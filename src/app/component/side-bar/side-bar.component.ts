@@ -1,6 +1,7 @@
-import { Component } from "@angular/core";
+import { Component, inject, signal } from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { MatIconModule } from "@angular/material/icon"; // <-- Import the module
+import { DataProcessingService } from "../../service/data-processing.service";
 
 @Component({
 	selector: "app-side-bar",
@@ -8,4 +9,7 @@ import { MatIconModule } from "@angular/material/icon"; // <-- Import the module
 	templateUrl: "./side-bar.component.html",
 	styleUrl: "./side-bar.component.css",
 })
-export class SideBarComponent {}
+export class SideBarComponent {
+	dataService = inject(DataProcessingService);
+	userName = signal<string>(this.dataService.getUserName());
+}

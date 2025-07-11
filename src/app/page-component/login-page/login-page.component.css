@@ -4,7 +4,7 @@ main {
 	align-items: center; /* Center vertically */
 	height: 100vh; /* Full viewport height */
 	width: 100%;
-	background-color: #527baa;
+	background-color: #111827;
 }
 
 .login-text {
@@ -20,7 +20,7 @@ main {
 }
 
 .login-box {
-	background-color: white;
+	background-color: #eaeaea;
 	border: 1px solid grey; /* Visible border */
 	border-radius: 20px;
 	padding: 1.1em;
