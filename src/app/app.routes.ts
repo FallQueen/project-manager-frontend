@@ -16,7 +16,6 @@ export const routes: Routes = [
 				path: "",
 				pathMatch: "full",
 				redirectTo: "/home/(home:dashboard)",
-				outlet: "home",
 			},
 			{
 				path: "dashboard",

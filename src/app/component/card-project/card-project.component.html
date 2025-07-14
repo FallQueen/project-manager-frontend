@@ -1,0 +1,36 @@
+@if (!(isEmpty === true)){
+<div class="card">
+    <div class="card-header">
+        <h3 class="request-title">{{ project().projectName}}</h3>
+        <span>
+            <span class="card-request-id">#{{ project().projectId }}</span>
+        </span>
+    </div>
+
+
+
+    <div class="description-body">{{project().description}}</div>
+
+    <div class="upload-box">
+        <div class="row-space-inbetween">
+            <div class="mid-label">Progress:</div>
+            <div class="minor-label">
+                {{projectPercentage()}}%
+            </div>
+        </div>
+        <div class="progress-bar" [matTooltip]="progressTooltip()">
+            <div class=" progress-fill" [style.width.%]="projectPercentage()"></div>
+        </div>
+    </div>
+    <div class="row-space-inbetween">
+        <div class="minor-label">PIC: {{project().pic}}</div>
+        <span class="minor-label date">{{
+            project().startDate| date : "short"
+            }}</span>
+    </div>
+</div>
+} @else {
+<div class="card empty">
+
+</div>
+}

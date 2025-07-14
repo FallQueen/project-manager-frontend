@@ -1,5 +1,17 @@
+/* Stacks the header and body vertically and fills the screen */
+:host {
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
+}
+
 .home-body {
 	display: flex;
-	width: 100%;
+	/* flex-wrap: wrap; */
 	height: 100%;
+	width: 100%;
+}
+
+.router-outlet-body {
+	flex: 1;
 }

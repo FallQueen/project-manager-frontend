@@ -4,9 +4,10 @@
 	display: flex;
 	flex-direction: column;
 	background-color: #111827;
-	padding: 1em 0.6em 0em 0.2em;
+	padding: 0.5em 0.4em 0.5em 0.4em;
 	transition: all 0.25s ease-in-out;
 	justify-content: space-between;
+	box-sizing: border-box;
 }
 
 .side-bar ul {
@@ -26,7 +27,7 @@
 	font-weight: 600;
 	font-size: 1.3em;
 	align-items: center;
-	padding: 0.4em 0.2em 0.4em 0.4em;
+	padding: 0.3em 0.3em 0.3em 0.3em;
 	border-radius: 4px;
 	transition: background-color 0.2s, color 0.2s;
 	/* white-space: nowrap;  */
@@ -47,19 +48,13 @@
 }
 
 .side-bar mat-icon {
-	font-size: 1.3em;
+	font-size: 1.55em;
 	width: fit-content;
 	height: fit-content;
 }
 .side-bar li:hover,
 .side-bar li.active {
 	background-color: #374151; /* Slightly lighter background on hover */
-
-	color: ffffff;
-}
-
-.side-bar li.active {
-	color: 2px solid #1c52b5;
 }
 
 .divider-line {

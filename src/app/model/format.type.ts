@@ -6,3 +6,13 @@ export type User = {
 	email: string;
 	roleId: string;
 };
+
+export type project = {
+	projectId: number;
+	projectName: string;
+	pic: string;
+	startDate: Date;
+	description: string;
+	totalTask: number;
+	doneTask: number;
+};
