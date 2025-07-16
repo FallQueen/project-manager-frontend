@@ -1,15 +1,16 @@
 @if (!(isEmpty === true)){
+@if (project){
 <div class="card">
     <div class="card-header">
-        <h3 class="request-title">{{ project().projectName}}</h3>
+        <h3 class="request-title">{{ project.projectName}}</h3>
         <span>
-            <span class="card-request-id">#{{ project().projectId }}</span>
+            <span class="card-request-id">#{{ project.projectId }}</span>
         </span>
     </div>
 
 
 
-    <div class="description-body">{{project().description}}</div>
+    <div class="description-body">{{project.description}}</div>
 
     <div class="upload-box">
         <div class="row-space-inbetween">
@@ -23,14 +24,20 @@
         </div>
     </div>
     <div class="row-space-inbetween">
-        <div class="minor-label">PIC: {{project().pic}}</div>
-        <span class="minor-label date">{{
-            project().startDate| date : "short"
-            }}</span>
+        <div class="minor-label">PIC: {{project.picName}}</div>
+        <div class="progress-bar date">
+            <span class="minor-label date-label">{{
+                project.startDate| date : "shortDate"
+                }} - {{
+                project.targetDate| date : "shortDate"
+                }}</span>
+            <div class=" progress-fill date" [style.width.%]="periodPercentage()"> </div>
+        </div>
+
     </div>
-</div>
+</div>}
 } @else {
 <div class="card empty">
-
+    <div><mat-icon>add</mat-icon></div>
 </div>
 }

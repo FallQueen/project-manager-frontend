@@ -2,7 +2,10 @@
 :host {
 	display: flex;
 	flex-direction: column;
+	/* height: 100vh; */
+	/* min-height: 100vh; */
 	height: 100vh;
+	/* height: auto; */
 }
 
 .home-body {
@@ -14,4 +17,5 @@
 
 .router-outlet-body {
 	flex: 1;
+	overflow-y: auto;
 }

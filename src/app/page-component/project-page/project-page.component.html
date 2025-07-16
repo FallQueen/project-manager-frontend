@@ -1,5 +1,11 @@
 <div class="card-container">
-    <app-card-project></app-card-project>
+    @if (projectPageService.Projects() !== []) {
+    @for (project of projectPageService.Projects(); track $index) {
+    <app-card-project [project]="project"></app-card-project>
+    }
+    }
+    <!-- 
     <app-card-project [isEmpty]="true
-    "></app-card-project>
+    "></app-card-project> -->
+    <app-card-new-project></app-card-new-project>
 </div>

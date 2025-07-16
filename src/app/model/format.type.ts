@@ -7,12 +7,31 @@ export type User = {
 	roleId: string;
 };
 
-export type project = {
+// export type project = {
+// 	projectId: number;
+// 	projectName: string;
+// 	pic: string;
+// 	startDate: Date;
+// 	description: string;
+// 	totalTask: number;
+// 	doneTask: number;
+// };
+
+export type Project = {
 	projectId: number;
 	projectName: string;
-	pic: string;
-	startDate: Date;
 	description: string;
+	picName: string;
+	startDate: Date;
+	targetDate: Date;
 	totalTask: number;
 	doneTask: number;
+};
+
+export type NewProjectInput = {
+	projectName: string;
+	description: string;
+	creatorId: number;
+	targetDate: string; // ISO 8601 date string
+	picId: number;
 };

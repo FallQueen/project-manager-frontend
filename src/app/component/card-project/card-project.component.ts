@@ -1,5 +1,5 @@
 import { Component, Input, signal } from "@angular/core";
-import type { project } from "../../model/format.type";
+import type { Project } from "../../model/format.type";
 import { CommonModule } from "@angular/common";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatIconModule } from "@angular/material/icon";
@@ -12,20 +12,38 @@ import { MatIconModule } from "@angular/material/icon";
 })
 export class CardProjectComponent {
 	@Input() isEmpty!: true;
-	project = signal<project>({
-		projectId: 1,
-		projectName: "Test Project",
-		pic: "Alice",
-		description:
-			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras vitae massa eu ligula tempus ultricies. Donec tempus pretium mi. Fusce efficitur varius nisi sit amet ultricies.",
-		startDate: new Date(),
-		totalTask: 10,
-		doneTask: 5,
-	});
-	projectPercentage = signal(
-		(this.project().doneTask / this.project().totalTask) * 100,
-	);
-	progressTooltip = signal(
-		`${this.project().doneTask} / ${this.project().totalTask} tasks`,
-	);
+	@Input() project!: Project;
+	projectPercentage = signal(0);
+	progressTooltip = signal("");
+	periodPercentage = signal(0);
+	ngOnInit() {
+		if (!this.isEmpty) {
+			this.setProjectPercentageAndTooltip();
+			this.setPeriodPercentage();
+		}
+	}
+
+	setProjectPercentageAndTooltip() {
+		if (this.project.totalTask !== 0) {
+			this.projectPercentage.set(
+				(this.project.doneTask / this.project.totalTask) * 100,
+			);
+			this.progressTooltip.set(
+				`${this.project.doneTask} / ${this.project.totalTask} tasks`,
+			);
+		}
+	}
+	setPeriodPercentage() {
+		const start = new Date(this.project.startDate).getTime();
+		const end = new Date(this.project.targetDate).getTime();
+		const total = end - start;
+
+		// Handle cases where the period is invalid or has ended/not started
+		if (total <= 0) {
+			return;
+		}
+
+		const percentage = (Date.now() - start) / total;
+		this.periodPercentage.set(100 * Math.min(percentage, 1));
+	}
 }

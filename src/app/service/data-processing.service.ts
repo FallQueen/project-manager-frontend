@@ -1,19 +1,19 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import type { User } from "../model/format.type";
+import type { NewProjectInput, Project, User } from "../model/format.type";
 
 @Injectable({
 	providedIn: "root",
 })
 export class DataProcessingService {
 	// Inject HttpClient to enable api calling.
-	http = inject(HttpClient);
+	private http = inject(HttpClient);
 	// Inject Router to handle routing.
-	router = inject(Router);
+	private router = inject(Router);
 	// The base URL for the backend API.
 	// host = "https://state-management-api.vercel.app/api";
-	host = "http://localhost:9090/api";
+	private host = "http://localhost:9090/api";
 
 	// Stores user information in localStorage after a successful login.
 	storeUserInfo(u: User) {
@@ -56,5 +56,15 @@ export class DataProcessingService {
 			return "";
 		}
 		return input;
+	}
+
+	getProjects() {
+		const url = `${this.host}/getProjects`;
+		return this.http.get<Project[]>(url);
+	}
+
+	postNewProject(newProject: NewProjectInput) {
+		const url = `${this.host}/postNewProject`;
+		return this.http.post(url, newProject);
 	}
 }

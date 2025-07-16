@@ -1,0 +1,12 @@
+@if (empty()){
+<div class="card empty" (click)="changeForm()">
+    <div><mat-icon>add</mat-icon></div>
+</div>
+} @else {
+<div class="card" (click)="changeForm()"></div>
+<div class="button-row">
+
+    <mat-icon class="form">close</mat-icon>
+    <mat-icon class="form">check</mat-icon>
+</div>
+}
