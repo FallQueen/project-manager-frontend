@@ -3,8 +3,8 @@
         <div class="login-box">
             <h2 class="login-text">Login</h2>
 
-            <!-- Username -->
-            <div class="text-label">Username</div>
+            <!-- username -->
+            <div class="text-label">username</div>
             <mat-form-field appearance="outline" class="field">
                 <input matInput name="username" [(ngModel)]="loginData.username" #usernameBox="ngModel" required
                     autocomplete="username" />
@@ -26,7 +26,7 @@
                 Login
             </button>
             <mat-error class="err-message" *ngIf=" loginFail()">
-                Username atau password salah
+                username atau password salah
             </mat-error>
         </div>
     </main>

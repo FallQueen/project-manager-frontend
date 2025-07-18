@@ -21,7 +21,7 @@ export class LoginService {
 		const url = `${this.host}/login`;
 		const body = {
 			// Remove blank spaces after the user's username
-			userName: username.toLowerCase().replace(/(\S)\s+/g, "$1"),
+			username: username.toLowerCase().replace(/(\S)\s+/g, "$1"),
 			password: password,
 		};
 		// calls the login api call using the dataService

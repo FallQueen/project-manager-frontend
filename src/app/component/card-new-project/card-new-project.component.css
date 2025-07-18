@@ -1,6 +1,6 @@
 .card {
 	width: 26em;
-	height: 100%;
+	height: 15.4em;
 }
 .card.empty {
 	display: flex;
@@ -27,11 +27,20 @@ mat-icon {
 .empty mat-icon {
 	font-size: 10em;
 }
-mat-icon.form {
-	font-size: 2.8em;
-	background-color: aqua;
+.button-row mat-icon {
+	font-size: 2.5em;
+	/* background-color: aqua; */
 	border-radius: 9999px;
 	padding: 0.1em;
+}
+.red {
+	background-color: #ffadad;
+	color: #4a0f0f;
+}
+
+.green {
+	background-color: #caffbf;
+	color: #1c3e1f;
 }
 .empty div {
 	width: fit-content;
@@ -39,8 +48,75 @@ mat-icon.form {
 }
 
 .button-row {
-	/* position: absolute; */
+	display: flex;
 	gap: 1em;
-	width: fit-content;
-	/* justify-self: center; */
+	width: 26em;
+	justify-content: center;
+	align-items: center;
+	margin-top: 0.1em;
+}
+.card.form {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5em;
+}
+.form-control {
+	position: relative; /* This is crucial for positioning the label */
+	border: 2px solid #d1d5db; /* Border is now on the container */
+	border-radius: 8px;
+	transition: border-color 0.2s ease-in-out;
+	/* width: 10em; */
+}
+
+.form-control:focus-within {
+	border-color: #3b82f6;
+}
+
+/* 2. The input field itself */
+.form-control-input {
+	width: 100%;
+	max-width: 100%;
+	min-width: 100%;
+	padding: 0.7em 0.75em 0.7em 0.75em;
+	border: none;
+	border-radius: 8px;
+	font-size: 1em;
+	color: #111827;
+	box-sizing: border-box;
+}
+
+.form-control-input:focus {
+	outline: none;
+}
+
+/* The placeholder needs to be transparent so it doesn't show, but exists for the CSS to work */
+.form-control-input::placeholder {
+	color: transparent;
+}
+
+/* 3. The label that will float */
+.form-control-label {
+	height: fit-content;
+	position: absolute;
+	top: 0.6em;
+	left: 0.75em;
+	font-size: 1em;
+	color: #6b7280;
+	pointer-events: none; /* Allows clicks to pass through to the input */
+	transition: all 0.2s ease-in-out;
+	background-color: white; /* This creates the "cutout" effect */
+	padding: 0 0.25em; /* Adds space around the label text */
+}
+
+.form-control-input:focus ~ .form-control-label,
+.form-control-input:not(:placeholder-shown) ~ .form-control-label {
+	transform: translateY(-1.3em);
+	font-size: 0.7em;
+	transform-origin: left top;
+	color: #3b82f6;
+}
+
+mat-error {
+	font-size: 0.8em;
+	padding-left: 0.5em;
 }

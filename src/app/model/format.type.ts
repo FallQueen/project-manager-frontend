@@ -2,7 +2,7 @@
 // Used for session management, logic, and user info.
 export type User = {
 	userId: string;
-	userName: string;
+	username: string;
 	email: string;
 	roleId: string;
 };
@@ -32,6 +32,12 @@ export type NewProjectInput = {
 	projectName: string;
 	description: string;
 	creatorId: number;
-	targetDate: string; // ISO 8601 date string
+	startDate: string | null;
+	targetDate: string | null;
 	picId: number;
+};
+
+export type Username = {
+	username: string;
+	userId: number;
 };

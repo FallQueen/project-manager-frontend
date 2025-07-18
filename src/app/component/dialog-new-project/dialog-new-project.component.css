@@ -1,3 +1,11 @@
+.dialog-container {
+	display: flex;
+	min-height: 80vh;
+	flex-direction: column;
+	padding: 0.9em 1.2em;
+	max-width: 100%;
+	gap: 1em;
+}
 .form-control {
 	display: flex;
 	position: relative; /* This is crucial for positioning the label */
@@ -64,25 +72,7 @@
 	color: #3b82f6;
 }
 
-.o .mat-mdc-option {
-	/* Default height is 48px. Reduce it to make the items more compact. */
-	height: 36px !important;
-
-	/* Adjust line-height to vertically center the text in the new, smaller option. */
-	line-height: 36px !important;
-
-	/* You can also adjust font size if needed */
-	/* font-size: 14px; */
-}
-
-mat-option {
-	/* font-size: 0.85em; */
-	/* white-space: normal; */
-	/* padding: 0;
-	margin: 0; */
-	line-height: 0.5em !important;
-}
-.compact-autocomplete-panel .mat-mdc-option {
-	height: 36px !important;
-	line-height: 36px !important;
+mat-error {
+	font-size: 0.8em;
+	padding-left: 0.5em;
 }

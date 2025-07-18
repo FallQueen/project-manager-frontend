@@ -1,7 +1,12 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import type { NewProjectInput, Project, User } from "../model/format.type";
+import type {
+	NewProjectInput,
+	Project,
+	User,
+	Username,
+} from "../model/format.type";
 
 @Injectable({
 	providedIn: "root",
@@ -18,7 +23,7 @@ export class DataProcessingService {
 	// Stores user information in localStorage after a successful login.
 	storeUserInfo(u: User) {
 		localStorage.setItem("userId", u.userId);
-		localStorage.setItem("userName", u.userName);
+		localStorage.setItem("username", u.username);
 		localStorage.setItem("userEmail", u.email);
 		localStorage.setItem("userRole", u.roleId);
 	}
@@ -30,7 +35,7 @@ export class DataProcessingService {
 
 	// Retrieves the current user's name from localStorage.
 	getUserName(): string {
-		return this.returnIfNotNull(localStorage.getItem("userName"));
+		return this.returnIfNotNull(localStorage.getItem("username"));
 	}
 
 	// Retrieves the current user's email from localStorage.
@@ -45,7 +50,7 @@ export class DataProcessingService {
 
 	clearUserData() {
 		localStorage.setItem("userId", "0");
-		localStorage.setItem("userName", "");
+		localStorage.setItem("username", "");
 		localStorage.setItem("userEmail", "");
 		localStorage.setItem("userRole", "");
 	}
@@ -66,5 +71,10 @@ export class DataProcessingService {
 	postNewProject(newProject: NewProjectInput) {
 		const url = `${this.host}/postNewProject`;
 		return this.http.post(url, newProject);
+	}
+
+	getUsernames() {
+		const url = `${this.host}/getUsernames`;
+		return this.http.get<Username[]>(url);
 	}
 }

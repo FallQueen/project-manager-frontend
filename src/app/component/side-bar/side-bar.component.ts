@@ -11,5 +11,5 @@ import { DataProcessingService } from "../../service/data-processing.service";
 })
 export class SideBarComponent {
 	dataService = inject(DataProcessingService);
-	userName = signal<string>(this.dataService.getUserName());
+	username = signal<string>(this.dataService.getUserName());
 }

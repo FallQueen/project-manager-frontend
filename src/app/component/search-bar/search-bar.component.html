@@ -1,1 +1,15 @@
-<p>search-bar works!</p>
+<div class="form-control">
+    <input type="text" class="form-control-input" matInput [(ngModel)]="userNameInput" [matAutocomplete]="auto"
+        placeholder="PIC">
+
+    <label class="form-control-label">Project PIC</label>
+
+    <mat-autocomplete #auto="matAutocomplete" panelClass="compact-autocomplete-panel">
+        @for (username of filteredUserNames(); track username.username) {
+        <mat-option [value]="username.username" (onSelectionChange)="onSelection(username)">
+            {{ username.username }}
+        </mat-option>
+        }
+
+    </mat-autocomplete>
+</div>
