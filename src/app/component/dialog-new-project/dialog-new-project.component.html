@@ -1,39 +1,61 @@
-<div class="dialog-container">
+<!-- Bind the entire form to the FormGroup -->
+<div class="dialog-container" [formGroup]="projectForm">
+
+    <!-- Project Name -->
     <div>
         <div class="form-control">
-            <input matInput type="text" class="form-control-input" [(ngModel)]="newProject.projectName"
+            <input matInput type="text" class="form-control-input" formControlName="projectName"
                 placeholder="Project Name">
             <label class="form-control-label">Project Name</label>
         </div>
-        <mat-error *ngIf="true">ok</mat-error>
+        <!-- Show error if invalid AND touched -->
+        <mat-error *ngIf="f.projectName.invalid && f.projectName.touched">
+            Tolong isi nama projek
+        </mat-error>
     </div>
 
-
+    <!-- Description -->
     <div>
         <div class="form-control">
-            <textarea type="text" class="form-control-input" [(ngModel)]="newProject.description"
-                placeholder="o"></textarea>
+            <textarea type="text" class="form-control-input" formControlName="description" rows="3"
+                placeholder="Description"></textarea>
             <label class="form-control-label">Description</label>
         </div>
-        <mat-error *ngIf="true">ok</mat-error>
+        <!-- Show error if invalid AND touched -->
+        <mat-error *ngIf="f.description.invalid && f.description.touched">
+            Tolong isi deskripsi
+        </mat-error>
     </div>
 
-
+    <!-- Date Range (uses a nested formGroupName) -->
     <div>
-        <div class="form-control" [formGroup]="dateRange" [class.has-value]="checkDateRangeHasValue()">
+        <div class="form-control" formGroupName="dateRange" [class.has-value]="checkDateRangeHasValue()">
             <mat-date-range-input class="form-control-input-date" [rangePicker]="rangePicker">
                 <input matStartDate formControlName="start">
                 <span class="custom-range-separator">–</span>
                 <input matEndDate formControlName="end">
             </mat-date-range-input>
-
             <mat-datepicker-toggle [for]="rangePicker"></mat-datepicker-toggle>
             <mat-date-range-picker #rangePicker></mat-date-range-picker>
-
             <label class="form-control-label">Target Date</label>
-
         </div>
-        <mat-error *ngIf="true">ok</mat-error>
+        <!-- Check the nested controls for errors -->
+        <mat-error *ngIf="f.dateRange.controls.start.invalid && f.dateRange.controls.start.touched">
+            Tolong isi mulai projek
+        </mat-error>
+        <mat-error *ngIf="f.dateRange.controls.end.invalid && f.dateRange.controls.end.touched">
+            Tolong isi target projek
+        </mat-error>
     </div>
-    <app-search-bar></app-search-bar>
+
+    <div>
+        <app-search-bar (userNameSelected)="f.picId.setValue($event)"></app-search-bar>
+        <mat-error *ngIf="f.picId.invalid  && f.picId.touched">Tolong isi PIC projek</mat-error>
+    </div>
+    <div class="selector-con"> <app-user-selector></app-user-selector></div>
+
+
+    <div class="row-right-aligned">
+        <button mat-flat-button (click)="onCreateClick()">Create</button>
+    </div>
 </div>

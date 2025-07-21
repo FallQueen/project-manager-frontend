@@ -5,7 +5,8 @@ import type {
 	NewProjectInput,
 	Project,
 	User,
-	Username,
+	NameListItem,
+	NameListItemByRole,
 } from "../model/format.type";
 
 @Injectable({
@@ -75,6 +76,21 @@ export class DataProcessingService {
 
 	getUsernames() {
 		const url = `${this.host}/getUsernames`;
-		return this.http.get<Username[]>(url);
+		return this.http.get<NameListItem[]>(url);
+	}
+
+	getProjectNames() {
+		const url = `${this.host}/getProjectNames`;
+		return this.http.get<NameListItem[]>(url);
+	}
+
+	getTaskNames() {
+		const url = `${this.host}/getTaskNames`;
+		return this.http.get<NameListItem[]>(url);
+	}
+
+	getUserProjectRoles(projectId: number) {
+		const url = `${this.host}/getUserProjectRoles?projectId=${projectId}`;
+		return this.http.get<NameListItemByRole[]>(url);
 	}
 }

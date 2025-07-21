@@ -31,13 +31,20 @@ export type Project = {
 export type NewProjectInput = {
 	projectName: string;
 	description: string;
-	creatorId: number;
-	startDate: string | null;
-	targetDate: string | null;
+	createdBy: number;
+	startDate: Date | null;
+	targetDate: Date | null;
 	picId: number;
+	userRoles: NameListItemByRole[];
 };
 
-export type Username = {
-	username: string;
-	userId: number;
+export type NameListItem = {
+	name: string;
+	id: number;
+};
+
+export type NameListItemByRole = {
+	roleId: number;
+	roleName: string;
+	users: NameListItem[];
 };

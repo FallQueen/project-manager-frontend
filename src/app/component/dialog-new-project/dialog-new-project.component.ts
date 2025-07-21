@@ -15,10 +15,13 @@ import {
 	FormsModule,
 	NgModel,
 	ReactiveFormsModule,
+	Validators,
 } from "@angular/forms";
 import { NgIf } from "@angular/common";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { SearchBarComponent } from "../search-bar/search-bar.component";
+import { MatButtonModule } from "@angular/material/button";
+import { UserSelectorComponent } from "../user-selector/user-selector.component";
 
 @Component({
 	selector: "app-dialog-new-project",
@@ -32,6 +35,8 @@ import { SearchBarComponent } from "../search-bar/search-bar.component";
 		MatFormFieldModule,
 		ReactiveFormsModule,
 		SearchBarComponent,
+		MatButtonModule,
+		UserSelectorComponent,
 	],
 	templateUrl: "./dialog-new-project.component.html",
 	styleUrl: "./dialog-new-project.component.css",
@@ -41,21 +46,48 @@ import { SearchBarComponent } from "../search-bar/search-bar.component";
 	],
 })
 export class DialogNewProjectComponent {
-	newProject: NewProjectInput = {
-		projectName: "",
-		description: "",
-		creatorId: 0,
-		startDate: null,
-		targetDate: null,
-		picId: 0,
-	};
-	dateRange = new FormGroup({
-		start: new FormControl<Date | null>(null),
-		end: new FormControl<Date | null>(null),
+	// newProject: NewProjectInput = {
+	// 	projectName: "",
+	// 	description: "",
+	// 	creatorId: 0,
+	// 	startDate: null,
+	// 	targetDate: null,
+	// 	picId: 0,
+	// };
+
+	projectForm = new FormGroup({
+		projectName: new FormControl("", [Validators.required]),
+		description: new FormControl("", [Validators.required]),
+		// A nested group for the date range
+		dateRange: new FormGroup({
+			start: new FormControl<Date | null>(null, [Validators.required]),
+			end: new FormControl<Date | null>(null, [Validators.required]),
+		}),
+		// A control to hold the ID from the search bar
+		picId: new FormControl<number | null>(null, [Validators.required]),
 	});
 
+	get f() {
+		return this.projectForm.controls;
+	}
 	checkDateRangeHasValue(): boolean {
-		const { start, end } = this.dateRange.value;
-		return !!start || !!end;
+		const dateRangeGroup = this.projectForm.get("dateRange");
+
+		if (dateRangeGroup) {
+			const { start, end } = dateRangeGroup.value;
+			return !!start || !!end;
+		}
+
+		return false;
+	}
+
+	onCreateClick(): void {
+		if (this.projectForm.valid) {
+			// Form is valid, proceed with creating the project
+			console.log("Form is valid. Submitting:", this.projectForm.value);
+		} else {
+			console.log("Form is invalid. Marking all as touched.");
+			this.projectForm.markAllAsTouched();
+		}
 	}
 }

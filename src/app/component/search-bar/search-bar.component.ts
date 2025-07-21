@@ -3,16 +3,18 @@ import {
 	computed,
 	EventEmitter,
 	inject,
+	output,
 	Output,
 	type Signal,
 	signal,
 } from "@angular/core";
-import type { Username } from "../../model/format.type";
+import type { NameListItem } from "../../model/format.type";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatInputModule } from "@angular/material/input";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { SearchBarService } from "../../service/search-bar.service";
+import { DataProcessingService } from "../../service/data-processing.service";
 @Component({
 	selector: "app-search-bar",
 	imports: [
@@ -21,49 +23,29 @@ import { SearchBarService } from "../../service/search-bar.service";
 		MatAutocompleteModule,
 		MatFormFieldModule,
 		FormsModule,
+		ReactiveFormsModule,
 	],
 	templateUrl: "./search-bar.component.html",
 	styleUrl: "./search-bar.component.css",
+	providers: [SearchBarService],
 })
 export class SearchBarComponent {
 	searchBarService = inject(SearchBarService);
+	dataService = inject(DataProcessingService);
 	// Input: The full list of userNames to search from
-	userNames = signal<Username[]>([
-		{ userId: 1, username: "alice" },
-		{ userId: 2, username: "garyo" },
-		{ userId: 1, username: "alice" },
-		{ userId: 2, username: "garyo" },
-		{ userId: 1, username: "alice" },
-		{ userId: 2, username: "garyo" },
-		{ userId: 1, username: "alice" },
-		{ userId: 2, username: "garyo" },
-	]);
+	projectNames = signal<NameListItem[]>([]);
 
 	// Output: Emits the selected username object
-	@Output() userNameSelected = new EventEmitter<Username>();
-
-	userNameInput = signal("");
-	filteredUserNames: Signal<Username[]> = computed(() => {
-		// Reads the current time from the shared timer service.
-		const name = this.userNameInput();
-		const readOnly = this.searchBarService.usernames();
-		console.log("compute filter");
-		return this.filter(name);
-	});
-
-	ngOnInit() {}
+	@Output() userNameSelected = new EventEmitter<number>();
 
 	// The filtering logic
-	private filter(value: string): Username[] {
-		const filterValue = value.toLowerCase();
-		const tempUserNames = this.searchBarService.usernames();
-		return tempUserNames.filter((username) =>
-			username.username.toLowerCase().includes(filterValue),
-		);
+	ngOnInit() {
+		this.dataService.getUsernames().subscribe((result) => {
+			this.searchBarService.nameList.set(result);
+		});
 	}
-
 	// When an option is selected from the list
-	onSelection(selectedUserName: Username): void {
-		this.userNameSelected.emit(selectedUserName);
+	onSelection(selectedName: NameListItem) {
+		this.userNameSelected.emit(selectedName.id);
 	}
 }

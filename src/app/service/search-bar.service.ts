@@ -1,19 +1,31 @@
-import { inject, Injectable, signal } from "@angular/core";
-import { DataProcessingService } from "./data-processing.service";
-import type { Username } from "../model/format.type";
+import { effect, inject, Injectable, signal, Injector } from "@angular/core";
+import type { NameListItem } from "../model/format.type";
 
-@Injectable({
-	providedIn: "root",
-})
+@Injectable()
 export class SearchBarService {
+	private injector = inject(Injector);
+	public readonly usernames = signal<NameListItem[]>([]);
+
 	constructor() {
-		this.getUsernames();
+		effect(
+			() => {
+				const nameInput = this.nameInput();
+				const nameList = this.nameList();
+				const filteredList = this.filter(nameInput, nameList);
+				this.filteredNameList.set(filteredList);
+			},
+			{ injector: this.injector },
+		);
 	}
-	private dataService = inject(DataProcessingService);
-	public readonly usernames = signal<Username[]>([]);
-	getUsernames() {
-		this.dataService.getUsernames().subscribe((result) => {
-			this.usernames.set(result);
-		});
+
+	public readonly nameInput = signal<string>("");
+	public readonly filteredNameList = signal<NameListItem[]>([]);
+	public readonly nameList = signal<NameListItem[]>([]);
+
+	filter(search: string, origin: NameListItem[]): NameListItem[] {
+		const filterValue = search.toLowerCase();
+		return origin.filter((names) =>
+			names.name.toLowerCase().includes(filterValue),
+		);
 	}
 }

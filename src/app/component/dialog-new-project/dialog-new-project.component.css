@@ -1,10 +1,11 @@
 .dialog-container {
 	display: flex;
-	min-height: 80vh;
+	height: fit-content;
 	flex-direction: column;
 	padding: 0.9em 1.2em;
 	max-width: 100%;
 	gap: 1em;
+	max-height: 90vh;
 }
 .form-control {
 	display: flex;
@@ -73,6 +74,14 @@
 }
 
 mat-error {
+	color: rgb(219, 36, 36);
 	font-size: 0.8em;
 	padding-left: 0.5em;
+}
+
+.row-right-aligned {
+	width: 100%;
+	display: flex;
+
+	justify-content: flex-end;
 }

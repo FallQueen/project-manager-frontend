@@ -17,10 +17,10 @@ export class CardNewProjectComponent {
 		// Uses the MatDialog service to open the DialogMoreDetailComponent.
 		const dialogRef = this.dialog.open(DialogNewProjectComponent, {
 			autoFocus: false, // Prevents the dialog from automatically focusing an element.
-			width: "90vw",
-			height: "90vw",
+			width: "850vw",
+			height: "fit-content",
 			maxWidth: "90vw",
-			maxHeight: "fit-content",
+			maxHeight: "90vh",
 			panelClass: "custom-dialog-container",
 		});
 

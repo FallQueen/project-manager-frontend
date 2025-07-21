@@ -1,0 +1,54 @@
+.backlog-container {
+	border-radius: 10px;
+	width: 100%;
+	height: fit-content;
+	background-color: aqua;
+}
+
+.backlog-row {
+	display: flex;
+}
+
+.module-item {
+	display: flex;
+	height: 2.5em;
+	align-items: center;
+	padding: 0 1em;
+}
+
+.backlog-header {
+	display: grid;
+	/* Defines 4 columns: adjust ratios as needed */
+	grid-template-columns: 40% 20% 20% 20%;
+	align-items: center;
+	padding: 0 1em;
+}
+
+.module-item {
+	background-color: yellow;
+	display: grid;
+	grid-template-columns: 3% 37% 20% 20% 20%;
+	align-items: center;
+	padding: 0 0.5em;
+	border-bottom: 1px solid #777;
+}
+
+.module-data {
+	border: 1px solid #999;
+	background-color: aqua;
+	display: flex;
+	height: 100%;
+	align-items: center;
+}
+.card-status span {
+	padding: 0.45em 0.7em;
+	text-align: center;
+	height: 100%;
+	width: 100%;
+	border-radius: 8px;
+	font-size: 0.95em;
+	font-weight: 500;
+	font-family: Roboto, sans-serif;
+	background-color: #caffbf;
+	color: #1c3e1f;
+}
