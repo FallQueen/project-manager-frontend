@@ -1,18 +1,28 @@
 <div cdkDropListGroup class="selector-container">
     <div class="drop-list-container">
-        @for (item of fullUserRoleList(); track item.roleId) {
+        @for (item of fullUserRoleList(); track $index) {
         <div cdkDropList cdkDropListOrientation="mixed" [cdkDropListData]="item.users" class="drop-list"
             (cdkDropListDropped)="drop($event)">
             <div class="role-name">{{item.roleName}}</div>
             @for (name of item.users; track name.id) {
-            <div cdkDrag class="drop-list-item">{{name.name}}</div>
+            <div cdkDrag class="drop-list-item" matTooltip="PIC"
+                [matTooltipDisabled]="!($index == 0 && item.roleId == 1)" [class.pic]="$index == 0 && item.roleId == 1">
+                {{name.name}}</div>
             }
         </div>
         }
     </div>
     <div class="drop-list-container">
+        <div>
+            <div class="form-control">
+                <input matInput type="text" class="form-control-input" [(ngModel)]="searchBarService.nameInput"
+                    placeholder="Name">
+                <label class="form-control-label">Name</label>
+            </div>
+
+        </div>
         <div cdkDropList cdkDropListOrientation="mixed" [cdkDropListData]="searchBarService.filteredNameList()"
-            class="drop-list" (cdkDropListDropped)="drop($event)">
+            class="drop-list" id="master-list" (cdkDropListDropped)="drop($event)">
             @for (name of searchBarService.filteredNameList(); track name.id) {
             <div cdkDrag class="drop-list-item">{{name.name}}</div>
             }

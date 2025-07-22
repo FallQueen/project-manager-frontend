@@ -4,7 +4,6 @@ import type { NameListItem } from "../model/format.type";
 @Injectable()
 export class SearchBarService {
 	private injector = inject(Injector);
-	public readonly usernames = signal<NameListItem[]>([]);
 
 	constructor() {
 		effect(

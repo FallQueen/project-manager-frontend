@@ -2,7 +2,10 @@
 @if (project){
 <div class="card">
     <div class="card-header">
-        <h3 class="request-title">{{ project.projectName}}</h3>
+        <h3 class="request-title">{{ project.projectName}}
+            <mat-icon>info</mat-icon>
+            <mat-icon>login</mat-icon>
+        </h3>
         <span>
             <span class="card-request-id">#{{ project.projectId }}</span>
         </span>
@@ -10,7 +13,7 @@
 
 
 
-    <div class="description-body">{{project.description}}</div>
+    <!-- <div class="description-body">{{project.description}}</div> -->
 
     <div class="upload-box">
         <div class="row-space-inbetween">

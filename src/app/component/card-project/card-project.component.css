@@ -1,6 +1,6 @@
 .card {
 	width: 26em;
-	height: 15.4em;
+	height: 9.4em;
 }
 
 .request-title {
@@ -8,6 +8,25 @@
 	margin-bottom: 0.1em;
 	font-size: 1.5em;
 	font-weight: 600;
+	display: flex;
+	align-items: center; /* This is the key to vertically centering everything */
+	gap: 0.5em; /* Adds a nice space between items */
+	cursor: default; /* The container itself isn't clickable */
+}
+
+.request-title mat-icon {
+	color: #444;
+	position: relative;
+	top: 0.1em;
+	font-size: 1em; /* Adjust icon size to match your title font */
+	cursor: pointer; /* Indicates the icons are clickable */
+	transition: transform 0.2s ease, color 0.2s ease;
+}
+
+/* The hover effect for the icons */
+.request-title mat-icon:hover {
+	transform: scale(1.2);
+	color: var(--primary-blue);
 }
 
 .minor-label {
@@ -88,13 +107,6 @@
 	font-size: 0.9em;
 	/* top: 50%;
 	transform: translateY(-50%); */
-}
-
-.empty mat-icon {
-	color: #444;
-	font-size: 10em;
-	width: fit-content;
-	height: fit-content;
 }
 
 .empty div {

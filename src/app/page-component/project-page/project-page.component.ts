@@ -12,6 +12,4 @@ import { CardNewProjectComponent } from "../../component/card-new-project/card-n
 })
 export class ProjectPageComponent {
 	projectPageService = inject(ProjectPageService);
-
-	ngOnInit() {}
 }

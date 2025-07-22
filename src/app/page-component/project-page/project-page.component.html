@@ -7,5 +7,5 @@
     <!-- 
     <app-card-project [isEmpty]="true
     "></app-card-project> -->
-    <app-card-new-project></app-card-new-project>
+    <app-card-new-project (refresh)="projectPageService.getProjectData()"></app-card-new-project>
 </div>

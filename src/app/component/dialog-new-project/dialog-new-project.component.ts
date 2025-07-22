@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, inject, signal, ViewChild } from "@angular/core";
 import {
 	DateAdapter,
 	MAT_DATE_FORMATS,
@@ -8,7 +8,10 @@ import {
 } from "@angular/material/core";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatError, MatInputModule } from "@angular/material/input";
-import type { NewProjectInput } from "../../model/format.type";
+import type {
+	NameListItemByRole,
+	NewProjectInput,
+} from "../../model/format.type";
 import {
 	FormControl,
 	FormGroup,
@@ -22,6 +25,8 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { SearchBarComponent } from "../search-bar/search-bar.component";
 import { MatButtonModule } from "@angular/material/button";
 import { UserSelectorComponent } from "../user-selector/user-selector.component";
+import { DataProcessingService } from "../../service/data-processing.service";
+import { MatDialogRef } from "@angular/material/dialog";
 
 @Component({
 	selector: "app-dialog-new-project",
@@ -46,14 +51,11 @@ import { UserSelectorComponent } from "../user-selector/user-selector.component"
 	],
 })
 export class DialogNewProjectComponent {
-	// newProject: NewProjectInput = {
-	// 	projectName: "",
-	// 	description: "",
-	// 	creatorId: 0,
-	// 	startDate: null,
-	// 	targetDate: null,
-	// 	picId: 0,
-	// };
+	dataService = inject(DataProcessingService);
+	fullUserRoleList = signal<NameListItemByRole[]>([]);
+	@ViewChild(UserSelectorComponent)
+	userSelectorComponent!: UserSelectorComponent;
+	dialogRef = inject(MatDialogRef<DialogNewProjectComponent>);
 
 	projectForm = new FormGroup({
 		projectName: new FormControl("", [Validators.required]),
@@ -82,9 +84,22 @@ export class DialogNewProjectComponent {
 	}
 
 	onCreateClick(): void {
+		this.userSelectorComponent.getCurrentArrayChanges();
 		if (this.projectForm.valid) {
 			// Form is valid, proceed with creating the project
-			console.log("Form is valid. Submitting:", this.projectForm.value);
+			const newProject: NewProjectInput = {
+				projectName: this.projectForm.value.projectName || "",
+				description: this.projectForm.value.description || "",
+				createdBy: Number(this.dataService.getUserId()),
+				startDate: this.projectForm.value.dateRange?.start || null,
+				targetDate: this.projectForm.value.dateRange?.end || null,
+				userRoles: this.userSelectorComponent.getCurrentArrayChanges(),
+				picId: this.userSelectorComponent.getPic(),
+			};
+			console.log("Form is valid. Submitting:", newProject);
+			this.dataService.postNewProject(newProject).subscribe(() => {
+				this.dialogRef.close(true);
+			});
 		} else {
 			console.log("Form is invalid. Marking all as touched.");
 			this.projectForm.markAllAsTouched();

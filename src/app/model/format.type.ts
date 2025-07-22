@@ -35,7 +35,7 @@ export type NewProjectInput = {
 	startDate: Date | null;
 	targetDate: Date | null;
 	picId: number;
-	userRoles: NameListItemByRole[];
+	userRoles: UserRoleChange[];
 };
 
 export type NameListItem = {
@@ -47,4 +47,10 @@ export type NameListItemByRole = {
 	roleId: number;
 	roleName: string;
 	users: NameListItem[];
+};
+
+export type UserRoleChange = {
+	roleId: number;
+	usersAdded: number[];
+	usersRemoved: number[];
 };

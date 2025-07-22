@@ -1,6 +1,6 @@
 .card {
 	width: 26em;
-	height: 15.4em;
+	height: 9.4em;
 }
 .card.empty {
 	display: flex;

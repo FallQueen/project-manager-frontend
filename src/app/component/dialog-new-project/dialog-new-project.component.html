@@ -52,7 +52,9 @@
         <app-search-bar (userNameSelected)="f.picId.setValue($event)"></app-search-bar>
         <mat-error *ngIf="f.picId.invalid  && f.picId.touched">Tolong isi PIC projek</mat-error>
     </div>
-    <div class="selector-con"> <app-user-selector></app-user-selector></div>
+    <div class="selector-con">
+        <app-user-selector (fullUserRoleListOut)="fullUserRoleList.set($event)"></app-user-selector>
+    </div>
 
 
     <div class="row-right-aligned">
