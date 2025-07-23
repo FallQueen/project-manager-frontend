@@ -1,6 +1,6 @@
 <!-- Bind the entire form to the FormGroup -->
-<div class="dialog-container" [formGroup]="projectForm">
 
+<div class="dialog-body" [formGroup]="projectForm">
     <!-- Project Name -->
     <div>
         <div class="form-control">
@@ -17,7 +17,7 @@
     <!-- Description -->
     <div>
         <div class="form-control">
-            <textarea type="text" class="form-control-input" formControlName="description" rows="3"
+            <textarea matInput cdkTextareaAutosize type="text" class="form-control-input" formControlName="description"
                 placeholder="Description"></textarea>
             <label class="form-control-label">Description</label>
         </div>
@@ -48,16 +48,23 @@
         </mat-error>
     </div>
 
-    <div>
+    <!-- <div>
         <app-search-bar (userNameSelected)="f.picId.setValue($event)"></app-search-bar>
         <mat-error *ngIf="f.picId.invalid  && f.picId.touched">Tolong isi PIC projek</mat-error>
-    </div>
-    <div class="selector-con">
-        <app-user-selector (fullUserRoleListOut)="fullUserRoleList.set($event)"></app-user-selector>
+    </div> -->
+    <div>
+        <div class="form-control">
+            <!-- <textarea type="text" class="form-control-input" formControlName="description" rows="3"
+                placeholder="Description"></textarea> -->
+            <div class="form-control-input">
+                @if (currentPic()) {
+                {{currentPic().name ||''}}}</div>
+            <label class="form-control-label">PIC</label>
+        </div>
+        <!-- Show error if invalid AND touched -->
+        <mat-error *ngIf="currentPic().id ===0 && f.description.touched">
+            Tolong isi PIC
+        </mat-error>
     </div>
 
-
-    <div class="row-right-aligned">
-        <button mat-flat-button (click)="onCreateClick()">Create</button>
-    </div>
 </div>

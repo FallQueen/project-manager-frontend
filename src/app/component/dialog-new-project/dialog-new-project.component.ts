@@ -1,4 +1,4 @@
-import { Component, inject, signal, ViewChild } from "@angular/core";
+import { Component, inject, signal, ViewChild, Input } from "@angular/core";
 import {
 	DateAdapter,
 	MAT_DATE_FORMATS,
@@ -9,8 +9,11 @@ import {
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatError, MatInputModule } from "@angular/material/input";
 import type {
+	NameListItem,
 	NameListItemByRole,
 	NewProjectInput,
+	Project,
+	UserRoleChange,
 } from "../../model/format.type";
 import {
 	FormControl,
@@ -22,11 +25,11 @@ import {
 } from "@angular/forms";
 import { NgIf } from "@angular/common";
 import { MatFormFieldModule } from "@angular/material/form-field";
-import { SearchBarComponent } from "../search-bar/search-bar.component";
 import { MatButtonModule } from "@angular/material/button";
 import { UserSelectorComponent } from "../user-selector/user-selector.component";
 import { DataProcessingService } from "../../service/data-processing.service";
-import { MatDialogRef } from "@angular/material/dialog";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { TextFieldModule } from "@angular/cdk/text-field";
 
 @Component({
 	selector: "app-dialog-new-project",
@@ -39,9 +42,8 @@ import { MatDialogRef } from "@angular/material/dialog";
 		NgIf,
 		MatFormFieldModule,
 		ReactiveFormsModule,
-		SearchBarComponent,
 		MatButtonModule,
-		UserSelectorComponent,
+		TextFieldModule,
 	],
 	templateUrl: "./dialog-new-project.component.html",
 	styleUrl: "./dialog-new-project.component.css",
@@ -52,9 +54,9 @@ import { MatDialogRef } from "@angular/material/dialog";
 })
 export class DialogNewProjectComponent {
 	dataService = inject(DataProcessingService);
-	fullUserRoleList = signal<NameListItemByRole[]>([]);
-	@ViewChild(UserSelectorComponent)
-	userSelectorComponent!: UserSelectorComponent;
+	dialogData = inject(MAT_DIALOG_DATA);
+	@Input() currentPic = signal<NameListItem>({ name: "", id: 0 });
+	@Input() project!: Project;
 	dialogRef = inject(MatDialogRef<DialogNewProjectComponent>);
 
 	projectForm = new FormGroup({
@@ -72,6 +74,26 @@ export class DialogNewProjectComponent {
 	get f() {
 		return this.projectForm.controls;
 	}
+
+	ngOnInit() {
+		if (this.project) {
+			console.log("project edit mode");
+			this.projectForm.patchValue({
+				projectName: this.project.projectName,
+				description: this.project.description,
+				dateRange: {
+					start: this.project.startDate
+						? new Date(this.project.startDate)
+						: null,
+					end: this.project.targetDate
+						? new Date(this.project.targetDate)
+						: null,
+				},
+				picId: 0,
+			});
+			this.currentPic().name = this.project.picName;
+		}
+	}
 	checkDateRangeHasValue(): boolean {
 		const dateRangeGroup = this.projectForm.get("dateRange");
 
@@ -83,8 +105,7 @@ export class DialogNewProjectComponent {
 		return false;
 	}
 
-	onCreateClick(): void {
-		this.userSelectorComponent.getCurrentArrayChanges();
+	newProjectCreate(userRoles: UserRoleChange[]) {
 		if (this.projectForm.valid) {
 			// Form is valid, proceed with creating the project
 			const newProject: NewProjectInput = {
@@ -93,8 +114,8 @@ export class DialogNewProjectComponent {
 				createdBy: Number(this.dataService.getUserId()),
 				startDate: this.projectForm.value.dateRange?.start || null,
 				targetDate: this.projectForm.value.dateRange?.end || null,
-				userRoles: this.userSelectorComponent.getCurrentArrayChanges(),
-				picId: this.userSelectorComponent.getPic(),
+				userRoles,
+				picId: this.currentPic().id,
 			};
 			console.log("Form is valid. Submitting:", newProject);
 			this.dataService.postNewProject(newProject).subscribe(() => {
@@ -102,6 +123,41 @@ export class DialogNewProjectComponent {
 			});
 		} else {
 			console.log("Form is invalid. Marking all as touched.");
+			this.projectForm.markAllAsTouched();
+		}
+	}
+
+	projectEdit(userRoles: UserRoleChange[]) {
+		if (this.projectForm.valid) {
+			const editProject: NewProjectInput = {
+				projectName:
+					this.projectForm.value.projectName === this.project.projectName
+						? ""
+						: this.projectForm.value.projectName || "",
+				description:
+					this.projectForm.value.description === this.project.description
+						? ""
+						: this.projectForm.value.description || "",
+				createdBy: 0,
+				startDate:
+					this.projectForm.value.dateRange?.start?.getTime() ===
+					new Date(this.project.startDate).getTime()
+						? null
+						: this.projectForm.value.dateRange?.start || null,
+				targetDate:
+					this.projectForm.value.dateRange?.end?.getTime() ===
+					new Date(this.project.targetDate).getTime()
+						? null
+						: this.projectForm.value.dateRange?.end || null,
+				userRoles,
+				picId: this.currentPic().id === 0 ? 0 : this.currentPic().id,
+			};
+			console.log("Editing project. Submitting:", editProject);
+			// this.dataService.editProject(this.project.id, editProject).subscribe(() => {
+			// 	this.dialogRef.close(true);
+			// });
+		} else {
+			console.log("Edit form is invalid. Marking all as touched.");
 			this.projectForm.markAllAsTouched();
 		}
 	}

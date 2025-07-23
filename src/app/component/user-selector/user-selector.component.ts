@@ -1,4 +1,13 @@
-import { Component, EventEmitter, inject, Output, signal } from "@angular/core";
+import {
+	Component,
+	computed,
+	EventEmitter,
+	inject,
+	Input,
+	Output,
+	type Signal,
+	signal,
+} from "@angular/core";
 import { SearchBarService } from "../../service/search-bar.service";
 import { DataProcessingService } from "../../service/data-processing.service";
 import {
@@ -17,6 +26,7 @@ import type {
 } from "../../model/format.type";
 import { FormsModule } from "@angular/forms";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { forkJoin } from "rxjs";
 
 @Component({
 	selector: "app-user-selector",
@@ -35,23 +45,35 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 export class UserSelectorComponent {
 	searchBarService = inject(SearchBarService);
 	dataService = inject(DataProcessingService);
-	@Output() fullUserRoleListOut = new EventEmitter<NameListItemByRole[]>();
 	fullUserRoleList = signal<NameListItemByRole[]>([]);
 	fullUserRoleListMemory!: NameListItemByRole[];
-	test = this.searchBarService.filteredNameList;
+	@Input() editable = false;
+	@Input() newProject = false;
+	@Input() projectId = 0;
+	@Output() newPic = new EventEmitter<NameListItem>();
+	currentPic = signal<NameListItem>({ name: "", id: 0 });
 
 	ngOnInit() {
-		this.dataService.getUserProjectRoles(0).subscribe((result) => {
-			this.fullUserRoleList.set(result);
+		forkJoin({
+			roles: this.dataService.getUserProjectRoles(this.projectId),
+			users: this.dataService.getUsernames(),
+		}).subscribe(({ roles, users }) => {
+			// Both calls are now complete. It's safe to set state.
+			this.searchBarService.nameList.set(users);
+			this.fullUserRoleList.set(roles);
+
+			// Create a deep copy for memory/comparison logic
 			this.fullUserRoleListMemory = JSON.parse(
 				JSON.stringify(this.fullUserRoleList()),
 			);
-		});
 
-		this.dataService.getUsernames().subscribe((result) => {
-			this.searchBarService.nameList.set(result);
+			// Now that all data is loaded, check if we need to set the PIC.
+			if (this.newProject) {
+				this.setCurrentUserAsPic();
+			}
 		});
 	}
+
 	drop(event: CdkDragDrop<NameListItem[]>) {
 		if (event.previousContainer === event.container) {
 			moveItemInArray(
@@ -60,25 +82,54 @@ export class UserSelectorComponent {
 				event.currentIndex,
 			);
 		} else {
+			const previousContainer = event.previousContainer.data;
 			const targetArray = event.container.data;
 			const itemToCopy = event.previousContainer.data[event.previousIndex];
+
+			if (
+				previousContainer.length <= 1 &&
+				event.previousContainer.id === "role-1"
+			) {
+				return;
+			}
+
 			if (event.previousContainer.id === "master-list") {
 				if (!this.hasDuplicate(targetArray, itemToCopy)) {
 					// If no duplicate, copy the item to the target array.
 					targetArray.splice(event.currentIndex, 0, itemToCopy);
 				}
 			} else if (event.container.id === "master-list") {
-				event.previousContainer.data.splice(event.previousIndex, 1);
+				previousContainer.splice(event.previousIndex, 1);
 			} else {
 				if (!this.hasDuplicate(targetArray, itemToCopy)) {
 					transferArrayItem(
-						event.previousContainer.data,
-						event.container.data,
+						previousContainer,
+						targetArray,
 						event.previousIndex,
 						event.currentIndex,
 					);
 				}
 			}
+		}
+		if (
+			event.container.id === "role-1" ||
+			event.previousContainer.id === "role-1"
+		) {
+			this.picChange(); // Call the specific function for this change.
+		}
+		if (
+			event.container.id === "role-1" ||
+			event.previousContainer.id === "role-1"
+		) {
+			this.picChange();
+		}
+	}
+
+	picChange() {
+		const potentialPic = this.fullUserRoleList()?.[0]?.users?.[0];
+		if (potentialPic && potentialPic.id !== this.currentPic().id) {
+			this.currentPic.set(potentialPic);
+			this.newPic.emit(potentialPic);
 		}
 	}
 
@@ -117,12 +168,6 @@ export class UserSelectorComponent {
 		const currentArrayChange: UserRoleChange[] = [];
 		let i = 0;
 		for (const roleUsers of this.fullUserRoleList()) {
-			console.log(`Role ID: ${roleUsers.roleId}, Users:`, roleUsers.users);
-			console.log(
-				`Role ID: ${roleUsers.roleId}, Users from memory:`,
-				this.fullUserRoleListMemory[i].users,
-			);
-
 			const change = this.getArrayChanges(
 				roleUsers.roleId,
 				this.fullUserRoleListMemory[i].users,
@@ -131,27 +176,17 @@ export class UserSelectorComponent {
 			currentArrayChange.push(change);
 			i++;
 		}
-		console.log(currentArrayChange);
 		return currentArrayChange;
 	}
 
-	getPic(): number {
-		const memoryList = this.fullUserRoleListMemory;
-		const currentList = this.fullUserRoleList();
-
-		// Safely get the ID of the current PIC using optional chaining.
-		// It will be the ID number or 'undefined' if any part of the path doesn't exist.
-		const currentPicId = currentList?.[0]?.users?.[0]?.id;
-
-		// Safely get the ID of the PIC from memory.
-		const memoryPicId = memoryList?.[0]?.users?.[0]?.id;
-
-		// Compare the two IDs.
-		if (currentPicId === memoryPicId) {
-			// If they are the same (including both being undefined),
-			// it means there's no change to the PIC. Return 0.
-			return 0;
-		}
-		return currentPicId || 0;
+	setCurrentUserAsPic() {
+		const tempUserId = Number(this.dataService.getUserId());
+		if (!tempUserId) return;
+		const newPic = this.searchBarService
+			.nameList()
+			.find((user) => user.id === tempUserId);
+		if (!newPic) return;
+		this.fullUserRoleList()[0].users.unshift(newPic);
+		this.picChange();
 	}
 }

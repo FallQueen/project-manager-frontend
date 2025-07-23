@@ -17,8 +17,8 @@
 .request-title mat-icon {
 	color: #444;
 	position: relative;
-	top: 0.1em;
-	font-size: 1em; /* Adjust icon size to match your title font */
+	top: 0.2em;
+	font-size: 0.95em;
 	cursor: pointer; /* Indicates the icons are clickable */
 	transition: transform 0.2s ease, color 0.2s ease;
 }

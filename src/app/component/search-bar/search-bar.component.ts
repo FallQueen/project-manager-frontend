@@ -1,13 +1,4 @@
-import {
-	Component,
-	computed,
-	EventEmitter,
-	inject,
-	output,
-	Output,
-	type Signal,
-	signal,
-} from "@angular/core";
+import { Component, EventEmitter, inject, Output, signal } from "@angular/core";
 import type { NameListItem } from "../../model/format.type";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatInputModule } from "@angular/material/input";

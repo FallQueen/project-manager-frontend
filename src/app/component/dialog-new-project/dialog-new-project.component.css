@@ -1,21 +1,11 @@
-.dialog-container {
+.dialog-body {
 	display: flex;
-	height: fit-content;
-	flex-direction: column;
-	padding: 0.9em 1.2em;
-	max-width: 100%;
 	gap: 1em;
-	max-height: 90vh;
-	background-color: white;
+	flex-direction: column;
 }
-
 .row-right-aligned {
 	width: 100%;
 	display: flex;
 
 	justify-content: flex-end;
-}
-
-.selector-con {
-	height: 26em;
 }

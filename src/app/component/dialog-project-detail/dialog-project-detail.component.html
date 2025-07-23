@@ -1,0 +1,50 @@
+@if (project){
+<div class="dialog-body">
+    <div>
+        <div class="form-control">
+            <div class="form-control-input" formControlName="projectName">{{project.projectName}}
+            </div>
+            <label class="form-control-label">Project Name</label>
+        </div>
+        <!-- Show error if invalid AND touched -->
+
+    </div>
+
+    <!-- Description -->
+    <div>
+        <div class="form-control">
+            <div class="form-control-input">{{project.description}}
+            </div>
+            <label class="form-control-label">Description</label>
+        </div>
+        <!-- Show error if invalid AND touched -->
+
+    </div>
+
+    <!-- Date Range (uses a nested formGroupName) -->
+    <div>
+        <div class="form-control" formGroupName="dateRange">
+            <div class="form-control-input">{{
+                project.startDate| date : "shortDate"
+                }} - {{
+                project.targetDate| date : "shortDate"
+                }}
+            </div>
+            <label class="form-control-label">Target Date</label>
+        </div>
+        <!-- Check the nested controls for errors -->
+
+    </div>
+
+    <div>
+        <div class="form-control">
+            <!-- <textarea type="text" class="form-control-input" formControlName="description" rows="3"
+                placeholder="Description"></textarea> -->
+            <div class="form-control-input">
+                {{project.picName}}</div>
+            <label class="form-control-label">PIC</label>
+        </div>
+
+    </div>
+</div>
+}

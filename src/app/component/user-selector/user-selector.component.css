@@ -31,12 +31,13 @@
 	display: flex;
 	/* height: fit-content; */
 	flex-direction: column;
-	/* gap: 1em; */
+	padding: 0.75em;
 	background-color: #f0f0f0;
 	border: 1px solid #ddd;
 	border-radius: 0.5em;
 	overflow-y: auto;
 	box-sizing: border-box;
+	gap: 0.5em;
 }
 
 .drop-list {
@@ -47,8 +48,8 @@
 	width: 100%;
 	background-color: #f0f0f0;
 	border-radius: 0.5em;
-	padding: 0.75em;
-	min-height: 5.5em;
+	/* padding: 0.75em; */
+	min-height: 3.5em;
 	box-sizing: border-box;
 }
 
@@ -61,8 +62,8 @@
 .role-name {
 	width: 100%;
 	height: fit-content;
-	font-weight: bold;
-	font-size: 0.9em;
+	font-weight: 600;
+	font-size: 1em;
 	color: #333;
 	padding-bottom: 0.1em;
 	border-bottom: 2px solid #e0e0e0;
@@ -78,7 +79,7 @@
 	background-color: var(--primary-blue); /* A more modern blue */
 	border-radius: 0.3em;
 	height: fit-content;
-	padding: 0.4em 0.8em;
+	padding: 0.3em 0.8em;
 	color: white;
 	font-weight: 500;
 	text-wrap: nowrap;
@@ -90,10 +91,6 @@
 	background: linear-gradient(to bottom, var(--primary-blue), #0b66c7); /* Lighter blue to primary blue */
 
 	box-shadow: 0 0 0 2px #0f77e6;
-}
-
-.form-control {
-	margin: 0.5em 0.3em 0 0.3em;
 }
 
 .form-control input {
