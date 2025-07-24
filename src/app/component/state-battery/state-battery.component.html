@@ -1,0 +1,7 @@
+<div class="progress-bar">
+    @for (item of workStateCountList; track $index) {
+    <div class=" progress-fill state-{{item.stateId}}"
+        [matTooltip]="getTooltip(item.stateName,item.stateCount,item.percentage)" [style.width.%]="item.percentage">
+    </div>
+    }
+</div>

@@ -38,6 +38,16 @@ export type NewProjectInput = {
 	userRoles: UserRoleChange[];
 };
 
+export type AlterProject = {
+	projectId: number;
+	projectName: string | null;
+	description: string | null;
+	startDate: Date | null;
+	targetDate: Date | null;
+	picId: number | null;
+	userRoles: UserRoleChange[];
+};
+
 export type NameListItem = {
 	name: string;
 	id: number;
@@ -53,4 +63,30 @@ export type UserRoleChange = {
 	roleId: number;
 	usersAdded: number[];
 	usersRemoved: number[];
+};
+
+export type WorkStateCount = {
+	stateName: string;
+	stateId: number;
+	stateCount: number;
+	percentage: number;
+};
+
+export type BacklogData = {
+	backlogId: number;
+	backlogName: string;
+	priorityId: number;
+	priorityName: string;
+	startDate: Date;
+	targetDate: Date;
+	workStateCountList: WorkStateCount[];
+};
+
+export type workData = {
+	workId: number;
+	workName: string;
+	priorityId: number;
+	priorityName: string;
+	startDate: Date;
+	targetDate: Date;
 };

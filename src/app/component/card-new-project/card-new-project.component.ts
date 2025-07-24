@@ -1,7 +1,7 @@
 import { Component, EventEmitter, inject, Output, signal } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MatIconModule } from "@angular/material/icon";
-import { DialogNewProjectComponent } from "../dialog-new-project/dialog-new-project.component";
+import { DialogProjectEditComponent } from "../dialog-project-edit/dialog-project-edit.component";
 import { DialogProjectContainerComponent } from "../dialog-project-container/dialog-project-container.component";
 
 @Component({

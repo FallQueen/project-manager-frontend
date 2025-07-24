@@ -2,12 +2,12 @@
 @if (project){
 <div class="card">
     <div class="card-header">
-        <h3 class="request-title">{{ project.projectName}}
+        <h3 class="title">{{ project.projectName}}
             <span (click)="openForm()"> <mat-icon>info</mat-icon></span>
             <span><mat-icon>login</mat-icon></span>
         </h3>
         <span>
-            <span class="card-request-id">#{{ project.projectId }}</span>
+            <span class="card-id">#{{ project.projectId }}</span>
         </span>
     </div>
 

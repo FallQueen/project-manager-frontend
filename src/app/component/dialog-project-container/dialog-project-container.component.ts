@@ -1,18 +1,28 @@
-import { Component, inject, signal, ViewChild, viewChild } from "@angular/core";
-import { DialogNewProjectComponent } from "../dialog-new-project/dialog-new-project.component";
+import {
+	Component,
+	EventEmitter,
+	inject,
+	Output,
+	signal,
+	ViewChild,
+} from "@angular/core";
+import { DialogProjectEditComponent } from "../dialog-project-edit/dialog-project-edit.component";
 import { DialogProjectDetailComponent } from "../dialog-project-detail/dialog-project-detail.component";
 import { MAT_DIALOG_DATA } from "@angular/material/dialog";
-import type { NameListItem } from "../../model/format.type";
+import type { NameListItem, Project } from "../../model/format.type";
 import { UserSelectorComponent } from "../user-selector/user-selector.component";
 import { MatButtonModule } from "@angular/material/button";
+import { DialogRef } from "@angular/cdk/dialog";
+import { MatIconModule } from "@angular/material/icon";
 
 @Component({
 	selector: "app-dialog-project-container",
 	imports: [
-		DialogNewProjectComponent,
+		DialogProjectEditComponent,
 		DialogProjectDetailComponent,
 		UserSelectorComponent,
 		MatButtonModule,
+		MatIconModule,
 	],
 	templateUrl: "./dialog-project-container.component.html",
 	styleUrl: "./dialog-project-container.component.css",
@@ -21,10 +31,12 @@ export class DialogProjectContainerComponent {
 	dialogData = inject(MAT_DIALOG_DATA);
 	currentPic = signal<NameListItem>({ name: "", id: 0 });
 	editable = signal<boolean>(false);
-	@ViewChild(DialogNewProjectComponent)
-	dialogNewProject!: DialogNewProjectComponent;
+	@Output() updatedProject = new EventEmitter<Project>();
+	@ViewChild(DialogProjectEditComponent)
+	dialogNewProject!: DialogProjectEditComponent;
 	@ViewChild(UserSelectorComponent)
 	UserSelector!: UserSelectorComponent;
+	dialogRef = inject(DialogRef<DialogProjectContainerComponent>);
 
 	triggerNewProjectSubmit() {
 		this.dialogNewProject.newProjectCreate(
@@ -36,9 +48,15 @@ export class DialogProjectContainerComponent {
 		this.dialogNewProject.projectEdit(
 			this.UserSelector.getCurrentArrayChanges(),
 		);
+		this.toggleEdit();
 	}
 
-	changeToEdit() {
+	toggleEdit() {
 		this.editable.set(!this.editable());
 	}
+
+	// updateProject() {
+	// 	console.log("should toggle edit");
+	// 	this.toggleEdit();
+	// }
 }

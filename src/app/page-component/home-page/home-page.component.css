@@ -1,11 +1,6 @@
 /* Stacks the header and body vertically and fills the screen */
 
-:host {
-	height: 100%;
-	/* overflow-y: auto; */
-}
-
-.home-body {
+.home-content {
 	display: flex;
 	height: 93.7%;
 	width: 100%;
@@ -15,3 +10,7 @@
 	flex: 1;
 	overflow-y: auto;
 }
+
+/* .home-body {
+	background-color: black;
+} */

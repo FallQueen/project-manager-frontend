@@ -1,4 +1,12 @@
-import { Component, inject, signal, ViewChild, Input } from "@angular/core";
+import {
+	Component,
+	inject,
+	signal,
+	ViewChild,
+	Input,
+	EventEmitter,
+	Output,
+} from "@angular/core";
 import {
 	DateAdapter,
 	MAT_DATE_FORMATS,
@@ -9,6 +17,7 @@ import {
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatError, MatInputModule } from "@angular/material/input";
 import type {
+	AlterProject,
 	NameListItem,
 	NameListItemByRole,
 	NewProjectInput,
@@ -32,7 +41,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { TextFieldModule } from "@angular/cdk/text-field";
 
 @Component({
-	selector: "app-dialog-new-project",
+	selector: 'app-dialog-project-edit',
 	imports: [
 		MatDatepickerModule,
 		MatNativeDateModule,
@@ -45,19 +54,19 @@ import { TextFieldModule } from "@angular/cdk/text-field";
 		MatButtonModule,
 		TextFieldModule,
 	],
-	templateUrl: "./dialog-new-project.component.html",
-	styleUrl: "./dialog-new-project.component.css",
+	templateUrl: './dialog-project-edit.component.html',
+	styleUrl: './dialog-project-edit.component.css',
 	providers: [
 		{ provide: DateAdapter, useClass: NativeDateAdapter },
 		{ provide: MAT_DATE_FORMATS, useValue: MAT_NATIVE_DATE_FORMATS },
 	],
 })
-export class DialogNewProjectComponent {
+export class DialogProjectEditComponent {
 	dataService = inject(DataProcessingService);
 	dialogData = inject(MAT_DIALOG_DATA);
 	@Input() currentPic = signal<NameListItem>({ name: "", id: 0 });
 	@Input() project!: Project;
-	dialogRef = inject(MatDialogRef<DialogNewProjectComponent>);
+	dialogRef = inject(MatDialogRef<DialogProjectEditComponent>);
 
 	projectForm = new FormGroup({
 		projectName: new FormControl("", [Validators.required]),
@@ -129,33 +138,45 @@ export class DialogNewProjectComponent {
 
 	projectEdit(userRoles: UserRoleChange[]) {
 		if (this.projectForm.valid) {
-			const editProject: NewProjectInput = {
+			const alterProject: AlterProject = {
+				projectId: this.project.projectId,
 				projectName:
 					this.projectForm.value.projectName === this.project.projectName
-						? ""
-						: this.projectForm.value.projectName || "",
+						? null
+						: this.projectForm.value.projectName || null,
 				description:
 					this.projectForm.value.description === this.project.description
-						? ""
-						: this.projectForm.value.description || "",
-				createdBy: 0,
+						? null
+						: this.projectForm.value.description || null,
 				startDate:
-					this.projectForm.value.dateRange?.start?.getTime() ===
-					new Date(this.project.startDate).getTime()
+					this.projectForm.value.dateRange?.start &&
+					new Date(this.project.startDate).getTime() ===
+						this.projectForm.value.dateRange.start.getTime()
 						? null
 						: this.projectForm.value.dateRange?.start || null,
 				targetDate:
-					this.projectForm.value.dateRange?.end?.getTime() ===
-					new Date(this.project.targetDate).getTime()
+					this.projectForm.value.dateRange?.end &&
+					new Date(this.project.targetDate).getTime() ===
+						this.projectForm.value.dateRange.end.getTime()
 						? null
 						: this.projectForm.value.dateRange?.end || null,
 				userRoles,
-				picId: this.currentPic().id === 0 ? 0 : this.currentPic().id,
+				picId: this.currentPic().id === 0 ? null : this.currentPic().id,
 			};
-			console.log("Editing project. Submitting:", editProject);
-			// this.dataService.editProject(this.project.id, editProject).subscribe(() => {
-			// 	this.dialogRef.close(true);
-			// });
+
+			// Update the local project object with either the same or new values
+			this.project.projectName =
+				this.projectForm.value.projectName || this.project.projectName;
+			this.project.description =
+				this.projectForm.value.description || this.project.description;
+			this.project.startDate =
+				this.projectForm.value.dateRange?.start || this.project.startDate;
+			this.project.targetDate =
+				this.projectForm.value.dateRange?.end || this.project.targetDate;
+			this.project.picName = this.currentPic().name || this.project.picName;
+			console.log("Editing project. Submitting:", alterProject);
+			console.log("Editing Origin project:", this.project);
+			this.dataService.putAlterProject(alterProject).subscribe();
 		} else {
 			console.log("Edit form is invalid. Marking all as touched.");
 			this.projectForm.markAllAsTouched();

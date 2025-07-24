@@ -7,6 +7,7 @@ import type {
 	User,
 	NameListItem,
 	NameListItemByRole,
+	AlterProject,
 } from "../model/format.type";
 
 @Injectable({
@@ -72,6 +73,11 @@ export class DataProcessingService {
 	postNewProject(newProject: NewProjectInput) {
 		const url = `${this.host}/postNewProject`;
 		return this.http.post(url, newProject);
+	}
+
+	putAlterProject(alterProject: AlterProject) {
+		const url = `${this.host}/putAlterProject`;
+		return this.http.put(url, alterProject);
 	}
 
 	getUsernames() {

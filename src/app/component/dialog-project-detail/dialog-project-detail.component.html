@@ -25,9 +25,9 @@
     <div>
         <div class="form-control" formGroupName="dateRange">
             <div class="form-control-input">{{
-                project.startDate| date : "shortDate"
-                }} - {{
-                project.targetDate| date : "shortDate"
+                project.startDate| date : "M/d/yyyy"
+                }} – {{
+                project.targetDate| date : "M/d/yyyy"
                 }}
             </div>
             <label class="form-control-label">Target Date</label>

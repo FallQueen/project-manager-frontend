@@ -1,16 +1,17 @@
 <div class="dialog-container">
-    <div class="page-title">
-        <h1 (click)="changeToEdit()">@if (dialogData.newProject) {
+    <div class="title">
+        <h1 (click)="toggleEdit()">@if (dialogData.newProject) {
             NEW PROJECT
-            } @else { PROJECT #{{dialogData.project.projectId}}}
+            } @else { PROJECT #{{dialogData.project.projectId}} <span><mat-icon>edit</mat-icon></span> }
+
         </h1>
     </div>
     @if (dialogData.newProject) {
     <div>newProj</div>
-    <app-dialog-new-project [currentPic]="currentPic"></app-dialog-new-project>
+    <app-dialog-project-edit [currentPic]="currentPic"></app-dialog-project-edit>
     } @else if (editable()) {
     <div>editable</div>
-    <app-dialog-new-project [currentPic]="currentPic" [project]="dialogData.project"></app-dialog-new-project>
+    <app-dialog-project-edit [currentPic]="currentPic" [project]="dialogData.project"></app-dialog-project-edit>
     } @else if (!editable()) {
     <div>not editable</div>
     <app-dialog-project-detail [project]="dialogData.project"></app-dialog-project-detail>
@@ -22,8 +23,9 @@
         <app-user-selector [editable]="true" [newProject]="dialogData?.newProject"
             (newPic)="currentPic.set($event)"></app-user-selector>
         } @else {
-        <app-user-selector [projectId]="dialogData?.project?.projectId" [editable]="editable()"
-            [newProject]="dialogData?.newProject" (newPic)="currentPic.set($event)"></app-user-selector>
+        <app-user-selector [projectId]="dialogData?.project?.projectId" [projectPicName]="dialogData?.project?.picName"
+            [editable]="editable()" [newProject]="dialogData?.newProject"
+            (newPic)="currentPic.set($event)"></app-user-selector>
         }
     </div>
     <div class="row-right-aligned">

@@ -3,28 +3,28 @@
 	height: 9.4em;
 }
 
-.request-title {
+.title {
 	margin-left: -0.1em;
 	margin-bottom: 0.1em;
 	font-size: 1.5em;
 	font-weight: 600;
 	display: flex;
-	align-items: center; /* This is the key to vertically centering everything */
-	gap: 0.5em; /* Adds a nice space between items */
-	cursor: default; /* The container itself isn't clickable */
+	align-items: center;
+	gap: 0.5em;
+	cursor: default;
 }
 
-.request-title mat-icon {
+.title mat-icon {
 	color: #444;
 	position: relative;
 	top: 0.2em;
 	font-size: 0.95em;
-	cursor: pointer; /* Indicates the icons are clickable */
+	cursor: pointer;
 	transition: transform 0.2s ease, color 0.2s ease;
 }
 
 /* The hover effect for the icons */
-.request-title mat-icon:hover {
+.title mat-icon:hover {
 	transform: scale(1.2);
 	color: var(--primary-blue);
 }

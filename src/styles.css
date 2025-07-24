@@ -63,7 +63,7 @@ mat-icon {
 	align-items: center;
 }
 
-.card-request-id {
+.card-id {
 	background-color: #eee;
 	padding: 2px 8px;
 	border-radius: 4px;
@@ -97,6 +97,55 @@ mat-icon {
 	background-color: #006daa !important;
 }
 
+.state-1 {
+	background-color: #ffadad !important;
+	color: #4a0f0f !important;
+}
+
+/* Verified */
+.state-2 {
+	background-color: #ffd6a5 !important;
+	color: #4b4318 !important;
+}
+
+/* In progress */
+.state-3 {
+	background-color: #fdffb6 !important;
+	color: #4a4b18 !important;
+}
+
+/* Waiting for review */
+.state-4 {
+	background-color: #9bf6ff !important;
+	color: #2d484a !important;
+}
+
+/* Done */
+.state-5 {
+	background-color: #caffbf !important;
+	color: #1c3e1f !important;
+}
+
+.priority-LOW {
+	background-color: #caffbf;
+	color: #1c3e1f;
+}
+
+.priority-MEDIUM {
+	background-color: #fdffb6;
+	color: #4a4b18;
+}
+
+.priority-HIGH {
+	background-color: #ffd6a5;
+	color: #4b4318;
+}
+
+.priority-CRITICAL {
+	background-color: #ffadad;
+	color: #4a0f0f;
+}
+
 /* STYLR FOR CUSTOM INPUTS */
 .form-control {
 	display: flex;
@@ -125,7 +174,9 @@ mat-icon {
 	line-height: 1.1em;
 	text-align: justify;
 }
-
+input {
+	line-height: 1.1em;
+}
 .form-control-input:empty::before {
 	content: "\00a0";
 }

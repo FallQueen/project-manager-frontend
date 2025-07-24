@@ -62,9 +62,10 @@ export class CardProjectComponent {
 			panelClass: "custom-dialog-container",
 			data: { project: this.project, newProject: false },
 		});
-
+		dialogRef.componentInstance.updatedProject.subscribe((updated) => {
+			this.project = updated;
+		});
 		// Subscribes to the `afterClosed` event of the dialog.
 		// This allows the component to react when the dialog is closed.
-		dialogRef.afterClosed().subscribe((result) => {});
 	}
 }

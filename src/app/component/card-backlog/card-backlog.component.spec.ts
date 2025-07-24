@@ -1,17 +1,17 @@
 import { type ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { UserSearchBaseComponent } from "./user-search-base.component";
+import { CardBacklogComponent } from "./card-backlog.component";
 
-describe("UserSearchBaseComponent", () => {
-	let component: UserSearchBaseComponent;
-	let fixture: ComponentFixture<UserSearchBaseComponent>;
+describe("CardBacklogComponent", () => {
+	let component: CardBacklogComponent;
+	let fixture: ComponentFixture<CardBacklogComponent>;
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
-			imports: [UserSearchBaseComponent],
+			imports: [CardBacklogComponent],
 		}).compileComponents();
 
-		fixture = TestBed.createComponent(UserSearchBaseComponent);
+		fixture = TestBed.createComponent(CardBacklogComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();
 	});

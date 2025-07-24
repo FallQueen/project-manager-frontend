@@ -50,6 +50,7 @@ export class UserSelectorComponent {
 	@Input() editable = false;
 	@Input() newProject = false;
 	@Input() projectId = 0;
+	@Input() projectPicName = "";
 	@Output() newPic = new EventEmitter<NameListItem>();
 	currentPic = signal<NameListItem>({ name: "", id: 0 });
 
@@ -66,6 +67,9 @@ export class UserSelectorComponent {
 			this.fullUserRoleListMemory = JSON.parse(
 				JSON.stringify(this.fullUserRoleList()),
 			);
+			if (this.projectPicName !== "") {
+				this.movePicFront(this.projectPicName, 1);
+			}
 
 			// Now that all data is loaded, check if we need to set the PIC.
 			if (this.newProject) {
@@ -188,5 +192,17 @@ export class UserSelectorComponent {
 		if (!newPic) return;
 		this.fullUserRoleList()[0].users.unshift(newPic);
 		this.picChange();
+	}
+
+	movePicFront(picName: string, roleId: number) {
+		const users = this.fullUserRoleList()[roleId - 1].users;
+		const picIndex = users.findIndex(
+			(user) => user.name === this.projectPicName,
+		);
+		console.log("found picIndex:", picIndex);
+		if (picIndex > 0) {
+			const [pic] = users.splice(picIndex, 1);
+			users.unshift(pic);
+		}
 	}
 }
