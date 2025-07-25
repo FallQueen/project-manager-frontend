@@ -75,18 +75,30 @@ export type WorkStateCount = {
 export type BacklogData = {
 	backlogId: number;
 	backlogName: string;
+	description: string;
 	priorityId: number;
 	priorityName: string;
+	createdBy: string;
 	startDate: Date;
 	targetDate: Date;
 	workStateCountList: WorkStateCount[];
 };
 
-export type workData = {
+export interface WorkData {
 	workId: number;
 	workName: string;
 	priorityId: number;
 	priorityName: string;
+	picId: number;
+	picUserName: string;
+	description: string;
+	stateId: number;
+	stateName: string;
 	startDate: Date;
 	targetDate: Date;
-};
+	createdBy: string;
+	createdByUserName: string;
+	estimatedHours: number;
+	trackerId: number;
+	trackerName: string;
+}

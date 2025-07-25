@@ -8,6 +8,8 @@ import type {
 	NameListItem,
 	NameListItemByRole,
 	AlterProject,
+	BacklogData,
+	WorkData,
 } from "../model/format.type";
 
 @Injectable({
@@ -98,5 +100,30 @@ export class DataProcessingService {
 	getUserProjectRoles(projectId: number) {
 		const url = `${this.host}/getUserProjectRoles?projectId=${projectId}`;
 		return this.http.get<NameListItemByRole[]>(url);
+	}
+
+	getProjectBacklogs(projectId: number) {
+		const url = `${this.host}/getProjectBacklogs?projectId=${projectId}`;
+		return this.http.get<BacklogData[]>(url);
+	}
+
+	getBacklogWorks(backlogId: number) {
+		const url = `${this.host}/getBacklogWorks?backlogId=${backlogId}`;
+		return this.http.get<WorkData[]>(url);
+	}
+
+	getPeriodDonePercentage(startDate: Date, endDate: Date): number {
+		console.log("check per percentage");
+		const start = new Date(startDate).getTime();
+		const end = new Date(endDate).getTime();
+		const total = end - start;
+
+		// Handle cases where the period is invalid or has ended/not started
+		const percentage = (Date.now() - start) / total;
+		if (percentage <= 0) {
+			return 0;
+		}
+
+		return Math.floor(1000 * Math.min(percentage, 1)) / 10;
 	}
 }

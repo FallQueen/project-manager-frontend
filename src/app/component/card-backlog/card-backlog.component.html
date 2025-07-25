@@ -1,39 +1,52 @@
 <div class="card backlog">
-    <div>></div>
-    <div class="card-name">
-        <span class="backlog-name">{{backlogData.backlogName}}</span>
-    </div>
-    <div class="card-section">
-        <span class="section-label">State</span>
-
-        <div class="progress-bar">
-            @for (item of backlogData.workStateCountList; track $index) {
-            <div class=" progress-fill state-{{item.stateId}}"
-                [matTooltip]="getTooltip(item.stateName,item.stateCount,item.percentage)"
-                [style.width.%]="item.percentage">
+    <div class="backlog-container">
+        <div class="indicator priority-{{backlogData.priorityName}}"></div>
+        <div class="backlog-inner-container">
+            <span class="arrow-icon-container" (click)="expandWorkInside()"> <mat-icon
+                    class="arrow-icon">keyboard_arrow_right</mat-icon>
+            </span>
+            <div class="card-name">
+                <span class="backlog-name">{{backlogData.backlogName}}</span>
             </div>
-            }
+            <div class="card-section">
+                <span class="section-label">State</span>
 
+                <div class="progress-bar-battery">
+                    @for (item of backlogData.workStateCountList; track $index) {
+                    <div class=" progress-fill-battery state-{{item.stateId}}"
+                        [matTooltip]="getTooltip(item.stateName,item.stateCount,item.percentage)"
+                        [style.width.%]="item.percentage">
+                    </div>
+                    }
+
+                </div>
+            </div>
+
+            <div class="card-section">
+                <span class="section-label">Priority</span>
+                <div class="card-status priority-{{backlogData.priorityName}}">
+                    <span>{{backlogData.priorityName}}</span>
+                </div>
+            </div>
+            <div class="card-section">
+                <span class="section-label">Period</span>
+                <div class="progress-bar" matTooltip="{{ periodPercentage()}}%">
+                    <span class="date-label">{{ backlogData.startDate | date : "shortDate" }} - {{
+                        backlogData.targetDate |
+                        date
+                        : "shortDate" }}</span>
+                    <div class="progress-fill" [style.width.%]="periodPercentage()"></div>
+                </div>
+            </div>
         </div>
     </div>
+    @if (expanded()) {
+    <div class="work-list-container">
+        @for (work of workList(); track $index) {
+        <app-card-work [workData]="work"></app-card-work>
+        }
 
-    <div class="card-section">
-        <span class="section-label">Priority</span>
-        <div class="priority-badge priority-{{backlogData.priorityName}}">
-            <span>{{backlogData.priorityName}}</span>
-        </div>
     </div>
-    <div class="card-section">
-        <span class="section-label">Period</span>
-        <div class="progress-bar">
-            <span class="date-label">{{ backlogData.startDate | date : "d MMM" }} - {{ backlogData.targetDate | date
-                : "d MMM" }}</span>
-            <div class="progress-fill" [style.width.%]="periodPercentage()"></div>
-        </div>
-    </div>
-</div>
+    }
 
-<div class="new-card">
-    <!-- <div class="progress-bar">ok</div> -->
-    <app-state-battery [workStateCountList]="backlogData.workStateCountList"></app-state-battery>
 </div>

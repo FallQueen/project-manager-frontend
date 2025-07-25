@@ -1,20 +1,25 @@
-import { Component, Input, signal } from "@angular/core";
-import type { BacklogData } from "../../model/format.type";
-import { StateBatteryComponent } from "../state-battery/state-battery.component";
+import { Component, inject, Input, signal } from "@angular/core";
+import type { BacklogData, WorkData } from "../../model/format.type";
 import { CommonModule } from "@angular/common";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatIconModule } from "@angular/material/icon";
+import { DataProcessingService } from "../../service/data-processing.service";
+import { CardWorkComponent } from "../card-work/card-work.component";
 
 @Component({
 	selector: "app-card-backlog",
-	imports: [StateBatteryComponent, CommonModule, MatTooltipModule],
+	imports: [CommonModule, MatTooltipModule, MatIconModule, CardWorkComponent],
 	templateUrl: "./card-backlog.component.html",
 	styleUrl: "./card-backlog.component.css",
 })
 export class CardBacklogComponent {
+	dataService = inject(DataProcessingService);
 	@Input() backlogData: BacklogData = {
 		backlogId: 101,
 		backlogName: "Develop User Profile Page",
+		description: "a",
 		priorityId: 2,
+		createdBy: "a",
 		priorityName: "MEDIUM",
 		startDate: new Date("2025-07-20T09:00:00"),
 		targetDate: new Date("2025-08-15T17:00:00"),
@@ -26,12 +31,21 @@ export class CardBacklogComponent {
 		],
 	};
 
+	expanded = signal(false);
 	periodPercentage = signal<number>(0);
 	totalWork = signal(0);
+
+	workList = signal<WorkData[]>([]);
 
 	ngOnInit() {
 		this.countTotalWorkState();
 		this.countPercentage();
+		this.periodPercentage.set(
+			this.dataService.getPeriodDonePercentage(
+				this.backlogData.startDate,
+				this.backlogData.targetDate,
+			),
+		);
 	}
 
 	countTotalWorkState() {
@@ -44,6 +58,7 @@ export class CardBacklogComponent {
 			state.percentage = (100 * state.stateCount) / this.totalWork();
 		}
 	}
+
 	getTooltip(
 		stateName: string,
 		stateCount: number,
@@ -55,17 +70,17 @@ export class CardBacklogComponent {
 		// Construct the string using a template literal
 		return `${stateName} ${stateCount}/${this.totalWork()} (${formattedPercentage}%)`;
 	}
-	setPeriodPercentage() {
-		const start = new Date(this.backlogData.startDate).getTime();
-		const end = new Date(this.backlogData.targetDate).getTime();
-		const total = end - start;
 
-		// Handle cases where the period is invalid or has ended/not started
-		if (total <= 0) {
-			return;
+	expandWorkInside() {
+		if (this.workList().length <= 0) {
+			this.dataService
+				.getBacklogWorks(this.backlogData.backlogId)
+				.subscribe((result) => {
+					this.workList.set(result);
+					this.expanded.set(!this.expanded());
+				});
+		} else {
+			this.expanded.set(!this.expanded());
 		}
-
-		const percentage = (Date.now() - start) / total;
-		this.periodPercentage.set(100 * Math.min(percentage, 1));
 	}
 }

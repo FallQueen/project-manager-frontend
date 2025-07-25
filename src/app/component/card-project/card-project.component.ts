@@ -28,14 +28,13 @@ export class CardProjectComponent {
 	}
 
 	setProjectPercentageAndTooltip() {
-		if (this.project.totalTask !== 0) {
-			this.projectPercentage.set(
-				(this.project.doneTask / this.project.totalTask) * 100,
-			);
-			this.progressTooltip.set(
-				`${this.project.doneTask} / ${this.project.totalTask} tasks`,
-			);
-		}
+		this.projectPercentage.set(
+			(this.project.doneTask / this.project.totalTask) * 100,
+		);
+
+		this.progressTooltip.set(
+			`${this.project.doneTask} / ${this.project.totalTask} tasks`,
+		);
 	}
 	setPeriodPercentage() {
 		const start = new Date(this.project.startDate).getTime();

@@ -1,60 +1,10 @@
-/* Style the overall table */
-.backlog-table {
-	width: 100%;
-	border-collapse: collapse; /* Removes space between cell borders */
-	font-family: sans-serif;
-}
-
-/* Style the header and all rows with Grid */
-.backlog-table thead tr,
-.backlog-table tbody tr {
-	display: grid;
-	/* This is the magic! Columns adjust automatically. */
-	/* 1. Icon column: takes minimum space needed */
-	/* 2. Module column: takes 2x the space of others */
-	/* 3. State, Priority, Progress: each take 1x the space */
-	grid-template-columns: auto 2fr 1fr 1fr 1fr;
-	align-items: center;
-	padding: 0 1em;
-	border-bottom: 1px solid #ddd;
-	height: 3.5em; /* A bit more space for clarity */
-}
-
-/* Style the header cells (th) */
-.backlog-table th {
-	text-align: left;
-	font-weight: 600;
-	color: #555;
-}
-
-/* Style the data cells (td) */
-.backlog-table td {
+.vertical-card-container {
 	display: flex;
-	align-items: center; /* Vertically center content in cells */
-}
-
-/* Keep your nice card styling */
-.card-status span {
-	padding: 0.45em 0.8em;
+	flex-direction: column;
+	/* gap: 0.5em; */
 	border-radius: 8px;
-	font-size: 0.9em;
-	font-weight: 500;
-}
-
-/* Example status colors */
-.status-progress {
-	background-color: #caffbf; /* light green */
-	color: #1c3e1f;
-}
-.status-high {
-	background-color: #ffadad; /* light red */
-	color: #5c1c1c;
-}
-.status-todo {
-	background-color: #e0e0e0; /* light gray */
-	color: #333;
-}
-.status-medium {
-	background-color: #fdffb6; /* light yellow */
-	color: #5a5200;
+	overflow: hidden;
+	border-bottom: 1px solid rgba(51, 51, 51, 0.5);
+	border-right: 1px solid rgba(51, 51, 51, 0.5);
+	border-top: 1px solid rgba(51, 51, 51, 0.5);
 }
