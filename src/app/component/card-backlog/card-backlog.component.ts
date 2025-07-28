@@ -5,10 +5,17 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatIconModule } from "@angular/material/icon";
 import { DataProcessingService } from "../../service/data-processing.service";
 import { CardWorkComponent } from "../card-work/card-work.component";
+import { CardWorkNewComponent } from "../card-work-new/card-work-new.component";
 
 @Component({
 	selector: "app-card-backlog",
-	imports: [CommonModule, MatTooltipModule, MatIconModule, CardWorkComponent],
+	imports: [
+		CommonModule,
+		MatTooltipModule,
+		MatIconModule,
+		CardWorkComponent,
+		CardWorkNewComponent,
+	],
 	templateUrl: "./card-backlog.component.html",
 	styleUrl: "./card-backlog.component.css",
 })

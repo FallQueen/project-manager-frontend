@@ -2,15 +2,18 @@
     <div class="backlog-container">
         <div class="indicator priority-{{backlogData.priorityName}}"></div>
         <div class="backlog-inner-container">
-            <span class="arrow-icon-container" (click)="expandWorkInside()"> <mat-icon
-                    class="arrow-icon">keyboard_arrow_right</mat-icon>
+            <span class="arrow-icon-container" (click)="expandWorkInside()"> <mat-icon class="arrow-icon">@if
+                    (!expanded()){keyboard_arrow_right} @else {keyboard_arrow_down}</mat-icon>
             </span>
+
+
             <div class="card-name">
                 <span class="backlog-name">{{backlogData.backlogName}}</span>
             </div>
+
+
             <div class="card-section">
                 <span class="section-label">State</span>
-
                 <div class="progress-bar-battery">
                     @for (item of backlogData.workStateCountList; track $index) {
                     <div class=" progress-fill-battery state-{{item.stateId}}"
@@ -18,6 +21,7 @@
                         [style.width.%]="item.percentage">
                     </div>
                     }
+
 
                 </div>
             </div>
@@ -28,6 +32,8 @@
                     <span>{{backlogData.priorityName}}</span>
                 </div>
             </div>
+
+
             <div class="card-section">
                 <span class="section-label">Period</span>
                 <div class="progress-bar" matTooltip="{{ periodPercentage()}}%">
@@ -40,13 +46,20 @@
             </div>
         </div>
     </div>
-    @if (expanded()) {
-    <div class="work-list-container">
-        @for (work of workList(); track $index) {
-        <app-card-work [workData]="work"></app-card-work>
-        }
 
+
+
+    @if (expanded()) {
+    <div class="child-container">
+        <div class="indicator-child priority-{{backlogData.priorityName}}"></div>
+        <div class="work-list-container">
+            <div class="tracker-name">work</div>
+            @for (work of workList(); track $index) {
+            <app-card-work [workData]="work"></app-card-work>
+            }
+            <app-card-work-new></app-card-work-new>
+
+        </div>
     </div>
     }
-
 </div>

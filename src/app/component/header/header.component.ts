@@ -8,10 +8,4 @@ import { LoginService } from "../../service/login.service";
 	templateUrl: "./header.component.html",
 	styleUrl: "./header.component.css",
 })
-export class HeaderComponent {
-	loginService = inject(LoginService);
-
-	// d(){
-	//   this.loginService.logOut()
-	// }
-}
+export class HeaderComponent {}

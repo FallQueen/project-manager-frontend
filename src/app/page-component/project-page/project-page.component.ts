@@ -2,11 +2,11 @@ import { Component, inject, signal } from "@angular/core";
 import { CardProjectComponent } from "../../component/card-project/card-project.component";
 import type { Project } from "../../model/format.type";
 import { ProjectPageService } from "../../service/project-page.service";
-import { CardNewProjectComponent } from "../../component/card-new-project/card-new-project.component";
+import { CardProjectNewComponent } from "../../component/card-project-new/card-project-new.component";
 
 @Component({
 	selector: "app-project-page",
-	imports: [CardProjectComponent, CardNewProjectComponent],
+	imports: [CardProjectComponent, CardProjectNewComponent],
 	templateUrl: "./project-page.component.html",
 	styleUrl: "./project-page.component.css",
 })

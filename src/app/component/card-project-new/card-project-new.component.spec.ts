@@ -1,17 +1,17 @@
 import { type ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { UserSelectorComponent } from "./user-selector.component";
+import { CardProjectNewComponent } from "./card-project-new.component";
 
-describe("UserSelectorComponent", () => {
-	let component: UserSelectorComponent;
-	let fixture: ComponentFixture<UserSelectorComponent>;
+describe("CardProjectNewComponent", () => {
+	let component: CardProjectNewComponent;
+	let fixture: ComponentFixture<CardProjectNewComponent>;
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
-			imports: [UserSelectorComponent],
+			imports: [CardProjectNewComponent],
 		}).compileComponents();
 
-		fixture = TestBed.createComponent(UserSelectorComponent);
+		fixture = TestBed.createComponent(CardProjectNewComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();
 	});

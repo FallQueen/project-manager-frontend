@@ -1,0 +1,71 @@
+<!-- Bind the entire form to the FormGroup -->
+
+<div class="dialog-body" [formGroup]="workForm">
+    <!-- Project Name -->
+    <div>
+        <div class="form-control">
+            <input matInput type="text" class="form-control-input" formControlName="workName">
+            <label class="form-control-label" [class.label-up]="f.workName.valid">Project Name</label>
+        </div>
+        <!-- Show error if invalid AND touched -->
+        <mat-error *ngIf="f.workName.invalid && f.workName.touched">
+            Tolong isi nama projek
+        </mat-error>
+    </div>
+
+    <!-- Description -->
+    <div>
+        <div class="form-control">
+            <textarea matInput cdkTextareaAutosize type="text" class="form-control-input"
+                formControlName="description"></textarea>
+            <label class="form-control-label" [class.label-up]="f.description.valid">Description</label>
+        </div>
+        <!-- Show error if invalid AND touched -->
+        <mat-error *ngIf="f.description.invalid && f.description.touched">
+            Tolong isi deskripsi
+        </mat-error>
+    </div>
+
+    <!-- Date Range (uses a nested formGroupName) -->
+    <div>
+        <div class="form-control" formGroupName="dateRange" [class.has-value]="checkDateRangeHasValue()">
+            <mat-date-range-input class="form-control-input" [rangePicker]="rangePicker">
+                <input matStartDate formControlName="start">
+                <span class="custom-range-separator">–</span>
+                <input matEndDate formControlName="end">
+            </mat-date-range-input>
+            <mat-datepicker-toggle [for]="rangePicker"></mat-datepicker-toggle>
+            <mat-date-range-picker #rangePicker></mat-date-range-picker>
+            <label class="form-control-label"
+                [class.label-up]="f.dateRange.controls.start.valid || f.dateRange.controls.end.valid">Target
+                Date</label>
+        </div>
+        <!-- Check the nested controls for errors -->
+        <mat-error *ngIf="f.dateRange.controls.start.invalid && f.dateRange.controls.start.touched">
+            Tolong isi mulai projek
+        </mat-error>
+        <mat-error *ngIf="f.dateRange.controls.end.invalid && f.dateRange.controls.end.touched">
+            Tolong isi target projek
+        </mat-error>
+    </div>
+
+    <!-- <div>
+        <app-search-bar (userNameSelected)="f.picId.setValue($event)"></app-search-bar>
+        <mat-error *ngIf="f.picId.invalid  && f.picId.touched">Tolong isi PIC projek</mat-error>
+    </div> -->
+    <div>
+        <div class="form-control">
+            <!-- <textarea type="text" class="form-control-input" formControlName="description" rows="3"
+                placeholder="Description"></textarea> -->
+            <div class="form-control-input">
+                @if (currentPic()) {
+                {{currentPic().name ||'&nbsp;'}}}</div>
+            <label class="form-control-label" [class.label-up]="currentPic().name != ''">PIC</label>
+        </div>
+        <!-- Show error if invalid AND touched -->
+        <mat-error *ngIf="currentPic().id ===0 && f.description.touched">
+            Tolong isi PIC
+        </mat-error>
+    </div>
+
+</div>

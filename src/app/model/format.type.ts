@@ -102,3 +102,30 @@ export interface WorkData {
 	trackerId: number;
 	trackerName: string;
 }
+
+export type NewWork = {
+	workName: string;
+	description: string;
+	startDate: Date;
+	targetDate: Date;
+	picId: number;
+	createdBy: number;
+	priorityId: number;
+	estimatedHours: number;
+	trackerId: number;
+	usersAdded: number[];
+};
+
+export type AlterWork = {
+	workId: number;
+	workName: string | null;
+	description: string | null;
+	startDate: Date | null;
+	targetDate: Date | null;
+	picId: number | null;
+	priorityId: number | null;
+	estimatedHours: number | null;
+	trackerId: number | null;
+	usersAdded: number[];
+	usersRemoved: number[];
+};

@@ -2,10 +2,9 @@ import {
 	Component,
 	inject,
 	signal,
-	ViewChild,
 	Input,
-	EventEmitter,
 	Output,
+	EventEmitter,
 } from "@angular/core";
 import {
 	DateAdapter,
@@ -19,7 +18,6 @@ import { MatError, MatInputModule } from "@angular/material/input";
 import type {
 	AlterProject,
 	NameListItem,
-	NameListItemByRole,
 	NewProjectInput,
 	Project,
 	UserRoleChange,
@@ -28,20 +26,19 @@ import {
 	FormControl,
 	FormGroup,
 	FormsModule,
-	NgModel,
 	ReactiveFormsModule,
 	Validators,
 } from "@angular/forms";
 import { NgIf } from "@angular/common";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatButtonModule } from "@angular/material/button";
-import { UserSelectorComponent } from "../user-selector/user-selector.component";
 import { DataProcessingService } from "../../service/data-processing.service";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { MatDialogRef } from "@angular/material/dialog";
 import { TextFieldModule } from "@angular/cdk/text-field";
+import type { DialogProjectContainerComponent } from "../dialog-project-container/dialog-project-container.component";
 
 @Component({
-	selector: 'app-dialog-project-edit',
+	selector: "app-dialog-project-edit",
 	imports: [
 		MatDatepickerModule,
 		MatNativeDateModule,
@@ -54,8 +51,8 @@ import { TextFieldModule } from "@angular/cdk/text-field";
 		MatButtonModule,
 		TextFieldModule,
 	],
-	templateUrl: './dialog-project-edit.component.html',
-	styleUrl: './dialog-project-edit.component.css',
+	templateUrl: "./dialog-project-edit.component.html",
+	styleUrl: "./dialog-project-edit.component.css",
 	providers: [
 		{ provide: DateAdapter, useClass: NativeDateAdapter },
 		{ provide: MAT_DATE_FORMATS, useValue: MAT_NATIVE_DATE_FORMATS },
@@ -63,10 +60,10 @@ import { TextFieldModule } from "@angular/cdk/text-field";
 })
 export class DialogProjectEditComponent {
 	dataService = inject(DataProcessingService);
-	dialogData = inject(MAT_DIALOG_DATA);
+
 	@Input() currentPic = signal<NameListItem>({ name: "", id: 0 });
 	@Input() project!: Project;
-	dialogRef = inject(MatDialogRef<DialogProjectEditComponent>);
+	containerDialogRef = inject(MatDialogRef<DialogProjectContainerComponent>);
 
 	projectForm = new FormGroup({
 		projectName: new FormControl("", [Validators.required]),
@@ -128,7 +125,7 @@ export class DialogProjectEditComponent {
 			};
 			console.log("Form is valid. Submitting:", newProject);
 			this.dataService.postNewProject(newProject).subscribe(() => {
-				this.dialogRef.close(true);
+				this.containerDialogRef.close();
 			});
 		} else {
 			console.log("Form is invalid. Marking all as touched.");

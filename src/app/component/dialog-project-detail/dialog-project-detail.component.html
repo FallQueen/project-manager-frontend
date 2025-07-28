@@ -2,9 +2,9 @@
 <div class="dialog-body">
     <div>
         <div class="form-control">
-            <div class="form-control-input" formControlName="projectName">{{project.projectName}}
+            <div class="form-control-input">{{project.projectName}}
             </div>
-            <label class="form-control-label">Project Name</label>
+            <label class="form-control-label label-up">Project Name</label>
         </div>
         <!-- Show error if invalid AND touched -->
 
@@ -15,7 +15,7 @@
         <div class="form-control">
             <div class="form-control-input">{{project.description}}
             </div>
-            <label class="form-control-label">Description</label>
+            <label class="form-control-label label-up">Description</label>
         </div>
         <!-- Show error if invalid AND touched -->
 
@@ -23,14 +23,14 @@
 
     <!-- Date Range (uses a nested formGroupName) -->
     <div>
-        <div class="form-control" formGroupName="dateRange">
+        <div class="form-control">
             <div class="form-control-input">{{
                 project.startDate| date : "M/d/yyyy"
                 }} – {{
                 project.targetDate| date : "M/d/yyyy"
                 }}
             </div>
-            <label class="form-control-label">Target Date</label>
+            <label class="form-control-label label-up">Target Date</label>
         </div>
         <!-- Check the nested controls for errors -->
 
@@ -42,7 +42,7 @@
                 placeholder="Description"></textarea> -->
             <div class="form-control-input">
                 {{project.picName}}</div>
-            <label class="form-control-label">PIC</label>
+            <label class="form-control-label label-up">PIC</label>
         </div>
 
     </div>

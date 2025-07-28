@@ -4,9 +4,8 @@
     <!-- Project Name -->
     <div>
         <div class="form-control">
-            <input matInput type="text" class="form-control-input" formControlName="projectName"
-                placeholder="Project Name">
-            <label class="form-control-label">Project Name</label>
+            <input matInput type="text" class="form-control-input" formControlName="projectName">
+            <label class="form-control-label" [class.label-up]="f.projectName.valid">Project Name</label>
         </div>
         <!-- Show error if invalid AND touched -->
         <mat-error *ngIf="f.projectName.invalid && f.projectName.touched">
@@ -17,9 +16,9 @@
     <!-- Description -->
     <div>
         <div class="form-control">
-            <textarea matInput cdkTextareaAutosize type="text" class="form-control-input" formControlName="description"
-                placeholder="Description"></textarea>
-            <label class="form-control-label">Description</label>
+            <textarea matInput cdkTextareaAutosize type="text" class="form-control-input"
+                formControlName="description"></textarea>
+            <label class="form-control-label" [class.label-up]="f.description.valid">Description</label>
         </div>
         <!-- Show error if invalid AND touched -->
         <mat-error *ngIf="f.description.invalid && f.description.touched">
@@ -30,14 +29,15 @@
     <!-- Date Range (uses a nested formGroupName) -->
     <div>
         <div class="form-control" formGroupName="dateRange" [class.has-value]="checkDateRangeHasValue()">
-            <mat-date-range-input class="form-control-input-date" [rangePicker]="rangePicker">
+            <mat-date-range-input class="form-control-input" [rangePicker]="rangePicker">
                 <input matStartDate formControlName="start">
                 <span class="custom-range-separator">–</span>
                 <input matEndDate formControlName="end">
             </mat-date-range-input>
             <mat-datepicker-toggle [for]="rangePicker"></mat-datepicker-toggle>
             <mat-date-range-picker #rangePicker></mat-date-range-picker>
-            <label class="form-control-label">Target Date</label>
+            <label class="form-control-label"
+                [class.label-up]="f.dateRange.controls.end.valid ||f.dateRange.controls.start.valid">Target Date</label>
         </div>
         <!-- Check the nested controls for errors -->
         <mat-error *ngIf="f.dateRange.controls.start.invalid && f.dateRange.controls.start.touched">
@@ -59,7 +59,7 @@
             <div class="form-control-input">
                 @if (currentPic()) {
                 {{currentPic().name ||''}}}</div>
-            <label class="form-control-label">PIC</label>
+            <label class="form-control-label" [class.label-up]="currentPic().name !=''">PIC</label>
         </div>
         <!-- Show error if invalid AND touched -->
         <mat-error *ngIf="currentPic().id ===0 && f.description.touched">

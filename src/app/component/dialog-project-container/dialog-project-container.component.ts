@@ -8,9 +8,9 @@ import {
 } from "@angular/core";
 import { DialogProjectEditComponent } from "../dialog-project-edit/dialog-project-edit.component";
 import { DialogProjectDetailComponent } from "../dialog-project-detail/dialog-project-detail.component";
-import { MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { MAT_DIALOG_DATA, MatDialogClose } from "@angular/material/dialog";
 import type { NameListItem, Project } from "../../model/format.type";
-import { UserSelectorComponent } from "../user-selector/user-selector.component";
+import { SelectorUserProjectRoleComponent } from "../selector-user-project-role/selector-user-project-role.component";
 import { MatButtonModule } from "@angular/material/button";
 import { DialogRef } from "@angular/cdk/dialog";
 import { MatIconModule } from "@angular/material/icon";
@@ -20,9 +20,10 @@ import { MatIconModule } from "@angular/material/icon";
 	imports: [
 		DialogProjectEditComponent,
 		DialogProjectDetailComponent,
-		UserSelectorComponent,
+		SelectorUserProjectRoleComponent,
 		MatButtonModule,
 		MatIconModule,
+		MatDialogClose,
 	],
 	templateUrl: "./dialog-project-container.component.html",
 	styleUrl: "./dialog-project-container.component.css",
@@ -34,8 +35,8 @@ export class DialogProjectContainerComponent {
 	@Output() updatedProject = new EventEmitter<Project>();
 	@ViewChild(DialogProjectEditComponent)
 	dialogNewProject!: DialogProjectEditComponent;
-	@ViewChild(UserSelectorComponent)
-	UserSelector!: UserSelectorComponent;
+	@ViewChild(SelectorUserProjectRoleComponent)
+	UserSelector!: SelectorUserProjectRoleComponent;
 	dialogRef = inject(DialogRef<DialogProjectContainerComponent>);
 
 	triggerNewProjectSubmit() {

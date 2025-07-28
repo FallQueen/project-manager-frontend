@@ -10,6 +10,7 @@ import type {
 	AlterProject,
 	BacklogData,
 	WorkData,
+	AlterWork,
 } from "../model/format.type";
 
 @Injectable({
@@ -110,6 +111,16 @@ export class DataProcessingService {
 	getBacklogWorks(backlogId: number) {
 		const url = `${this.host}/getBacklogWorks?backlogId=${backlogId}`;
 		return this.http.get<WorkData[]>(url);
+	}
+
+	getWorkUserAssignment(workId: number) {
+		const url = `${this.host}/getUserWorkAssignment?workId=${workId}`;
+		return this.http.get<NameListItem[]>(url);
+	}
+
+	putAlterWork(alterProject: AlterWork) {
+		const url = `${this.host}/putAlterUserWorkAssignment`;
+		return this.http.put(url, alterProject);
 	}
 
 	getPeriodDonePercentage(startDate: Date, endDate: Date): number {

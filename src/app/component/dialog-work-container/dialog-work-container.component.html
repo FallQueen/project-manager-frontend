@@ -1,0 +1,44 @@
+<div class="dialog-container">
+    <div class="title">
+        <h1 (click)="toggleEdit()">@if (dialogData.newWork) {
+            NEW WORK
+            } @else { #{{dialogData.project.projectId}} <span><mat-icon>edit</mat-icon></span> }
+
+        </h1>
+    </div>
+    @if (dialogData.newWork) {
+
+    <app-dialog-work-input [currentPic]="currentPic"></app-dialog-work-input>
+    } @else if (editable()) {
+
+    <!-- <app-dialog-project-edit [currentPic]="currentPic" [project]="dialogData.project"></app-dialog-project-edit> -->
+    } @else if (!editable()) {
+
+    <!-- <app-dialog-project-detail [project]="dialogData.project"></app-dialog-project-detail> -->
+    }
+    @if (dialogData.newWork) {
+    <div class="selector-con">
+        <app-selector-user-work [editable]="true" [newWork]="dialogData?.newWork"
+            (newPic)="currentPic.set($event)"></app-selector-user-work>
+    </div>
+    }
+
+
+    <!--  @else {
+        <app-selector-user-work [workId]="dialogData?.project?.workId" [workPicName]="dialogData?.work?.picName"
+            [editable]="editable()" [newWork]="dialogData?.newWork"
+            (newPic)="currentPic.set($event)"></app-selector-user-work>
+        } -->
+
+    <div class="row-right-aligned">
+        @if (dialogData.newWork) {
+        <button mat-flat-button [mat-dialog-close]="true">Cancel</button>
+        <button mat-flat-button (click)="triggerNewWorkSubmit()">Create</button>
+        } @else if (!dialogData.newWork && !editable()) {
+        <button mat-flat-button [mat-dialog-close]="true">Ok</button>
+        } @else {
+        <button mat-flat-button (click)="triggerEditWorkSubmit()">Save</button>
+
+        }
+    </div>
+</div>

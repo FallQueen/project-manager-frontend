@@ -1,0 +1,39 @@
+.work-container {
+	display: flex;
+	align-items: center;
+	width: 100%; /* Ensures it takes full width of its parent */
+	height: 3.2em;
+}
+
+.work-inner-container {
+	display: flex;
+	align-items: center;
+	width: 100%; /* Ensures it takes full width of its parent */
+	height: 3.2em;
+	transition: color 0.2s ease-in-out;
+}
+
+.indicator {
+	width: 4px;
+
+	height: 100%;
+	background-color: var(--primary-blue);
+}
+
+mat-icon {
+	padding-left: 0.2em;
+}
+
+.card-name {
+	display: flex;
+	align-items: center;
+	width: 25%;
+	font-size: 1.1em;
+	font-weight: 600;
+	padding: 0 0em 0 0.5em;
+	transform: translateY(-0.05em);
+}
+
+.work-inner-container:hover {
+	color: var(--primary-blue);
+}

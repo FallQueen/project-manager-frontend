@@ -29,7 +29,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { forkJoin } from "rxjs";
 
 @Component({
-	selector: "app-user-selector",
+	selector: 'app-selector-user-project-role',
 	imports: [
 		DragDropModule,
 		CdkDropListGroup,
@@ -38,11 +38,11 @@ import { forkJoin } from "rxjs";
 		FormsModule,
 		MatTooltipModule,
 	],
-	templateUrl: "./user-selector.component.html",
-	styleUrl: "./user-selector.component.css",
+	templateUrl: './selector-user-project-role.component.html',
+	styleUrl: './selector-user-project-role.component.css',
 	providers: [SearchBarService],
 })
-export class UserSelectorComponent {
+export class SelectorUserProjectRoleComponent {
 	searchBarService = inject(SearchBarService);
 	dataService = inject(DataProcessingService);
 	fullUserRoleList = signal<NameListItemByRole[]>([]);

@@ -5,12 +5,12 @@ import { DialogProjectEditComponent } from "../dialog-project-edit/dialog-projec
 import { DialogProjectContainerComponent } from "../dialog-project-container/dialog-project-container.component";
 
 @Component({
-	selector: "app-card-new-project",
+	selector: 'app-card-project-new',
 	imports: [MatIconModule],
-	templateUrl: "./card-new-project.component.html",
-	styleUrl: "./card-new-project.component.css",
+	templateUrl: './card-project-new.component.html',
+	styleUrl: './card-project-new.component.css',
 })
-export class CardNewProjectComponent {
+export class CardProjectNewComponent {
 	dialog = inject(MatDialog);
 	@Output() refresh = new EventEmitter<void>();
 

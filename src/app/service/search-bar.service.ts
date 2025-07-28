@@ -27,4 +27,9 @@ export class SearchBarService {
 			names.name.toLowerCase().includes(filterValue),
 		);
 	}
+
+	triggerManualFilter() {
+		const filteredList = this.filter(this.nameInput(), this.nameList());
+		this.filteredNameList.set(filteredList);
+	}
 }
