@@ -83,7 +83,6 @@ export class DialogProjectEditComponent {
 
 	ngOnInit() {
 		if (this.project) {
-			console.log("project edit mode");
 			this.projectForm.patchValue({
 				projectName: this.project.projectName,
 				description: this.project.description,
@@ -123,12 +122,10 @@ export class DialogProjectEditComponent {
 				userRoles,
 				picId: this.currentPic().id,
 			};
-			console.log("Form is valid. Submitting:", newProject);
 			this.dataService.postNewProject(newProject).subscribe(() => {
 				this.containerDialogRef.close();
 			});
 		} else {
-			console.log("Form is invalid. Marking all as touched.");
 			this.projectForm.markAllAsTouched();
 		}
 	}
@@ -171,11 +168,8 @@ export class DialogProjectEditComponent {
 			this.project.targetDate =
 				this.projectForm.value.dateRange?.end || this.project.targetDate;
 			this.project.picName = this.currentPic().name || this.project.picName;
-			console.log("Editing project. Submitting:", alterProject);
-			console.log("Editing Origin project:", this.project);
 			this.dataService.putAlterProject(alterProject).subscribe();
 		} else {
-			console.log("Edit form is invalid. Marking all as touched.");
 			this.projectForm.markAllAsTouched();
 		}
 	}

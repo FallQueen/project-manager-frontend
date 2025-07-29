@@ -53,7 +53,14 @@
     <div class="child-container">
         <div class="indicator-child priority-{{backlogData.priorityName}}"></div>
         <div class="work-list-container">
-            <div class="tracker-name">work</div>
+            <div class="work-header">
+                <span class="section-label-name">FUNCTION</span>
+                <span class="section-label">STATE</span>
+                <span class="section-label">PRIORITY</span>
+                <span class="section-label">PERIOD</span>
+            </div>
+
+
             @for (work of workList(); track $index) {
             <app-card-work [workData]="work"></app-card-work>
             }

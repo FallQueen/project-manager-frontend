@@ -1,9 +1,10 @@
 <div cdkDropListGroup class="selector-container">
     <div class="drop-list-container">
         @for (item of fullUserRoleList(); track $index) {
+        <div class="role-name">{{item.roleName}}</div>
         <div [cdkDropListDisabled]="!editable" cdkDropList cdkDropListOrientation="mixed" id="role-{{$index +1}}"
             [cdkDropListData]="item.users" class="drop-list" (cdkDropListDropped)="drop($event)">
-            <div class="role-name">{{item.roleName}}</div>
+
             @for (name of item.users; track name.id) {
             <div cdkDrag class="drop-list-item" matTooltip="PIC"
                 [matTooltipDisabled]="!($index == 0 && item.roleId == 1)" [class.pic]="$index == 0 && item.roleId == 1">

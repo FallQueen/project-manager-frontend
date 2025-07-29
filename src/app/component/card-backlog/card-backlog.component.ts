@@ -84,10 +84,11 @@ export class CardBacklogComponent {
 				.getBacklogWorks(this.backlogData.backlogId)
 				.subscribe((result) => {
 					this.workList.set(result);
-					this.expanded.set(!this.expanded());
+					// this.expanded.set(!this.expanded());
 				});
 		} else {
-			this.expanded.set(!this.expanded());
+			// this.expanded.set(!this.expanded());
 		}
+		this.expanded.set(!this.expanded());
 	}
 }

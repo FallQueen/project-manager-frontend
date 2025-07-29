@@ -8,4 +8,6 @@ import { LoginService } from "../../service/login.service";
 	templateUrl: "./header.component.html",
 	styleUrl: "./header.component.css",
 })
-export class HeaderComponent {}
+export class HeaderComponent {
+	dataService = inject(DataProcessingService);
+}

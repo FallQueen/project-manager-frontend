@@ -106,13 +106,14 @@ export interface WorkData {
 export type NewWork = {
 	workName: string;
 	description: string;
-	startDate: Date;
-	targetDate: Date;
-	picId: number;
+	startDate: Date | null;
+	targetDate: Date | null;
+	picId: number | null;
 	createdBy: number;
 	priorityId: number;
 	estimatedHours: number;
 	trackerId: number;
+	activityId: number;
 	usersAdded: number[];
 };
 

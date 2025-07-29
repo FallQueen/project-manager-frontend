@@ -5,6 +5,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatIconModule } from "@angular/material/icon";
 import { MatDialog } from "@angular/material/dialog";
 import { DialogProjectContainerComponent } from "../dialog-project-container/dialog-project-container.component";
+import { DataProcessingService } from "../../service/data-processing.service";
 
 @Component({
 	selector: "app-card-project",
@@ -13,6 +14,7 @@ import { DialogProjectContainerComponent } from "../dialog-project-container/dia
 	styleUrl: "./card-project.component.css",
 })
 export class CardProjectComponent {
+	dataService = inject(DataProcessingService);
 	dialog = inject(MatDialog);
 
 	@Input() isEmpty!: true;

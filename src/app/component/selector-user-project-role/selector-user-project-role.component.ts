@@ -29,7 +29,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { forkJoin } from "rxjs";
 
 @Component({
-	selector: 'app-selector-user-project-role',
+	selector: "app-selector-user-project-role",
 	imports: [
 		DragDropModule,
 		CdkDropListGroup,
@@ -38,8 +38,8 @@ import { forkJoin } from "rxjs";
 		FormsModule,
 		MatTooltipModule,
 	],
-	templateUrl: './selector-user-project-role.component.html',
-	styleUrl: './selector-user-project-role.component.css',
+	templateUrl: "./selector-user-project-role.component.html",
+	styleUrl: "./selector-user-project-role.component.css",
 	providers: [SearchBarService],
 })
 export class SelectorUserProjectRoleComponent {
@@ -199,7 +199,6 @@ export class SelectorUserProjectRoleComponent {
 		const picIndex = users.findIndex(
 			(user) => user.name === this.projectPicName,
 		);
-		console.log("found picIndex:", picIndex);
 		if (picIndex > 0) {
 			const [pic] = users.splice(picIndex, 1);
 			users.unshift(pic);

@@ -1,7 +1,7 @@
 <!-- Bind the entire form to the FormGroup -->
 
 <div class="dialog-body" [formGroup]="workForm">
-    <!-- Project Name -->
+    <!-- Project name -->
     <div>
         <div class="form-control">
             <input matInput type="text" class="form-control-input" formControlName="workName">
@@ -28,11 +28,11 @@
 
     <!-- Date Range (uses a nested formGroupName) -->
     <div>
-        <div class="form-control" formGroupName="dateRange" [class.has-value]="checkDateRangeHasValue()">
+        <div class="form-control" formGroupName="dateRange">
             <mat-date-range-input class="form-control-input" [rangePicker]="rangePicker">
-                <input matStartDate formControlName="start">
+                <input matStartDate readonly formControlName="start">
                 <span class="custom-range-separator">–</span>
-                <input matEndDate formControlName="end">
+                <input matEndDate readonly formControlName="end">
             </mat-date-range-input>
             <mat-datepicker-toggle [for]="rangePicker"></mat-datepicker-toggle>
             <mat-date-range-picker #rangePicker></mat-date-range-picker>
@@ -49,23 +49,115 @@
         </mat-error>
     </div>
 
-    <!-- <div>
-        <app-search-bar (userNameSelected)="f.picId.setValue($event)"></app-search-bar>
-        <mat-error *ngIf="f.picId.invalid  && f.picId.touched">Tolong isi PIC projek</mat-error>
-    </div> -->
-    <div>
-        <div class="form-control">
-            <!-- <textarea type="text" class="form-control-input" formControlName="description" rows="3"
-                placeholder="Description"></textarea> -->
-            <div class="form-control-input">
-                @if (currentPic()) {
-                {{currentPic().name ||'&nbsp;'}}}</div>
-            <label class="form-control-label" [class.label-up]="currentPic().name != ''">PIC</label>
+    <!-- Priority and State -->
+    <div class="row">
+        <div>
+            <div class="form-control">
+                <input matInput type="text" readonly (click)="priorityTrigger.openPanel()"
+                    #priorityTrigger="matAutocompleteTrigger" [matAutocomplete]="autoPriority"
+                    class="form-control-input" formControlName="priority">
+                <label class="form-control-label" [class.label-up]="f.priority.valid">Priority</label>
+
+                <mat-autocomplete #autoPriority="matAutocomplete" [displayWith]="displayName">
+                    @for (nameItem of priorityList(); track nameItem.id ) {
+                    <mat-option [value]="nameItem">{{ nameItem.name }}</mat-option>
+                    }
+                </mat-autocomplete>
+            </div>
+            <!-- Show error if invalid AND touched -->
+            <mat-error *ngIf="f.priority.invalid && f.priority.touched">
+                Tolong isi tracker
+            </mat-error>
         </div>
-        <!-- Show error if invalid AND touched -->
-        <mat-error *ngIf="currentPic().id ===0 && f.description.touched">
-            Tolong isi PIC
-        </mat-error>
+
+
+        <div>
+            <div class="form-control">
+                <input matInput type="text" readonly class="form-control-input" formControlName="state">
+                <label class="form-control-label" [class.label-up]="f.state.valid">State</label>
+
+
+            </div>
+            <!-- Show error if invalid AND touched -->
+            <mat-error *ngIf="f.state.invalid && f.state.touched">
+                Tolong isi tracker
+            </mat-error>
+        </div>
+
     </div>
 
+    <!-- Tracker and Activity -->
+    <div class="row">
+        <div>
+            <div class="form-control">
+                <input matInput type="text" readonly (click)="trackerTrigger.openPanel()"
+                    #trackerTrigger="matAutocompleteTrigger" [matAutocomplete]="autoTrack" class="form-control-input"
+                    formControlName="tracker">
+                <label class="form-control-label" [class.label-up]="f.tracker.valid">Tracker</label>
+
+                <mat-autocomplete #autoTrack="matAutocomplete" [displayWith]="displayName">
+                    @for (nameItem of trackerList(); track nameItem.id ) {
+                    <mat-option [value]="nameItem">{{ nameItem.name }}</mat-option>
+                    }
+                </mat-autocomplete>
+            </div>
+            <!-- Show error if invalid AND touched -->
+            <mat-error *ngIf="f.tracker.invalid && f.tracker.touched">
+                Tolong isi tracker
+            </mat-error>
+        </div>
+
+
+        <div>
+            <div class="form-control">
+                <input matInput type="text" readonly (click)="nameItemTrigger.openPanel()"
+                    #nameItemTrigger="matAutocompleteTrigger" [matAutocomplete]="autoActivity"
+                    class="form-control-input" formControlName="activity">
+                <label class="form-control-label" [class.label-up]="f.activity.valid">Activity</label>
+
+                <mat-autocomplete #autoActivity="matAutocomplete" [displayWith]="displayName"
+                    (optionSelected)="onActivitySelected()">
+                    @for (nameItem of activityList(); track nameItem.id ) {
+                    <mat-option [value]="nameItem">{{ nameItem.name }}</mat-option>
+                    }
+                </mat-autocomplete>
+            </div>
+            <!-- Show error if invalid AND touched -->
+            <mat-error *ngIf="f.activity.invalid && f.activity.touched">
+                Tolong isi activity
+            </mat-error>
+        </div>
+    </div>
+
+    <!-- PIC and Estimated Hours -->
+    <div class="row">
+        <div>
+            <div class="form-control">
+                <!-- <textarea type="text" class="form-control-input" formControlName="description" rows="3"
+                placeholder="Description"></textarea> -->
+                <div class="form-control-input">
+                    @if (currentPic()) {
+                    {{currentPic().name ||'&nbsp;'}}}</div>
+                <label class="form-control-label" [class.label-up]="currentPic().name != ''">PIC</label>
+            </div>
+            <!-- Show error if invalid AND touched -->
+            <mat-error *ngIf="currentPic().id ===0 && f.description.touched">
+                Tolong isi PIC
+            </mat-error>
+        </div>
+
+
+        <div>
+            <div class="form-control">
+                <input matInput type="number" class="form-control-input" formControlName="estimatedHours" min="0">
+                <label class="form-control-label" [class.label-up]="f.estimatedHours.value != null">Estimated
+                    Hours</label>
+            </div>
+            <!-- Show error if invalid AND touched -->
+            <mat-error *ngIf="f.estimatedHours.invalid && f.estimatedHours.touched">
+                Tolong isi Estimated Hours yang valid
+            </mat-error>
+        </div>
+
+    </div>
 </div>

@@ -1,10 +1,11 @@
 <div cdkDropListGroup class="selector-container">
-    <div class="drop-list-container">
 
+    <div class="drop-list-container">
+        <div class="role-name">Assigned</div>
         <div [cdkDropListDisabled]="!editable" cdkDropList cdkDropListOrientation="mixed"
             [cdkDropListData]="userAssignmentList()" class="drop-list" id="assignment-listS"
             (cdkDropListDropped)="drop($event)">
-            <div class="role-name">Assigned</div>
+
             @for (name of userAssignmentList(); track name.id) {
             <div cdkDrag class="drop-list-item" matTooltip="PIC" [matTooltipDisabled]="!($index == 0)"
                 [class.pic]="$index == 0">
@@ -19,10 +20,11 @@
             <div class="form-control">
                 <input matInput type="text" class="form-control-input" [(ngModel)]="searchBarService.nameInput"
                     placeholder="Name">
-                <label class="form-control-label">Name</label>
+                <label class="form-control-label" [class.label-up]="searchBarService.nameInput() !== ''">Name</label>
             </div>
-
         </div>
+
+
         <div cdkDropList cdkDropListOrientation="mixed" [cdkDropListData]="searchBarService.nameList()"
             class="drop-list" id="master-list" (cdkDropListDropped)="drop($event)">
             @for (name of searchBarService.filteredNameList(); track name.id) {

@@ -15,8 +15,6 @@ export class ProjectPageService {
 	getProjectData() {
 		this.dataService.getProjects().subscribe((result) => {
 			this.Projects.set(result);
-
-			console.log(result[0]);
 		});
 	}
 }

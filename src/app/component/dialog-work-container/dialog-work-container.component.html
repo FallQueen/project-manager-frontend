@@ -7,8 +7,7 @@
         </h1>
     </div>
     @if (dialogData.newWork) {
-
-    <app-dialog-work-input [currentPic]="currentPic"></app-dialog-work-input>
+    <app-dialog-work-input (selectActivity)="selectActivity($event)" [currentPic]="currentPic"></app-dialog-work-input>
     } @else if (editable()) {
 
     <!-- <app-dialog-project-edit [currentPic]="currentPic" [project]="dialogData.project"></app-dialog-project-edit> -->

@@ -12,6 +12,7 @@ import type {
 	WorkData,
 	AlterWork,
 } from "../model/format.type";
+import { firstValueFrom } from "rxjs";
 
 @Injectable({
 	providedIn: "root",
@@ -25,6 +26,14 @@ export class DataProcessingService {
 	// host = "https://state-management-api.vercel.app/api";
 	private host = "http://localhost:9090/api";
 
+	private trackerList!: NameListItem[];
+	private activityList!: NameListItem[];
+	private priorityList!: NameListItem[];
+	private stateList!: NameListItem[];
+
+	constructor() {
+		this.getStartBundle();
+	}
 	// Stores user information in localStorage after a successful login.
 	storeUserInfo(u: User) {
 		localStorage.setItem("userId", u.userId);
@@ -53,6 +62,18 @@ export class DataProcessingService {
 		return this.returnIfNotNull(localStorage.getItem("userRole"));
 	}
 
+	setProject(projectId: number, projectName: string) {
+		localStorage.setItem("projectId", projectId.toString());
+		localStorage.setItem("projectName", projectName);
+	}
+
+	getprojectId(): number {
+		return Number(this.returnIfNotNull(localStorage.getItem("projectId")));
+	}
+	getprojectName(): string {
+		return this.returnIfNotNull(localStorage.getItem("projectName"));
+	}
+
 	clearUserData() {
 		localStorage.setItem("userId", "0");
 		localStorage.setItem("username", "");
@@ -66,6 +87,53 @@ export class DataProcessingService {
 			return "";
 		}
 		return input;
+	}
+
+	getStartBundle() {
+		const url = `${this.host}/getStartBundle`;
+
+		this.http
+			.get<{
+				trackerList: NameListItem[];
+				activityList: NameListItem[];
+				priorityList: NameListItem[];
+				stateList: NameListItem[];
+			}>(url)
+			.subscribe((result) => {
+				this.trackerList = result.trackerList;
+				this.activityList = result.activityList;
+				this.priorityList = result.priorityList;
+				this.stateList = result.stateList;
+			});
+	}
+
+	getTrackerList(): NameListItem[] {
+		if (this.trackerList !== undefined) {
+			return this.trackerList;
+		}
+		return [];
+	}
+
+	getActivityList(): NameListItem[] {
+		if (this.activityList !== undefined) {
+			return this.activityList;
+		}
+
+		return [];
+	}
+
+	getPriorityList(): NameListItem[] {
+		if (this.priorityList !== undefined) {
+			return this.priorityList;
+		}
+		return [];
+	}
+
+	getStateList(): NameListItem[] {
+		if (this.stateList !== undefined) {
+			return this.stateList;
+		}
+		return [];
 	}
 
 	getProjects() {
@@ -85,6 +153,11 @@ export class DataProcessingService {
 
 	getUsernames() {
 		const url = `${this.host}/getUsernames`;
+		return this.http.get<NameListItem[]>(url);
+	}
+
+	getProjectAssignedUsernames(projectId: number, roleId: number) {
+		const url = `${this.host}/getProjectAssignedUsernames?projectId=${projectId}&roleId=${roleId}`;
 		return this.http.get<NameListItem[]>(url);
 	}
 
@@ -124,7 +197,6 @@ export class DataProcessingService {
 	}
 
 	getPeriodDonePercentage(startDate: Date, endDate: Date): number {
-		console.log("check per percentage");
 		const start = new Date(startDate).getTime();
 		const end = new Date(endDate).getTime();
 		const total = end - start;

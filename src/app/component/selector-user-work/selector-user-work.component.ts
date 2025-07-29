@@ -1,8 +1,10 @@
 import {
 	Component,
 	computed,
+	effect,
 	EventEmitter,
 	inject,
+	Injector,
 	Input,
 	Output,
 	type Signal,
@@ -46,6 +48,7 @@ export class SelectorUserWorkComponent {
 	searchBarService = inject(SearchBarService);
 	dataService = inject(DataProcessingService);
 	userAssignmentList = signal<NameListItem[]>([]);
+	injector = inject(Injector);
 	UserAssignmentMemory!: NameListItem[];
 	@Input() editable = false;
 	@Input() newWork = false;
@@ -57,12 +60,6 @@ export class SelectorUserWorkComponent {
 
 	ngOnInit() {
 		if (this.newWork) {
-			this.dataService.getUsernames().subscribe((users) => {
-				this.searchBarService.nameList.set(users);
-			});
-			if (this.setUserAsPic) {
-				this.setCurrentUserAsPic();
-			}
 			return;
 		}
 
@@ -86,6 +83,27 @@ export class SelectorUserWorkComponent {
 				this.setCurrentUserAsPic();
 			}
 		});
+	}
+
+	initProjectUsers(activity: number) {
+		// ActivityId 1 = Development,  2 = Design
+		let roleId = 0;
+		if (activity === 1) {
+			roleId = 2; // RoleId 2 = Developer
+		} else if (activity === 2) {
+			roleId = 3; // RoleId 3 = Designer
+		} else {
+			return;
+		}
+		this.dataService
+			.getProjectAssignedUsernames(this.dataService.getprojectId(), roleId)
+			.subscribe((users) => {
+				this.searchBarService.nameList.set(users);
+			});
+		if (this.setUserAsPic) {
+			this.setCurrentUserAsPic();
+		}
+		return;
 	}
 
 	drop(event: CdkDragDrop<NameListItem[]>) {
@@ -201,7 +219,6 @@ export class SelectorUserWorkComponent {
 	movePicFront(picName: string) {
 		const users = this.userAssignmentList();
 		const picIndex = users.findIndex((user) => user.name === this.workPicName);
-		console.log("found picIndex:", picIndex);
 		if (picIndex > 0) {
 			const [pic] = users.splice(picIndex, 1);
 			users.unshift(pic);
