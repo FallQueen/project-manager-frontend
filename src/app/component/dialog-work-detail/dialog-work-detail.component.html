@@ -1,1 +1,87 @@
-<p>dialog-work-detail works!</p>
+@if (work){
+<div class="dialog-body">
+    <div>
+        <div class="form-control">
+            <div class="form-control-input">{{work.workName}}
+            </div>
+            <label class="form-control-label label-up">Work Name</label>
+        </div>
+
+
+    </div>
+
+    <!-- Description -->
+    <div>
+        <div class="form-control">
+            <div class="form-control-input">{{work.description}}
+            </div>
+            <label class="form-control-label label-up">Description</label>
+        </div>
+
+
+    </div>
+
+    <!-- Date Range (uses a nested formGroupName) -->
+    <div>
+        <div class="form-control">
+            <div class="form-control-input">{{
+                work.startDate| date : "M/d/yyyy"
+                }} – {{
+                work.targetDate| date : "M/d/yyyy"
+                }}
+            </div>
+            <label class="form-control-label label-up">Target Date</label>
+        </div>
+        <!-- Check the nested controls for errors -->
+
+    </div>
+
+    <div class="row">
+        <div class="form-control">
+            <div class="form-control-input">{{work.priorityName}}</div>
+            <label class="form-control-label label-up">Priority</label>
+        </div>
+
+
+        <div class="form-control">
+            <div class="form-control-input">{{work.stateName}}
+            </div>
+            <label class="form-control-label label-up">State</label>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="form-control">
+            <div class="form-control-input">{{work.trackerName}}</div>
+            <label class="form-control-label label-up">Tracker</label>
+        </div>
+
+
+        <div class="form-control">
+            <div class="form-control-input">{{work.activityName}}
+            </div>
+            <label class="form-control-label label-up">Activity</label>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="form-control">
+            <!-- <textarea type="text" class="form-control-input" formControlName="description" rows="3"
+                placeholder="Description"></textarea> -->
+            <div class="form-control-input">
+                {{work.picName}}</div>
+            <label class="form-control-label label-up">PIC</label>
+        </div>
+
+
+
+        <div class="form-control">
+            <div class="form-control-input">{{work.estimatedHours}}
+            </div>
+            <label class="form-control-label label-up">Estimated Hours</label>
+        </div>
+    </div>
+</div>
+}

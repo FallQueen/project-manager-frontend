@@ -27,7 +27,7 @@
 }
 
 .drop-list-container {
-	flex: 1;
+	width: 100%;
 	display: flex;
 	/* height: fit-content; */
 	flex-direction: column;
@@ -50,6 +50,7 @@
 	border-radius: 0.5em;
 	box-sizing: border-box;
 	align-content: flex-start;
+	min-height: 2em;
 }
 /* .selector-container > .drop-list {
 	flex-basis: 250px;
@@ -85,6 +86,24 @@
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
+.pic-placeholder {
+	display: flex;
+	font-size: 0.9em;
+	justify-content: center;
+	align-items: center;
+	background-color: color-mix(in srgb, var(--primary-blue) 20%, transparent); /* 50% opacity background */
+	border-radius: 4px;
+	padding: 0.3em 1em;
+	color: #444;
+	font-weight: 700;
+	border: dashed 3px #888; /* Dashed border for placeholder */
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.drop-list .pic-placeholder:has(+ .cdk-drag-placeholder) {
+	display: none !important;
+}
+
 .drop-list-item.pic {
 	background: linear-gradient(to bottom, var(--primary-blue), #0b66c7); /* Lighter blue to primary blue */
 
@@ -97,5 +116,5 @@
 
 .form-control label {
 	background-color: #f0f0f0;
-	top: 0.8em;
+	top: 0.85em;
 }

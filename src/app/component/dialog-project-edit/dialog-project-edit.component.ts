@@ -159,18 +159,24 @@ export class DialogProjectEditComponent {
 			};
 
 			// Update the local project object with either the same or new values
-			this.project.projectName =
-				this.projectForm.value.projectName || this.project.projectName;
-			this.project.description =
-				this.projectForm.value.description || this.project.description;
-			this.project.startDate =
-				this.projectForm.value.dateRange?.start || this.project.startDate;
-			this.project.targetDate =
-				this.projectForm.value.dateRange?.end || this.project.targetDate;
-			this.project.picName = this.currentPic().name || this.project.picName;
-			this.dataService.putAlterProject(alterProject).subscribe();
+
+			this.dataService.putAlterProject(alterProject).subscribe(() => {
+				this.updateExistingProject();
+			});
 		} else {
 			this.projectForm.markAllAsTouched();
 		}
+	}
+
+	updateExistingProject() {
+		this.project.projectName =
+			this.projectForm.value.projectName || this.project.projectName;
+		this.project.description =
+			this.projectForm.value.description || this.project.description;
+		this.project.startDate =
+			this.projectForm.value.dateRange?.start || this.project.startDate;
+		this.project.targetDate =
+			this.projectForm.value.dateRange?.end || this.project.targetDate;
+		this.project.picName = this.currentPic().name || this.project.picName;
 	}
 }

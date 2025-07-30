@@ -11,6 +11,7 @@ import type {
 	BacklogData,
 	WorkData,
 	AlterWork,
+	NewWork,
 } from "../model/format.type";
 import { firstValueFrom } from "rxjs";
 
@@ -186,15 +187,25 @@ export class DataProcessingService {
 		return this.http.get<WorkData[]>(url);
 	}
 
+	postNewWork(newWork: NewWork) {
+		const url = `${this.host}/postNewWork`;
+		return this.http.post(url, newWork);
+	}
+
+	putAlterWork(alterWork: AlterWork) {
+		const url = `${this.host}/putAlterWork`;
+		return this.http.put(url, alterWork);
+	}
+
 	getWorkUserAssignment(workId: number) {
 		const url = `${this.host}/getUserWorkAssignment?workId=${workId}`;
 		return this.http.get<NameListItem[]>(url);
 	}
 
-	putAlterWork(alterProject: AlterWork) {
-		const url = `${this.host}/putAlterUserWorkAssignment`;
-		return this.http.put(url, alterProject);
-	}
+	// putAlterWork(alterProject: AlterWork) {
+	// 	const url = `${this.host}/putAlterUserWorkAssignment`;
+	// 	return this.http.put(url, alterProject);
+	// }
 
 	getPeriodDonePercentage(startDate: Date, endDate: Date): number {
 		const start = new Date(startDate).getTime();

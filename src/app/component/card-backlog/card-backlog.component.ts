@@ -1,5 +1,9 @@
 import { Component, inject, Input, signal } from "@angular/core";
-import type { BacklogData, WorkData } from "../../model/format.type";
+import type {
+	BacklogData,
+	NameListItem,
+	WorkData,
+} from "../../model/format.type";
 import { CommonModule } from "@angular/common";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatIconModule } from "@angular/material/icon";
@@ -56,9 +60,11 @@ export class CardBacklogComponent {
 	}
 
 	countTotalWorkState() {
+		let total = 0;
 		for (const state of this.backlogData.workStateCountList) {
-			this.totalWork.set(this.totalWork() + state.stateCount);
+			total += state.stateCount;
 		}
+		this.totalWork.set(total);
 	}
 	countPercentage() {
 		for (const state of this.backlogData.workStateCountList) {
@@ -80,15 +86,40 @@ export class CardBacklogComponent {
 
 	expandWorkInside() {
 		if (this.workList().length <= 0) {
-			this.dataService
-				.getBacklogWorks(this.backlogData.backlogId)
-				.subscribe((result) => {
-					this.workList.set(result);
-					// this.expanded.set(!this.expanded());
-				});
+			this.refreshWorkList();
 		} else {
 			// this.expanded.set(!this.expanded());
 		}
 		this.expanded.set(!this.expanded());
+	}
+
+	refreshWorkList() {
+		this.dataService
+			.getBacklogWorks(this.backlogData.backlogId)
+			.subscribe((result) => {
+				this.workList.set(result);
+			});
+	}
+
+	doWhenNewWork(workState: NameListItem) {
+		this.refreshWorkList();
+		const index = this.backlogData.workStateCountList.findIndex(
+			(item) => item.stateId === workState.id,
+		);
+		console.log("Index of work state:", index);
+		if (index !== -1) {
+			this.backlogData.workStateCountList[index].stateCount += 1;
+		}
+		if (index === -1) {
+			this.backlogData.workStateCountList.push({
+				stateId: workState.id,
+				stateName: workState.name,
+				stateCount: 1,
+				percentage: 0,
+			});
+		}
+		console.log("Work state updated:", this.backlogData.workStateCountList);
+		this.countTotalWorkState();
+		this.countPercentage();
 	}
 }

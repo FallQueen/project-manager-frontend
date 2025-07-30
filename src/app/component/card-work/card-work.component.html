@@ -1,9 +1,26 @@
 <div class="work-container">
-    <div class="indicator priority-{{workData.priorityName}}"></div>
+    <!-- <div class="indicator priority-{{workData.priorityName}}"></div> -->
     <div class="work-inner-container">
-        <div class="card-name">
+        <div (click)="openForm()" class="card-name">
             <span class="backlog-name">{{workData.workName}}</span>
         </div>
+
+
+
+        <div class="card-section">
+            <!-- <span class="section-label">State</span> -->
+            <div class="card-status">
+                <span>{{workData.trackerName}}</span>
+            </div>
+        </div>
+
+        <div class="card-section">
+            <!-- <span class="section-label">State</span> -->
+            <div class="card-status">
+                <span>{{workData.activityName}}</span>
+            </div>
+        </div>
+
         <div class="card-section">
             <!-- <span class="section-label">State</span> -->
             <div class="card-status state-{{workData.stateId}}">

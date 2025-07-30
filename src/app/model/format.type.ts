@@ -90,7 +90,7 @@ export interface WorkData {
 	priorityId: number;
 	priorityName: string;
 	picId: number;
-	picUserName: string;
+	picName: string;
 	description: string;
 	stateId: number;
 	stateName: string;
@@ -101,14 +101,18 @@ export interface WorkData {
 	estimatedHours: number;
 	trackerId: number;
 	trackerName: string;
+	activityId: number;
+	activityName: string;
 }
 
 export type NewWork = {
+	backlogId: number;
 	workName: string;
 	description: string;
 	startDate: Date | null;
 	targetDate: Date | null;
 	picId: number | null;
+	currentState: number;
 	createdBy: number;
 	priorityId: number;
 	estimatedHours: number;
@@ -127,6 +131,7 @@ export type AlterWork = {
 	priorityId: number | null;
 	estimatedHours: number | null;
 	trackerId: number | null;
-	usersAdded: number[];
+	activityId: number | null;
 	usersRemoved: number[];
+	usersAdded: number[];
 };

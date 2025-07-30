@@ -23,9 +23,9 @@
         <app-selector-user-project-role [editable]="true" [newProject]="dialogData?.newProject"
             (newPic)="currentPic.set($event)"></app-selector-user-project-role>
         } @else {
-        <app-selector-user-project-role [projectId]="dialogData?.project?.projectId" [projectPicName]="dialogData?.project?.picName"
-            [editable]="editable()" [newProject]="dialogData?.newProject"
-            (newPic)="currentPic.set($event)"></app-selector-user-project-role>
+        <app-selector-user-project-role [projectId]="dialogData?.project?.projectId"
+            [projectPicName]="dialogData?.project?.picName" [editable]="editable()"
+            [newProject]="dialogData?.newProject" (newPic)="currentPic.set($event)"></app-selector-user-project-role>
         }
     </div>
     <div class="row-right-aligned">
@@ -35,8 +35,8 @@
         } @else if (!dialogData.newProject && !editable()) {
         <button mat-flat-button [mat-dialog-close]="true">Ok</button>
         } @else {
+        <button mat-flat-button (click)="toggleEdit()">Cancel</button>
         <button mat-flat-button (click)="triggerEditProjectSubmit()">Save</button>
-
         }
     </div>
 </div>

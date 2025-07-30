@@ -184,6 +184,7 @@ app-card-work-new {
 	max-height: 0;
 	transition: all 0.4s ease-in-out;
 }
+app-card-work-new.empty,
 .child-container:hover app-card-work-new {
 	max-height: 3em;
 }
@@ -192,18 +193,8 @@ app-card-work-new {
 	display: flex;
 	flex-direction: column;
 	width: 100%;
-
-	margin: 0.2em 0em 0.5em 0.1em;
-	border-radius: 8px;
-	border: 1px solid rgba(51, 51, 51, 0.2);
+	margin: 0.2em 0em 0em 0em;
+	/* border-radius: 8px; */
+	border-top: 1px solid rgba(51, 51, 51, 0.2);
 	overflow: hidden;
-}
-
-.tracker-name {
-	width: 100%;
-	background-color: var(--primary-blue);
-	color: var(--primary-white);
-	font-size: 1.2em;
-	font-weight: 600;
-	padding-left: 0.5em;
 }

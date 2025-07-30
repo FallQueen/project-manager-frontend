@@ -26,6 +26,8 @@ export class DialogWorkContainerComponent {
 	editable = signal<boolean>(false);
 	@ViewChild(SelectorUserWorkComponent)
 	SelectorUserWorkComponent!: SelectorUserWorkComponent;
+	@ViewChild(DialogWorkInputComponent)
+	DialogWorkInputComponent!: DialogWorkInputComponent;
 
 	toggleEdit() {
 		this.editable.set(!this.editable());
@@ -34,6 +36,21 @@ export class DialogWorkContainerComponent {
 	selectActivity(activity: NameListItem) {
 		this.SelectorUserWorkComponent.initProjectUsers(activity.id);
 	}
-	triggerNewWorkSubmit() {}
-	triggerEditWorkSubmit() {}
+
+	selectorEmpty(empty: boolean) {
+		this.DialogWorkInputComponent.changeState(empty);
+	}
+
+	triggerNewWorkSubmit() {
+		this.DialogWorkInputComponent.newWorkCreate(
+			this.SelectorUserWorkComponent.getArrayChanges().usersAdded,
+		);
+	}
+	triggerEditWorkSubmit() {
+		const changes = this.SelectorUserWorkComponent.getArrayChanges();
+		this.DialogWorkInputComponent.workEdit(
+			changes.usersRemoved,
+			changes.usersAdded,
+		);
+	}
 }

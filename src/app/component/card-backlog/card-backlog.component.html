@@ -55,6 +55,8 @@
         <div class="work-list-container">
             <div class="work-header">
                 <span class="section-label-name">FUNCTION</span>
+                <span class="section-label">TRACKER</span>
+                <span class="section-label">ACTIVITY</span>
                 <span class="section-label">STATE</span>
                 <span class="section-label">PRIORITY</span>
                 <span class="section-label">PERIOD</span>
@@ -64,7 +66,8 @@
             @for (work of workList(); track $index) {
             <app-card-work [workData]="work"></app-card-work>
             }
-            <app-card-work-new></app-card-work-new>
+            <app-card-work-new [class.empty]="!workList().length" [backlogData]="backlogData"
+                (newWork)="doWhenNewWork($event)"></app-card-work-new>
 
         </div>
     </div>

@@ -1,32 +1,31 @@
-<!-- Bind the entire form to the FormGroup -->
-
+<!-- Form bound to workForm FormGroup -->
 <div class="dialog-body" [formGroup]="workForm">
-    <!-- Project name -->
+
+    <!-- Project Name Input -->
     <div>
         <div class="form-control">
             <input matInput type="text" class="form-control-input" formControlName="workName">
-            <label class="form-control-label" [class.label-up]="f.workName.valid">Project Name</label>
+            <label class="form-control-label" [class.label-up]="f.workName.valid">Work Name</label>
         </div>
-        <!-- Show error if invalid AND touched -->
+        <!-- Error if project name is invalid and touched -->
         <mat-error *ngIf="f.workName.invalid && f.workName.touched">
-            Tolong isi nama projek
+            Please enter the project name
         </mat-error>
     </div>
 
-    <!-- Description -->
+    <!-- Description Input -->
     <div>
         <div class="form-control">
-            <textarea matInput cdkTextareaAutosize type="text" class="form-control-input"
-                formControlName="description"></textarea>
+            <textarea matInput type="text" class="form-control-input" formControlName="description"></textarea>
             <label class="form-control-label" [class.label-up]="f.description.valid">Description</label>
         </div>
-        <!-- Show error if invalid AND touched -->
+        <!-- Error if description is invalid and touched -->
         <mat-error *ngIf="f.description.invalid && f.description.touched">
-            Tolong isi deskripsi
+            Please enter the description
         </mat-error>
     </div>
 
-    <!-- Date Range (uses a nested formGroupName) -->
+    <!-- Date Range Picker (nested formGroupName) -->
     <div>
         <div class="form-control" formGroupName="dateRange">
             <mat-date-range-input class="form-control-input" [rangePicker]="rangePicker">
@@ -40,16 +39,16 @@
                 [class.label-up]="f.dateRange.controls.start.valid || f.dateRange.controls.end.valid">Target
                 Date</label>
         </div>
-        <!-- Check the nested controls for errors -->
+        <!-- Errors for start/end date if invalid and touched -->
         <mat-error *ngIf="f.dateRange.controls.start.invalid && f.dateRange.controls.start.touched">
-            Tolong isi mulai projek
+            Please enter the project start date
         </mat-error>
         <mat-error *ngIf="f.dateRange.controls.end.invalid && f.dateRange.controls.end.touched">
-            Tolong isi target projek
+            Please enter the project target date
         </mat-error>
     </div>
 
-    <!-- Priority and State -->
+    <!-- Priority and State Inputs -->
     <div class="row">
         <div>
             <div class="form-control">
@@ -57,56 +56,51 @@
                     #priorityTrigger="matAutocompleteTrigger" [matAutocomplete]="autoPriority"
                     class="form-control-input" formControlName="priority">
                 <label class="form-control-label" [class.label-up]="f.priority.valid">Priority</label>
-
+                <!-- Priority Autocomplete -->
                 <mat-autocomplete #autoPriority="matAutocomplete" [displayWith]="displayName">
                     @for (nameItem of priorityList(); track nameItem.id ) {
                     <mat-option [value]="nameItem">{{ nameItem.name }}</mat-option>
                     }
                 </mat-autocomplete>
             </div>
-            <!-- Show error if invalid AND touched -->
+            <!-- Error if priority is invalid and touched -->
             <mat-error *ngIf="f.priority.invalid && f.priority.touched">
-                Tolong isi tracker
+                Please select the priority
             </mat-error>
         </div>
-
 
         <div>
             <div class="form-control">
-                <input matInput type="text" readonly class="form-control-input" formControlName="state">
+                <div class="form-control-input">{{f.state.value?.name}}</div>
                 <label class="form-control-label" [class.label-up]="f.state.valid">State</label>
-
-
             </div>
-            <!-- Show error if invalid AND touched -->
+            <!-- Error if state is invalid and touched -->
             <mat-error *ngIf="f.state.invalid && f.state.touched">
-                Tolong isi tracker
+                Please select the state
             </mat-error>
         </div>
-
     </div>
 
-    <!-- Tracker and Activity -->
+    <!-- Tracker and Activity Inputs -->
     <div class="row">
         <div>
             <div class="form-control">
-                <input matInput type="text" readonly (click)="trackerTrigger.openPanel()"
+                <input matInput type="text" (click)="trackerTrigger.openPanel()"
                     #trackerTrigger="matAutocompleteTrigger" [matAutocomplete]="autoTrack" class="form-control-input"
                     formControlName="tracker">
                 <label class="form-control-label" [class.label-up]="f.tracker.valid">Tracker</label>
-
+                <!-- Tracker Autocomplete -->
                 <mat-autocomplete #autoTrack="matAutocomplete" [displayWith]="displayName">
                     @for (nameItem of trackerList(); track nameItem.id ) {
                     <mat-option [value]="nameItem">{{ nameItem.name }}</mat-option>
                     }
                 </mat-autocomplete>
             </div>
-            <!-- Show error if invalid AND touched -->
+            <!-- Error if tracker is invalid and touched -->
             <mat-error *ngIf="f.tracker.invalid && f.tracker.touched">
-                Tolong isi tracker
+                Please select the tracker
             </mat-error>
         </div>
-
 
         <div>
             <div class="form-control">
@@ -114,7 +108,7 @@
                     #nameItemTrigger="matAutocompleteTrigger" [matAutocomplete]="autoActivity"
                     class="form-control-input" formControlName="activity">
                 <label class="form-control-label" [class.label-up]="f.activity.valid">Activity</label>
-
+                <!-- Activity Autocomplete -->
                 <mat-autocomplete #autoActivity="matAutocomplete" [displayWith]="displayName"
                     (optionSelected)="onActivitySelected()">
                     @for (nameItem of activityList(); track nameItem.id ) {
@@ -122,30 +116,28 @@
                     }
                 </mat-autocomplete>
             </div>
-            <!-- Show error if invalid AND touched -->
+            <!-- Error if activity is invalid and touched -->
             <mat-error *ngIf="f.activity.invalid && f.activity.touched">
-                Tolong isi activity
+                Please select the activity
             </mat-error>
         </div>
     </div>
 
-    <!-- PIC and Estimated Hours -->
+    <!-- PIC and Estimated Hours Inputs -->
     <div class="row">
         <div>
             <div class="form-control">
-                <!-- <textarea type="text" class="form-control-input" formControlName="description" rows="3"
-                placeholder="Description"></textarea> -->
+                <!-- Display current PIC -->
                 <div class="form-control-input">
                     @if (currentPic()) {
                     {{currentPic().name ||'&nbsp;'}}}</div>
                 <label class="form-control-label" [class.label-up]="currentPic().name != ''">PIC</label>
             </div>
-            <!-- Show error if invalid AND touched -->
-            <mat-error *ngIf="currentPic().id ===0 && f.description.touched">
-                Tolong isi PIC
-            </mat-error>
+            <!-- Error if PIC not selected -->
+            <!-- <mat-error *ngIf="currentPic().id ===0 && f..touched">
+                Please select the PIC
+            </mat-error> -->
         </div>
-
 
         <div>
             <div class="form-control">
@@ -153,11 +145,10 @@
                 <label class="form-control-label" [class.label-up]="f.estimatedHours.value != null">Estimated
                     Hours</label>
             </div>
-            <!-- Show error if invalid AND touched -->
+            <!-- Error if estimated hours is invalid and touched -->
             <mat-error *ngIf="f.estimatedHours.invalid && f.estimatedHours.touched">
-                Tolong isi Estimated Hours yang valid
+                Please enter a valid Estimated Hours
             </mat-error>
         </div>
-
     </div>
 </div>

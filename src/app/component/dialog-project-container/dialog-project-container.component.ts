@@ -57,7 +57,6 @@ export class DialogProjectContainerComponent {
 	}
 
 	// updateProject() {
-	// 	console.log("should toggle edit");
 	// 	this.toggleEdit();
 	// }
 }
