@@ -78,10 +78,23 @@ export type BacklogData = {
 	description: string;
 	priorityId: number;
 	priorityName: string;
+	picId: number;
+	picName: string;
 	createdBy: string;
 	startDate: Date;
 	targetDate: Date;
 	workStateCountList: WorkStateCount[];
+};
+
+export type NewBacklog = {
+	projectId: number;
+	backlogName: string;
+	description: string;
+	priorityId: number;
+	createdBy: number;
+	picId: number;
+	startDate: Date | null;
+	targetDate: Date | null;
 };
 
 export interface WorkData {

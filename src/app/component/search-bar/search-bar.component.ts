@@ -1,4 +1,11 @@
-import { Component, EventEmitter, inject, Output, signal } from "@angular/core";
+import {
+	Component,
+	EventEmitter,
+	inject,
+	Input,
+	Output,
+	signal,
+} from "@angular/core";
 import type { NameListItem } from "../../model/format.type";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatInputModule } from "@angular/material/input";
@@ -27,16 +34,17 @@ export class SearchBarComponent {
 	projectNames = signal<NameListItem[]>([]);
 
 	// Output: Emits the selected username object
-	@Output() userNameSelected = new EventEmitter<number>();
+	@Output() nameItemSelected = new EventEmitter<NameListItem>();
+	@Output() clicked = new EventEmitter<void>();
+	@Input() fieldLabel = "";
+	@Input() nameList = signal<NameListItem[]>([]);
 
 	// The filtering logic
 	ngOnInit() {
-		this.dataService.getUsernames().subscribe((result) => {
-			this.searchBarService.nameList.set(result);
-		});
+		this.searchBarService.nameList = this.nameList;
 	}
 	// When an option is selected from the list
 	onSelection(selectedName: NameListItem) {
-		this.userNameSelected.emit(selectedName.id);
+		this.nameItemSelected.emit(selectedName);
 	}
 }

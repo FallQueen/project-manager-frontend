@@ -33,22 +33,7 @@ import ms from "@angular/common/locales/extra/ms";
 })
 export class CardBacklogComponent {
 	dataService = inject(DataProcessingService);
-	@Input() backlogData: BacklogData = {
-		backlogId: 101,
-		backlogName: "Develop User Profile Page",
-		description: "a",
-		priorityId: 2,
-		createdBy: "a",
-		priorityName: "MEDIUM",
-		startDate: new Date("2025-07-20T09:00:00"),
-		targetDate: new Date("2025-08-15T17:00:00"),
-		workStateCountList: [
-			{ stateId: 1, stateName: "To Do", stateCount: 5, percentage: 0 },
-			{ stateId: 2, stateName: "In Progress", stateCount: 3, percentage: 0 },
-			{ stateId: 3, stateName: "In Review", stateCount: 2, percentage: 0 },
-			{ stateId: 4, stateName: "Done", stateCount: 10, percentage: 0 },
-		],
-	};
+	@Input() backlogData!: BacklogData;
 
 	@ViewChild("workChildContainer") workChildContainer!: ElementRef;
 	workChildContainerHeight = signal<number>(0);

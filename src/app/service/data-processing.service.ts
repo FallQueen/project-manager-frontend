@@ -12,6 +12,7 @@ import type {
 	WorkData,
 	AlterWork,
 	NewWork,
+	NewBacklog,
 } from "../model/format.type";
 import { firstValueFrom } from "rxjs";
 
@@ -157,8 +158,13 @@ export class DataProcessingService {
 		return this.http.get<NameListItem[]>(url);
 	}
 
-	getProjectAssignedUsernames(projectId: number, roleId: number) {
-		const url = `${this.host}/getProjectAssignedUsernames?projectId=${projectId}&roleId=${roleId}`;
+	getProjectAssignedUsernames(projectId: number, roleId: number | null = null) {
+		let url = "";
+		if (roleId === null) {
+			url = `${this.host}/getProjectAssignedUsernames?projectId=${projectId}`;
+		} else {
+			url = `${this.host}/getProjectAssignedUsernames?projectId=${projectId}&roleId=${roleId}`;
+		}
 		return this.http.get<NameListItem[]>(url);
 	}
 
@@ -182,6 +188,11 @@ export class DataProcessingService {
 		return this.http.get<BacklogData[]>(url);
 	}
 
+	postNewBacklog(newBacklog: NewBacklog) {
+		const url = `${this.host}/postNewBacklog`;
+		return this.http.post(url, newBacklog);
+	}
+
 	getBacklogWorks(backlogId: number) {
 		const url = `${this.host}/getBacklogWorks?backlogId=${backlogId}`;
 		return this.http.get<WorkData[]>(url);
@@ -202,11 +213,6 @@ export class DataProcessingService {
 		return this.http.get<NameListItem[]>(url);
 	}
 
-	// putAlterWork(alterProject: AlterWork) {
-	// 	const url = `${this.host}/putAlterUserWorkAssignment`;
-	// 	return this.http.put(url, alterProject);
-	// }
-
 	getPeriodDonePercentage(startDate: Date, endDate: Date): number {
 		const start = new Date(startDate).getTime();
 		const end = new Date(endDate).getTime();
@@ -219,5 +225,9 @@ export class DataProcessingService {
 		}
 
 		return Math.floor(1000 * Math.min(percentage, 1)) / 10;
+	}
+
+	displayName(nameItem: NameListItem): string {
+		return nameItem?.name ? nameItem.name : "";
 	}
 }

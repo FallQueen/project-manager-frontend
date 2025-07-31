@@ -6,7 +6,7 @@
 
         </h1>
     </div>
-    @if (dialogData.newWork) {
+    @if (dialogData.newBacklog) {
     <app-dialog-backlog-input [projectId]="dialogData.projectId"></app-dialog-backlog-input>
     }
     <!-- @else if (editable()) {
@@ -18,10 +18,10 @@
     } -->
 
     <div class="row-right-aligned">
-        @if (dialogData.newWork) {
+        @if (dialogData.newBacklog) {
         <button mat-flat-button [mat-dialog-close]="true">Cancel</button>
         <button mat-flat-button (click)="triggerNewBacklogSubmit()">Create</button>
-        } @else if (!dialogData.newWork && !editable()) {
+        } @else if (!dialogData.newBacklog && !editable()) {
         <button mat-flat-button [mat-dialog-close]="true">Ok</button>
         } @else {
         <button mat-flat-button (click)="triggerEditBacklogSubmit()">Save</button>

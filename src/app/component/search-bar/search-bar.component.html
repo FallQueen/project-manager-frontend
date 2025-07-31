@@ -1,12 +1,12 @@
 <div class="form-control">
     <input type="text" class="form-control-input" matInput [(ngModel)]="searchBarService.nameInput"
-        [matAutocomplete]="auto" placeholder="PIC">
+        [matAutocomplete]="auto" (blur)="clicked.emit()">
 
-    <label class="form-control-label">Project PIC</label>
+    <label class="form-control-label" [class.label-up]="searchBarService.nameInput() !== ''">{{fieldLabel}}</label>
 
-    <mat-autocomplete #auto="matAutocomplete" panelClass="compact-autocomplete-panel">
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="dataService.displayName">
         @for (name of searchBarService.filteredNameList(); track name.name) {
-        <mat-option [value]="name.name" (onSelectionChange)="onSelection(name)">
+        <mat-option [value]="name" (onSelectionChange)="onSelection(name)">
             {{ name.name }}
         </mat-option>
         }

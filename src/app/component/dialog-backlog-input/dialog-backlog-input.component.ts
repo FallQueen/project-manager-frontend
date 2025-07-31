@@ -1,15 +1,69 @@
-import { Component, inject, Input, Output, signal } from "@angular/core";
+import {
+	Component,
+	inject,
+	signal,
+	Input,
+	Output,
+	EventEmitter,
+} from "@angular/core";
+import {
+	DateAdapter,
+	MAT_DATE_FORMATS,
+	MAT_NATIVE_DATE_FORMATS,
+	MatNativeDateModule,
+	MatOptionModule,
+	NativeDateAdapter,
+} from "@angular/material/core";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatError, MatInputModule } from "@angular/material/input";
+import type {
+	AlterProject,
+	BacklogData,
+	NameListItem,
+	NewBacklog,
+	UserRoleChange,
+} from "../../model/format.type";
+import {
+	FormControl,
+	FormGroup,
+	FormsModule,
+	ReactiveFormsModule,
+	Validators,
+} from "@angular/forms";
+import { CommonModule, NgIf } from "@angular/common";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatButtonModule } from "@angular/material/button";
 import { DataProcessingService } from "../../service/data-processing.service";
-import type { BacklogData, NameListItem } from "../../model/format.type";
 import { MatDialogRef } from "@angular/material/dialog";
+import { TextFieldModule } from "@angular/cdk/text-field";
 import type { DialogBacklogContainerComponent } from "../dialog-backlog-container/dialog-backlog-container.component";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { SearchBarComponent } from "../search-bar/search-bar.component";
 
 @Component({
 	selector: "app-dialog-backlog-input",
-	imports: [],
+	imports: [
+		CommonModule,
+		MatDatepickerModule,
+		MatNativeDateModule,
+		MatInputModule,
+		MatError,
+		FormsModule,
+		NgIf,
+		MatFormFieldModule,
+		ReactiveFormsModule,
+		MatButtonModule,
+		TextFieldModule,
+		MatOptionModule,
+		MatAutocompleteModule,
+		SearchBarComponent,
+	],
 	templateUrl: "./dialog-backlog-input.component.html",
 	styleUrl: "./dialog-backlog-input.component.css",
+	providers: [
+		{ provide: DateAdapter, useClass: NativeDateAdapter },
+		{ provide: MAT_DATE_FORMATS, useValue: MAT_NATIVE_DATE_FORMATS },
+	],
 })
 export class DialogBacklogInputComponent {
 	dataService = inject(DataProcessingService);
@@ -25,20 +79,26 @@ export class DialogBacklogInputComponent {
 			start: new FormControl<Date | null>(null, [Validators.required]),
 			end: new FormControl<Date | null>(null, [Validators.required]),
 		}),
+		pic: new FormControl<NameListItem | null>(null, [Validators.required]),
 		// A control to hold the ID from the search bar
-		state: new FormControl<NameListItem | null>(null, [Validators.required]),
-		pic: new FormControl<string | null>(null),
 		priority: new FormControl<NameListItem | null>(null, [Validators.required]),
-		estimatedHours: new FormControl<number | null>(null, [Validators.required]),
-		tracker: new FormControl<NameListItem | null>(null, [Validators.required]),
-		activity: new FormControl<NameListItem | null>(null, [Validators.required]),
 	});
+
+	priorityList = signal<NameListItem[]>([]);
+	projectUsernameList = signal<NameListItem[]>([]);
 
 	get f() {
 		return this.backlogForm.controls;
 	}
 
 	ngOnInit() {
+		this.priorityList.set(this.dataService.getPriorityList());
+		this.dataService
+			.getProjectAssignedUsernames(this.projectId)
+			.subscribe((result) => {
+				this.projectUsernameList.set(result);
+			});
+
 		if (this.backlog) {
 			this.backlogForm.patchValue({
 				backlogName: this.backlog.backlogName,
@@ -51,13 +111,37 @@ export class DialogBacklogInputComponent {
 						? new Date(this.backlog.targetDate)
 						: null,
 				},
-				pic: this.backlog.picName || "",
 				priority: {
 					id: this.backlog.priorityId,
 					name: this.backlog.priorityName,
 				},
+				pic: {
+					id: this.backlog.picId,
+					name: this.backlog.picName,
+				},
 			});
-			this.currentPic().name = this.backlog.picName;
+		}
+	}
+
+	newBacklogCreate() {
+		if (this.backlogForm.valid) {
+			// Form is valid, proceed with creating the project
+			const newBacklog: NewBacklog = {
+				projectId: this.projectId,
+				backlogName: this.backlogForm.value.backlogName || "",
+				description: this.backlogForm.value.description || "",
+				createdBy: Number(this.dataService.getUserId()),
+				startDate: this.backlogForm.value.dateRange?.start || null,
+				targetDate: this.backlogForm.value.dateRange?.end || null,
+				picId: this.backlogForm.value.pic?.id || 0,
+				priorityId: this.backlogForm.value.priority?.id || 0,
+			};
+			console.log("Creating new backlog:", newBacklog);
+			this.dataService.postNewBacklog(newBacklog).subscribe(() => {
+				this.containerDialogRef.close();
+			});
+		} else {
+			this.backlogForm.markAllAsTouched();
 		}
 	}
 }

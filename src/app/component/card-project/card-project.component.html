@@ -4,8 +4,7 @@
     <div class="card-header">
         <h3 class="title">{{ project.projectName}}
             <span (click)="openForm()"> <mat-icon>info</mat-icon></span>
-            <span
-                (click)="dataService.setProject(project.projectId, project.projectName)"><mat-icon>login</mat-icon></span>
+            <span (click)="goToProject()"><mat-icon>login</mat-icon></span>
         </h3>
         <span>
             <span class="card-id">#{{ project.projectId }}</span>

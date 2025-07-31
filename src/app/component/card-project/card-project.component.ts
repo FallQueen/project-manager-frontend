@@ -6,6 +6,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatDialog } from "@angular/material/dialog";
 import { DialogProjectContainerComponent } from "../dialog-project-container/dialog-project-container.component";
 import { DataProcessingService } from "../../service/data-processing.service";
+import { Router } from "@angular/router";
 
 @Component({
 	selector: "app-card-project",
@@ -16,6 +17,7 @@ import { DataProcessingService } from "../../service/data-processing.service";
 export class CardProjectComponent {
 	dataService = inject(DataProcessingService);
 	dialog = inject(MatDialog);
+	router = inject(Router);
 
 	@Input() isEmpty!: true;
 	@Input() project!: Project;
@@ -65,5 +67,13 @@ export class CardProjectComponent {
 		});
 		// Subscribes to the `afterClosed` event of the dialog.
 		// This allows the component to react when the dialog is closed.
+	}
+
+	goToProject() {
+		this.dataService.setProject(
+			this.project.projectId,
+			this.project.projectName,
+		);
+		this.router.navigate(["/home", { outlets: { home: "backlog" } }]);
 	}
 }

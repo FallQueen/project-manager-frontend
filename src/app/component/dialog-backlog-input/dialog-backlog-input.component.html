@@ -1,1 +1,78 @@
-<p>dialog-backlog-input works!</p>
+<!-- Form bound to backlogForm FormGroup -->
+<div class="dialog-body" [formGroup]="backlogForm">
+
+    <!-- Project Name Input -->
+    <div>
+        <div class="form-control">
+            <input matInput type="text" class="form-control-input" formControlName="backlogName">
+            <label class="form-control-label" [class.label-up]="f.backlogName.valid">Project Name</label>
+        </div>
+        <!-- Show error if invalid AND touched -->
+        <mat-error *ngIf="f.backlogName.invalid && f.backlogName.touched">
+            Tolong isi nama projek
+        </mat-error>
+    </div>
+
+    <!-- Description Input -->
+    <div>
+        <div class="form-control">
+            <textarea matInput type="text" class="form-control-input" formControlName="description"></textarea>
+            <label class="form-control-label" [class.label-up]="f.description.valid">Description</label>
+        </div>
+        <!-- Error if description is invalid and touched -->
+        <mat-error *ngIf="f.description.invalid && f.description.touched">
+            Please enter the description
+        </mat-error>
+    </div>
+
+    <!-- Date Range Picker (nested formGroupName) -->
+    <div>
+        <div class="form-control" formGroupName="dateRange">
+            <mat-date-range-input class="form-control-input" [rangePicker]="rangePicker">
+                <input matStartDate readonly formControlName="start">
+                <span class="custom-range-separator">–</span>
+                <input matEndDate readonly formControlName="end">
+            </mat-date-range-input>
+            <mat-datepicker-toggle [for]="rangePicker"></mat-datepicker-toggle>
+            <mat-date-range-picker #rangePicker></mat-date-range-picker>
+            <label class="form-control-label"
+                [class.label-up]="f.dateRange.controls.start.valid || f.dateRange.controls.end.valid">Target
+                Date</label>
+        </div>
+        <!-- Errors for start/end date if invalid and touched -->
+        <mat-error *ngIf="f.dateRange.controls.start.invalid && f.dateRange.controls.start.touched">
+            Please enter the project start date
+        </mat-error>
+        <mat-error *ngIf="f.dateRange.controls.end.invalid && f.dateRange.controls.end.touched">
+            Please enter the project target date
+        </mat-error>
+    </div>
+
+
+    <div>
+        <div class="form-control">
+            <input matInput type="text" readonly (click)="priorityTrigger.openPanel()"
+                #priorityTrigger="matAutocompleteTrigger" [matAutocomplete]="autoPriority" class="form-control-input"
+                formControlName="priority">
+            <label class="form-control-label" [class.label-up]="f.priority.valid">Priority</label>
+            <!-- Priority Autocomplete -->
+            <mat-autocomplete #autoPriority="matAutocomplete" [displayWith]="dataService.displayName">
+                @for (nameItem of priorityList(); track nameItem.id ) {
+                <mat-option [value]="nameItem">{{ nameItem.name }}</mat-option>
+                }
+            </mat-autocomplete>
+        </div>
+        <!-- Error if priority is invalid and touched -->
+        <mat-error *ngIf="f.priority.invalid && f.priority.touched">
+            Please select the priority
+        </mat-error>
+    </div>
+
+    <div>
+        <app-search-bar (clicked)="f.pic.markAsTouched()" (nameItemSelected)="f.pic.setValue($event)" fieldLabel="PIC"
+            [nameList]="projectUsernameList"></app-search-bar>
+        <mat-error *ngIf="f.pic.invalid && f.pic.touched">
+            Please select a PIC
+        </mat-error>
+    </div>
+</div>

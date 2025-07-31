@@ -1,0 +1,11 @@
+.dialog-body {
+	display: flex;
+	gap: 1em;
+	flex-direction: column;
+}
+.row-right-aligned {
+	width: 100%;
+	display: flex;
+
+	justify-content: flex-end;
+}
