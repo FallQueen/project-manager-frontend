@@ -1,0 +1,52 @@
+.dialog-container {
+	display: flex;
+	flex-direction: column;
+	height: fit-content;
+	max-width: 100%;
+	padding: 0.9em 1.2em 2em 1.2em;
+	gap: 1em;
+	background-color: white;
+}
+
+.selector-con {
+	height: 15em;
+}
+
+.row-right-aligned {
+	width: 100%;
+	display: flex;
+	gap: 0.5em;
+	justify-content: flex-end;
+}
+
+.title {
+	position: relative;
+	/* width: 100%; */
+	margin-left: -0.1em;
+	margin-bottom: 0.1em;
+	font-size: 1em;
+	display: flex;
+	align-items: center;
+	gap: 0.5em;
+	justify-content: center;
+}
+
+.title h1 {
+	font-weight: 500;
+}
+.title mat-icon {
+	height: auto;
+	width: auto;
+	color: #444;
+	position: relative;
+	top: 0.1em;
+	font-size: 0.95em;
+	cursor: pointer; /* Indicates the icons are clickable */
+	transition: transform 0.2s ease, color 0.2s ease;
+}
+
+/* The hover effect for the icons */
+.title mat-icon:hover {
+	transform: scale(1.2);
+	color: var(--primary-blue);
+}

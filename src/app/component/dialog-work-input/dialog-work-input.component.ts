@@ -248,6 +248,7 @@ export class DialogWorkInputComponent {
 		this.work.estimatedHours =
 			this.workForm.value.estimatedHours ?? this.work.estimatedHours;
 		this.work.picId = Number(this.workForm.value.pic) || this.work.picId;
+		this.work.picName = this.currentPic.name;
 		this.work.priorityId =
 			this.workForm.value.priority?.id || this.work.priorityId;
 		this.work.priorityName =

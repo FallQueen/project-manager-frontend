@@ -1,4 +1,11 @@
-import { Component, inject, Input, signal } from "@angular/core";
+import {
+	Component,
+	type ElementRef,
+	inject,
+	Input,
+	signal,
+	ViewChild,
+} from "@angular/core";
 import type {
 	BacklogData,
 	NameListItem,
@@ -10,6 +17,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { DataProcessingService } from "../../service/data-processing.service";
 import { CardWorkComponent } from "../card-work/card-work.component";
 import { CardWorkNewComponent } from "../card-work-new/card-work-new.component";
+import ms from "@angular/common/locales/extra/ms";
 
 @Component({
 	selector: "app-card-backlog",
@@ -42,6 +50,9 @@ export class CardBacklogComponent {
 		],
 	};
 
+	@ViewChild("workChildContainer") workChildContainer!: ElementRef;
+	workChildContainerHeight = signal<number>(0);
+
 	expanded = signal(false);
 	periodPercentage = signal<number>(0);
 	totalWork = signal(0);
@@ -59,6 +70,22 @@ export class CardBacklogComponent {
 		);
 	}
 
+	updateContentHeight() {
+		console.log("Updating content height");
+		if (this.expanded()) {
+			this.workChildContainerHeight.set(
+				this.workChildContainer.nativeElement.scrollHeight,
+			);
+		}
+	}
+
+	AlterContentHeightBy(difference: number) {
+		if (this.expanded()) {
+			this.workChildContainerHeight.set(
+				this.workChildContainerHeight() + difference,
+			);
+		}
+	}
 	countTotalWorkState() {
 		let total = 0;
 		for (const state of this.backlogData.workStateCountList) {
@@ -85,12 +112,14 @@ export class CardBacklogComponent {
 	}
 
 	expandWorkInside() {
-		if (this.workList().length <= 0) {
-			this.refreshWorkList();
-		} else {
-			// this.expanded.set(!this.expanded());
-		}
-		this.expanded.set(!this.expanded());
+		if (!this.workList().length) this.refreshWorkList();
+		this.expanded.update((v) => {
+			const expanded = !v;
+			this.workChildContainerHeight.set(
+				expanded ? this.workChildContainer.nativeElement.scrollHeight : 0,
+			);
+			return expanded;
+		});
 	}
 
 	refreshWorkList() {
@@ -98,6 +127,9 @@ export class CardBacklogComponent {
 			.getBacklogWorks(this.backlogData.backlogId)
 			.subscribe((result) => {
 				this.workList.set(result);
+				setTimeout(() => {
+					this.updateContentHeight();
+				}, 4);
 			});
 	}
 
@@ -106,7 +138,7 @@ export class CardBacklogComponent {
 		const index = this.backlogData.workStateCountList.findIndex(
 			(item) => item.stateId === workState.id,
 		);
-		console.log("Index of work state:", index);
+
 		if (index !== -1) {
 			this.backlogData.workStateCountList[index].stateCount += 1;
 		}
@@ -118,8 +150,10 @@ export class CardBacklogComponent {
 				percentage: 0,
 			});
 		}
-		console.log("Work state updated:", this.backlogData.workStateCountList);
 		this.countTotalWorkState();
 		this.countPercentage();
 	}
+}
+function thisupdateContentHeight() {
+	throw new Error("Function not implemented.");
 }

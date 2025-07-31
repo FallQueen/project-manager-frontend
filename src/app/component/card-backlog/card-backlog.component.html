@@ -8,7 +8,7 @@
 
 
             <div class="card-name">
-                <span class="backlog-name">{{backlogData.backlogName}}</span>
+                <span>{{backlogData.backlogName}}</span>
             </div>
 
 
@@ -47,29 +47,29 @@
         </div>
     </div>
 
+    <!-- <div>height:{{workChildContainerHeight()}} </div> -->
+    <div class="child-wrapper" [style.maxHeight.px]="workChildContainerHeight()">
+        <div class="child-container" #workChildContainer (mouseleave)="AlterContentHeightBy(-50)"
+            (mouseenter)="AlterContentHeightBy(50)">
+            <div class="indicator-child priority-{{backlogData.priorityName}}"></div>
+            <div class="work-list-container">
+                <div class="work-header">
+                    <span class="section-label name">FUNCTION</span>
+                    <span class="section-label">TRACKER</span>
+                    <span class="section-label">ACTIVITY</span>
+                    <span class="section-label">STATE</span>
+                    <span class="section-label">PRIORITY</span>
+                    <span class="section-label">PERIOD</span>
+                </div>
 
 
-    @if (expanded()) {
-    <div class="child-container">
-        <div class="indicator-child priority-{{backlogData.priorityName}}"></div>
-        <div class="work-list-container">
-            <div class="work-header">
-                <span class="section-label-name">FUNCTION</span>
-                <span class="section-label">TRACKER</span>
-                <span class="section-label">ACTIVITY</span>
-                <span class="section-label">STATE</span>
-                <span class="section-label">PRIORITY</span>
-                <span class="section-label">PERIOD</span>
+                @for (work of workList(); track $index) {
+                <app-card-work [workData]="work"></app-card-work>
+                }
+                <app-card-work-new [class.empty]="!workList().length" [backlogData]="backlogData"
+                    (newWork)="doWhenNewWork($event)"></app-card-work-new>
+
             </div>
-
-
-            @for (work of workList(); track $index) {
-            <app-card-work [workData]="work"></app-card-work>
-            }
-            <app-card-work-new [class.empty]="!workList().length" [backlogData]="backlogData"
-                (newWork)="doWhenNewWork($event)"></app-card-work-new>
-
         </div>
     </div>
-    }
 </div>

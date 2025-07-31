@@ -2,7 +2,7 @@
     <!-- <div class="indicator priority-{{workData.priorityName}}"></div> -->
     <div class="work-inner-container">
         <div (click)="openForm()" class="card-name">
-            <span class="backlog-name">{{workData.workName}}</span>
+            <span class="backlog-name" [matTooltip]="workData.workName">{{workData.workName}}</span>
         </div>
 
 

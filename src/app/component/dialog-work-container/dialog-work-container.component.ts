@@ -52,5 +52,6 @@ export class DialogWorkContainerComponent {
 			changes.usersRemoved,
 			changes.usersAdded,
 		);
+		this.toggleEdit();
 	}
 }

@@ -1,1 +1,30 @@
-<p>dialog-backlog-container works!</p>
+<div class="dialog-container">
+    <div class="title">
+        <h1 (click)="toggleEdit()">@if (dialogData.newBacklog) {
+            NEW BACKLOG
+            } @else { #{{dialogData.backlog.backlogId}} <span><mat-icon>edit</mat-icon></span> }
+
+        </h1>
+    </div>
+    @if (dialogData.newWork) {
+    <app-dialog-backlog-input [projectId]="dialogData.projectId"></app-dialog-backlog-input>
+    }
+    <!-- @else if (editable()) {
+
+    <app-dialog-backlog-input [backlog]="dialogData.backlog"></app-dialog-backlog-input>
+    } @else if (!editable()) {
+
+    <app-dialog-backlog-detail [backlog]="dialogData.backlog"></app-dialog-backlog-detail>
+    } -->
+
+    <div class="row-right-aligned">
+        @if (dialogData.newWork) {
+        <button mat-flat-button [mat-dialog-close]="true">Cancel</button>
+        <button mat-flat-button (click)="triggerNewBacklogSubmit()">Create</button>
+        } @else if (!dialogData.newWork && !editable()) {
+        <button mat-flat-button [mat-dialog-close]="true">Ok</button>
+        } @else {
+        <button mat-flat-button (click)="triggerEditBacklogSubmit()">Save</button>
+        }
+    </div>
+</div>
