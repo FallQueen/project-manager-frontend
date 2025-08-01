@@ -2,20 +2,20 @@
     <div class="title">
         <h1 (click)="toggleEdit()">@if (dialogData.newBacklog) {
             NEW BACKLOG
-            } @else { #{{dialogData.backlog.backlogId}} <span><mat-icon>edit</mat-icon></span> }
+            } @else { Backlog #{{dialogData.backlogData.backlogId}} <span><mat-icon>edit</mat-icon></span> }
 
         </h1>
     </div>
     @if (dialogData.newBacklog) {
-    <app-dialog-backlog-input [projectId]="dialogData.projectId"></app-dialog-backlog-input>
+    <app-dialog-backlog-input></app-dialog-backlog-input>
     }
-    <!-- @else if (editable()) {
+    @else if (editable()) {
 
-    <app-dialog-backlog-input [backlog]="dialogData.backlog"></app-dialog-backlog-input>
+    <app-dialog-backlog-input [backlogData]="dialogData.backlogData"></app-dialog-backlog-input>
     } @else if (!editable()) {
 
-    <app-dialog-backlog-detail [backlog]="dialogData.backlog"></app-dialog-backlog-detail>
-    } -->
+    <app-dialog-backlog-detail [backlogData]="dialogData.backlogData"></app-dialog-backlog-detail>
+    }
 
     <div class="row-right-aligned">
         @if (dialogData.newBacklog) {

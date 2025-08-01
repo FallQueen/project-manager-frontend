@@ -1,8 +1,8 @@
-@if (work){
+@if (workData){
 <div class="dialog-body">
     <div>
         <div class="form-control">
-            <div class="form-control-input">{{work.workName}}
+            <div class="form-control-input">{{workData.workName}}
             </div>
             <label class="form-control-label label-up">Work Name</label>
         </div>
@@ -13,7 +13,7 @@
     <!-- Description -->
     <div>
         <div class="form-control">
-            <div class="form-control-input">{{work.description}}
+            <div class="form-control-input">{{workData.description}}
             </div>
             <label class="form-control-label label-up">Description</label>
         </div>
@@ -25,9 +25,9 @@
     <div>
         <div class="form-control">
             <div class="form-control-input">{{
-                work.startDate| date : "M/d/yyyy"
+                workData.startDate| date : "M/d/yyyy"
                 }} – {{
-                work.targetDate| date : "M/d/yyyy"
+                workData.targetDate| date : "M/d/yyyy"
                 }}
             </div>
             <label class="form-control-label label-up">Target Date</label>
@@ -38,13 +38,13 @@
 
     <div class="row">
         <div class="form-control">
-            <div class="form-control-input">{{work.priorityName}}</div>
+            <div class="form-control-input">{{workData.priorityName}}</div>
             <label class="form-control-label label-up">Priority</label>
         </div>
 
 
         <div class="form-control">
-            <div class="form-control-input">{{work.stateName}}
+            <div class="form-control-input">{{workData.stateName}}
             </div>
             <label class="form-control-label label-up">State</label>
         </div>
@@ -53,13 +53,13 @@
 
     <div class="row">
         <div class="form-control">
-            <div class="form-control-input">{{work.trackerName}}</div>
+            <div class="form-control-input">{{workData.trackerName}}</div>
             <label class="form-control-label label-up">Tracker</label>
         </div>
 
 
         <div class="form-control">
-            <div class="form-control-input">{{work.activityName}}
+            <div class="form-control-input">{{workData.activityName}}
             </div>
             <label class="form-control-label label-up">Activity</label>
         </div>
@@ -71,14 +71,14 @@
             <!-- <textarea type="text" class="form-control-input" formControlName="description" rows="3"
                 placeholder="Description"></textarea> -->
             <div class="form-control-input">
-                {{work.picName}}</div>
+                {{workData.picName}}</div>
             <label class="form-control-label label-up">PIC</label>
         </div>
 
 
 
         <div class="form-control">
-            <div class="form-control-input">{{work.estimatedHours}}
+            <div class="form-control-input">{{workData.estimatedHours}}
             </div>
             <label class="form-control-label label-up">Estimated Hours</label>
         </div>

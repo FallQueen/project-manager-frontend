@@ -1,10 +1,18 @@
 // The data of the authenticated user that will be stored to local.
 // Used for session management, logic, and user info.
+// The data of the authenticated user that will be stored to local.
+// Used for session management, logic, and user info.
 export type User = {
-	userId: string;
+	userId: number;
 	username: string;
 	email: string;
-	roleId: string;
+	webRole: number;
+	projectRoles: userProjectRoles[];
+};
+
+export type userProjectRoles = {
+	projectId: number;
+	roles: number[];
 };
 
 // export type project = {
@@ -97,7 +105,17 @@ export type NewBacklog = {
 	targetDate: Date | null;
 };
 
-export interface WorkData {
+export type AlterBacklog = {
+	backlogId: number;
+	backlogName: string | null;
+	description: string | null;
+	startDate: Date | null;
+	targetDate: Date | null;
+	picId: number | null;
+	priorityId: number | null;
+};
+
+export type WorkData = {
 	workId: number;
 	workName: string;
 	priorityId: number;
@@ -116,7 +134,7 @@ export interface WorkData {
 	trackerName: string;
 	activityId: number;
 	activityName: string;
-}
+};
 
 export type NewWork = {
 	backlogId: number;
@@ -141,6 +159,7 @@ export type AlterWork = {
 	startDate: Date | null;
 	targetDate: Date | null;
 	picId: number | null;
+	currentState: number | null;
 	priorityId: number | null;
 	estimatedHours: number | null;
 	trackerId: number | null;

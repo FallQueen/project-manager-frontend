@@ -9,5 +9,5 @@ import { CommonModule } from "@angular/common";
 	styleUrl: "./dialog-work-detail.component.css",
 })
 export class DialogWorkDetailComponent {
-	@Input() work!: WorkData;
+	@Input() workData!: WorkData;
 }

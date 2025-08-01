@@ -38,6 +38,8 @@ import { TextFieldModule } from "@angular/cdk/text-field";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatDialogRef } from "@angular/material/dialog";
 import type { DialogWorkContainerComponent } from "../dialog-work-container/dialog-work-container.component";
+import { Dialog } from "@angular/cdk/dialog";
+import { DialogService } from "../../service/dialog.service";
 
 @Component({
 	selector: "app-dialog-work-input",
@@ -65,12 +67,11 @@ import type { DialogWorkContainerComponent } from "../dialog-work-container/dial
 })
 export class DialogWorkInputComponent {
 	dataService = inject(DataProcessingService);
+	dialogService = inject(DialogService);
 	@Input() currentPic = signal<NameListItem>({ name: "", id: 0 });
 	@Input() backlogId!: number;
-	@Input() work!: WorkData;
+	@Input() workData!: WorkData;
 	@Output() selectActivity = new EventEmitter<NameListItem>();
-	@Output()
-	containerDialogRef = inject(MatDialogRef<DialogWorkContainerComponent>);
 
 	trackerList = signal<NameListItem[]>([]);
 	activityList = signal<NameListItem[]>([]);
@@ -108,23 +109,36 @@ export class DialogWorkInputComponent {
 		);
 		this.f.state.setValue(this.stateList()[0]);
 
-		if (this.work) {
+		if (this.workData) {
 			this.workForm.patchValue({
-				workName: this.work.workName,
-				description: this.work.description,
+				workName: this.workData.workName,
+				description: this.workData.description,
 				dateRange: {
-					start: this.work.startDate ? new Date(this.work.startDate) : null,
-					end: this.work.targetDate ? new Date(this.work.targetDate) : null,
+					start: this.workData.startDate
+						? new Date(this.workData.startDate)
+						: null,
+					end: this.workData.targetDate
+						? new Date(this.workData.targetDate)
+						: null,
 				},
-				pic: this.work.picName || "",
-				state: { id: this.work.stateId, name: this.work.stateName },
-				priority: { id: this.work.priorityId, name: this.work.priorityName },
-				estimatedHours: this.work.estimatedHours || 0,
-				tracker: { id: this.work.trackerId, name: this.work.trackerName },
+				pic: this.workData.picName || "",
+				state: { id: this.workData.stateId, name: this.workData.stateName },
+				priority: {
+					id: this.workData.priorityId,
+					name: this.workData.priorityName,
+				},
+				estimatedHours: this.workData.estimatedHours || 0,
+				tracker: {
+					id: this.workData.trackerId,
+					name: this.workData.trackerName,
+				},
 
-				activity: { id: this.work.activityId, name: this.work.activityName },
+				activity: {
+					id: this.workData.activityId,
+					name: this.workData.activityName,
+				},
 			});
-			this.currentPic().name = this.work.picName;
+			this.currentPic().name = this.workData.picName;
 		}
 	}
 
@@ -154,9 +168,9 @@ export class DialogWorkInputComponent {
 			picId: this.currentPic().id || null,
 		};
 		console.log("New Work Data:", newWork);
-		this.dataService.postNewWork(newWork).subscribe(() => {
-			this.containerDialogRef.close(this.workForm.value.state);
-		});
+		this.dialogService
+			.getWorkContainerDialogRef()
+			?.close(this.workForm.value.state);
 	}
 
 	changeState(empty: boolean) {
@@ -180,45 +194,49 @@ export class DialogWorkInputComponent {
 
 		// 2. Build the payload, sending `null` for any value that hasn't changed.
 		const alterWork: AlterWork = {
-			workId: this.work.workId,
+			workId: this.workData.workId,
 			workName:
-				this.workForm.value.workName === this.work.workName
+				this.workForm.value.workName === this.workData.workName
 					? null
 					: this.workForm.value.workName || null,
 			description:
-				this.workForm.value.description === this.work.description
+				this.workForm.value.description === this.workData.description
 					? null
 					: this.workForm.value.description || null,
 			startDate:
 				this.workForm.value.dateRange?.start &&
-				new Date(this.work.startDate).getTime() ===
+				new Date(this.workData.startDate).getTime() ===
 					this.workForm.value.dateRange.start.getTime()
 					? null
 					: this.workForm.value.dateRange?.start || null,
 			targetDate:
 				this.workForm.value.dateRange?.end &&
-				new Date(this.work.targetDate).getTime() ===
+				new Date(this.workData.targetDate).getTime() ===
 					this.workForm.value.dateRange.end.getTime()
 					? null
 					: this.workForm.value.dateRange?.end || null,
 			picId:
-				this.currentPic().name === this.work.picName
+				this.currentPic().name === this.workData.picName
 					? null
 					: this.currentPic().id || null,
+			currentState:
+				this.workForm.value.state?.id === this.workData.stateId
+					? null
+					: this.workForm.value.state?.id || null,
 			priorityId:
-				this.workForm.value.priority?.id === this.work.priorityId
+				this.workForm.value.priority?.id === this.workData.priorityId
 					? null
 					: this.workForm.value.priority?.id || null,
 			estimatedHours:
-				this.workForm.value.estimatedHours === this.work.estimatedHours
+				this.workForm.value.estimatedHours === this.workData.estimatedHours
 					? null
 					: (this.workForm.value.estimatedHours ?? null),
 			trackerId:
-				this.workForm.value.tracker?.id === this.work.trackerId
+				this.workForm.value.tracker?.id === this.workData.trackerId
 					? null
 					: this.workForm.value.tracker?.id || null,
 			activityId:
-				this.workForm.value.activity?.id === this.work.activityId
+				this.workForm.value.activity?.id === this.workData.activityId
 					? null
 					: this.workForm.value.activity?.id || null,
 			usersAdded,
@@ -232,34 +250,36 @@ export class DialogWorkInputComponent {
 	}
 
 	updateExistingWork() {
-		this.work.workName = this.workForm.value.workName || this.work.workName;
-		this.work.description =
-			this.workForm.value.description || this.work.description;
-		this.work.startDate =
+		this.workData.workName =
+			this.workForm.value.workName || this.workData.workName;
+		this.workData.description =
+			this.workForm.value.description || this.workData.description;
+		this.workData.startDate =
 			this.workForm.value.dateRange?.start !== undefined &&
 			this.workForm.value.dateRange?.start !== null
 				? this.workForm.value.dateRange.start
-				: this.work.startDate;
-		this.work.targetDate =
+				: this.workData.startDate;
+		this.workData.targetDate =
 			this.workForm.value.dateRange?.end !== undefined &&
 			this.workForm.value.dateRange?.end !== null
 				? this.workForm.value.dateRange.end
-				: this.work.targetDate;
-		this.work.estimatedHours =
-			this.workForm.value.estimatedHours ?? this.work.estimatedHours;
-		this.work.picId = Number(this.workForm.value.pic) || this.work.picId;
-		this.work.picName = this.currentPic.name;
-		this.work.priorityId =
-			this.workForm.value.priority?.id || this.work.priorityId;
-		this.work.priorityName =
-			this.workForm.value.priority?.name || this.work.priorityName;
-		this.work.trackerId =
-			this.workForm.value.tracker?.id || this.work.trackerId;
-		this.work.trackerName =
-			this.workForm.value.tracker?.name || this.work.trackerName;
-		this.work.activityId =
-			this.workForm.value.activity?.id || this.work.activityId;
-		this.work.activityName =
-			this.workForm.value.activity?.name || this.work.activityName;
+				: this.workData.targetDate;
+		this.workData.estimatedHours =
+			this.workForm.value.estimatedHours ?? this.workData.estimatedHours;
+		this.workData.picId =
+			Number(this.workForm.value.pic) || this.workData.picId;
+		this.workData.picName = this.currentPic.name;
+		this.workData.priorityId =
+			this.workForm.value.priority?.id || this.workData.priorityId;
+		this.workData.priorityName =
+			this.workForm.value.priority?.name || this.workData.priorityName;
+		this.workData.trackerId =
+			this.workForm.value.tracker?.id || this.workData.trackerId;
+		this.workData.trackerName =
+			this.workForm.value.tracker?.name || this.workData.trackerName;
+		this.workData.activityId =
+			this.workForm.value.activity?.id || this.workData.activityId;
+		this.workData.activityName =
+			this.workForm.value.activity?.name || this.workData.activityName;
 	}
 }

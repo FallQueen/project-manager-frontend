@@ -5,6 +5,7 @@ import { DataProcessingService } from "../../service/data-processing.service";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatDialog } from "@angular/material/dialog";
 import { DialogWorkContainerComponent } from "../dialog-work-container/dialog-work-container.component";
+import { DialogService } from "../../service/dialog.service";
 
 @Component({
 	selector: "app-card-work",
@@ -14,7 +15,7 @@ import { DialogWorkContainerComponent } from "../dialog-work-container/dialog-wo
 })
 export class CardWorkComponent {
 	dataService = inject(DataProcessingService);
-	dialog = inject(MatDialog);
+	dialogService = inject(DialogService);
 	@Input() workData!: WorkData;
 	periodPercentage = signal<number>(0);
 
@@ -29,15 +30,11 @@ export class CardWorkComponent {
 
 	openForm() {
 		// Uses the MatDialog service to open the DialogMoreDetailComponent.
-		const dialogRef = this.dialog.open(DialogWorkContainerComponent, {
-			autoFocus: false, // Prevents the dialog from automatically focusing an element.
-			width: "850vw",
-			height: "fit-content",
-			maxWidth: "90vw",
-			maxHeight: "90vh",
-			panelClass: "custom-dialog-container",
-			data: { work: this.workData, newWork: false },
-		});
+		const dialogRef = this.dialogService.openWorkDialog(
+			this.workData,
+			undefined,
+			false,
+		);
 
 		// Subscribes to the `afterClosed` event of the dialog.
 		// This allows the component to react when the dialog is closed.

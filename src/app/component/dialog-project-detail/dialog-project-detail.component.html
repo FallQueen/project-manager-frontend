@@ -1,8 +1,8 @@
-@if (project){
+@if (projectData){
 <div class="dialog-body">
     <div>
         <div class="form-control">
-            <div class="form-control-input">{{project.projectName}}
+            <div class="form-control-input">{{projectData.projectName}}
             </div>
             <label class="form-control-label label-up">Project Name</label>
         </div>
@@ -13,7 +13,7 @@
     <!-- Description -->
     <div>
         <div class="form-control">
-            <div class="form-control-input">{{project.description}}
+            <div class="form-control-input">{{projectData.description}}
             </div>
             <label class="form-control-label label-up">Description</label>
         </div>
@@ -25,9 +25,9 @@
     <div>
         <div class="form-control">
             <div class="form-control-input">{{
-                project.startDate| date : "M/d/yyyy"
+                projectData.startDate| date : "M/d/yyyy"
                 }} – {{
-                project.targetDate| date : "M/d/yyyy"
+                projectData.targetDate| date : "M/d/yyyy"
                 }}
             </div>
             <label class="form-control-label label-up">Target Date</label>
@@ -41,7 +41,7 @@
             <!-- <textarea type="text" class="form-control-input" formControlName="description" rows="3"
                 placeholder="Description"></textarea> -->
             <div class="form-control-input">
-                {{project.picName}}</div>
+                {{projectData.picName}}</div>
             <label class="form-control-label label-up">PIC</label>
         </div>
 

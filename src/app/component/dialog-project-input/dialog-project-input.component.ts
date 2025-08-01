@@ -36,9 +36,10 @@ import { DataProcessingService } from "../../service/data-processing.service";
 import { MatDialogRef } from "@angular/material/dialog";
 import { TextFieldModule } from "@angular/cdk/text-field";
 import type { DialogProjectContainerComponent } from "../dialog-project-container/dialog-project-container.component";
+import { DialogService } from "../../service/dialog.service";
 
 @Component({
-	selector: "app-dialog-project-edit",
+	selector: "app-dialog-project-input",
 	imports: [
 		MatDatepickerModule,
 		MatNativeDateModule,
@@ -51,19 +52,18 @@ import type { DialogProjectContainerComponent } from "../dialog-project-containe
 		MatButtonModule,
 		TextFieldModule,
 	],
-	templateUrl: "./dialog-project-edit.component.html",
-	styleUrl: "./dialog-project-edit.component.css",
+	templateUrl: "./dialog-project-input.component.html",
+	styleUrl: "./dialog-project-input.component.css",
 	providers: [
 		{ provide: DateAdapter, useClass: NativeDateAdapter },
 		{ provide: MAT_DATE_FORMATS, useValue: MAT_NATIVE_DATE_FORMATS },
 	],
 })
-export class DialogProjectEditComponent {
+export class DialogProjectInputComponent {
 	dataService = inject(DataProcessingService);
-
+	dialogService = inject(DialogService);
 	@Input() currentPic = signal<NameListItem>({ name: "", id: 0 });
-	@Input() project!: Project;
-	containerDialogRef = inject(MatDialogRef<DialogProjectContainerComponent>);
+	@Input() projectData!: Project;
 
 	projectForm = new FormGroup({
 		projectName: new FormControl("", [Validators.required]),
@@ -82,21 +82,21 @@ export class DialogProjectEditComponent {
 	}
 
 	ngOnInit() {
-		if (this.project) {
+		if (this.projectData) {
 			this.projectForm.patchValue({
-				projectName: this.project.projectName,
-				description: this.project.description,
+				projectName: this.projectData.projectName,
+				description: this.projectData.description,
 				dateRange: {
-					start: this.project.startDate
-						? new Date(this.project.startDate)
+					start: this.projectData.startDate
+						? new Date(this.projectData.startDate)
 						: null,
-					end: this.project.targetDate
-						? new Date(this.project.targetDate)
+					end: this.projectData.targetDate
+						? new Date(this.projectData.targetDate)
 						: null,
 				},
 				picId: 0,
 			});
-			this.currentPic().name = this.project.picName;
+			this.currentPic().name = this.projectData.picName;
 		}
 	}
 	checkDateRangeHasValue(): boolean {
@@ -123,7 +123,7 @@ export class DialogProjectEditComponent {
 				picId: this.currentPic().id,
 			};
 			this.dataService.postNewProject(newProject).subscribe(() => {
-				this.containerDialogRef.close();
+				this.dialogService.getProjectContainerDialogRef()?.close();
 			});
 		} else {
 			this.projectForm.markAllAsTouched();
@@ -133,24 +133,24 @@ export class DialogProjectEditComponent {
 	projectEdit(userRoles: UserRoleChange[]) {
 		if (this.projectForm.valid) {
 			const alterProject: AlterProject = {
-				projectId: this.project.projectId,
+				projectId: this.projectData.projectId,
 				projectName:
-					this.projectForm.value.projectName === this.project.projectName
+					this.projectForm.value.projectName === this.projectData.projectName
 						? null
 						: this.projectForm.value.projectName || null,
 				description:
-					this.projectForm.value.description === this.project.description
+					this.projectForm.value.description === this.projectData.description
 						? null
 						: this.projectForm.value.description || null,
 				startDate:
 					this.projectForm.value.dateRange?.start &&
-					new Date(this.project.startDate).getTime() ===
+					new Date(this.projectData.startDate).getTime() ===
 						this.projectForm.value.dateRange.start.getTime()
 						? null
 						: this.projectForm.value.dateRange?.start || null,
 				targetDate:
 					this.projectForm.value.dateRange?.end &&
-					new Date(this.project.targetDate).getTime() ===
+					new Date(this.projectData.targetDate).getTime() ===
 						this.projectForm.value.dateRange.end.getTime()
 						? null
 						: this.projectForm.value.dateRange?.end || null,
@@ -169,14 +169,15 @@ export class DialogProjectEditComponent {
 	}
 
 	updateExistingProject() {
-		this.project.projectName =
-			this.projectForm.value.projectName || this.project.projectName;
-		this.project.description =
-			this.projectForm.value.description || this.project.description;
-		this.project.startDate =
-			this.projectForm.value.dateRange?.start || this.project.startDate;
-		this.project.targetDate =
-			this.projectForm.value.dateRange?.end || this.project.targetDate;
-		this.project.picName = this.currentPic().name || this.project.picName;
+		this.projectData.projectName =
+			this.projectForm.value.projectName || this.projectData.projectName;
+		this.projectData.description =
+			this.projectForm.value.description || this.projectData.description;
+		this.projectData.startDate =
+			this.projectForm.value.dateRange?.start || this.projectData.startDate;
+		this.projectData.targetDate =
+			this.projectForm.value.dateRange?.end || this.projectData.targetDate;
+		this.projectData.picName =
+			this.currentPic().name || this.projectData.picName;
 	}
 }

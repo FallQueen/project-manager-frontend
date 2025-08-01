@@ -13,6 +13,8 @@ import type {
 	AlterWork,
 	NewWork,
 	NewBacklog,
+	AlterBacklog,
+	userProjectRoles,
 } from "../model/format.type";
 import { firstValueFrom } from "rxjs";
 
@@ -38,10 +40,11 @@ export class DataProcessingService {
 	}
 	// Stores user information in localStorage after a successful login.
 	storeUserInfo(u: User) {
-		localStorage.setItem("userId", u.userId);
+		localStorage.setItem("userId", u.userId.toString());
 		localStorage.setItem("username", u.username);
 		localStorage.setItem("userEmail", u.email);
-		localStorage.setItem("userRole", u.roleId);
+		localStorage.setItem("webRole", u.webRole.toString());
+		localStorage.setItem("projectRoles", JSON.stringify(u.projectRoles || []));
 	}
 
 	// Retrieves the current user's ID from localStorage.
@@ -60,8 +63,30 @@ export class DataProcessingService {
 	}
 
 	// Retrieves the current user's role ID from localStorage.
-	getUserRole(): string {
-		return this.returnIfNotNull(localStorage.getItem("userRole"));
+	getwebRole(): string {
+		return this.returnIfNotNull(localStorage.getItem("webRole"));
+	}
+
+	getProjectRoles(): userProjectRoles[] {
+		const projectRoles = localStorage.getItem("projectRoles");
+		return projectRoles ? JSON.parse(projectRoles) : [];
+	}
+
+	checkUserProjectRole(projectId: number): number[] {
+		const projectRoles = this.getProjectRoles();
+		const role = projectRoles.find((pr) => pr.projectId === projectId);
+		if (role) {
+			return role.roles;
+		}
+		return [];
+	}
+
+	resetUserData() {
+		localStorage.removeItem("userId");
+		localStorage.removeItem("username");
+		localStorage.removeItem("userEmail");
+		localStorage.removeItem("webRole");
+		localStorage.removeItem("projectRoles");
 	}
 
 	setProject(projectId: number, projectName: string) {
@@ -69,7 +94,7 @@ export class DataProcessingService {
 		localStorage.setItem("projectName", projectName);
 	}
 
-	getprojectId(): number {
+	getProjectId(): number {
 		return Number(this.returnIfNotNull(localStorage.getItem("projectId")));
 	}
 	getprojectName(): string {
@@ -80,7 +105,7 @@ export class DataProcessingService {
 		localStorage.setItem("userId", "0");
 		localStorage.setItem("username", "");
 		localStorage.setItem("userEmail", "");
-		localStorage.setItem("userRole", "");
+		localStorage.setItem("webRole", "");
 	}
 
 	// A private utility to handle null values from localStorage, returning an empty string instead.
@@ -196,6 +221,11 @@ export class DataProcessingService {
 	getBacklogWorks(backlogId: number) {
 		const url = `${this.host}/getBacklogWorks?backlogId=${backlogId}`;
 		return this.http.get<WorkData[]>(url);
+	}
+
+	putAlterBacklog(alterBacklog: AlterBacklog) {
+		const url = `${this.host}/putAlterBacklog`;
+		return this.http.put(url, alterBacklog);
 	}
 
 	postNewWork(newWork: NewWork) {

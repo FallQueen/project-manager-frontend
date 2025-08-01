@@ -2,7 +2,7 @@
     <div class="title">
         <h1 (click)="toggleEdit()">@if (dialogData.newWork) {
             NEW WORK
-            } @else { #{{dialogData.work.workId}} <span><mat-icon>edit</mat-icon></span> }
+            } @else {Work #{{dialogData.workData.workId}} <span><mat-icon>edit</mat-icon></span> }
 
         </h1>
     </div>
@@ -12,10 +12,10 @@
     } @else if (editable()) {
 
     <app-dialog-work-input [currentPic]="currentPic" (selectActivity)="selectActivity($event)"
-        [work]="dialogData.work"></app-dialog-work-input>
+        [workData]="dialogData.workData"></app-dialog-work-input>
     } @else if (!editable()) {
 
-    <app-dialog-work-detail [work]="dialogData.work"></app-dialog-work-detail>
+    <app-dialog-work-detail [workData]="dialogData.workData"></app-dialog-work-detail>
     }
     @if (dialogData.newWork) {
     <div class="selector-con">

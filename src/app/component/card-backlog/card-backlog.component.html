@@ -7,7 +7,7 @@
             </span>
 
 
-            <div class="card-name">
+            <div (click)="openForm()" class="card-name">
                 <span>{{backlogData.backlogName}}</span>
             </div>
 
@@ -49,8 +49,8 @@
 
     <!-- <div>height:{{workChildContainerHeight()}} </div> -->
     <div class="child-wrapper" [style.maxHeight.px]="workChildContainerHeight()">
-        <div class="child-container" #workChildContainer (mouseleave)="AlterContentHeightBy(-50)"
-            (mouseenter)="AlterContentHeightBy(50)">
+        <div class="child-container" #workChildContainer (mouseleave)="workHovered.set(false)"
+            (mouseenter)="workHovered.set(true)">
             <div class="indicator-child priority-{{backlogData.priorityName}}"></div>
             <div class="work-list-container">
                 <div class="work-header">

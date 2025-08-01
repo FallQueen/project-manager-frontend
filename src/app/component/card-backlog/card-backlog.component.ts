@@ -3,8 +3,10 @@ import {
 	type ElementRef,
 	inject,
 	Input,
+	type Signal,
 	signal,
 	ViewChild,
+	computed,
 } from "@angular/core";
 import type {
 	BacklogData,
@@ -18,6 +20,10 @@ import { DataProcessingService } from "../../service/data-processing.service";
 import { CardWorkComponent } from "../card-work/card-work.component";
 import { CardWorkNewComponent } from "../card-work-new/card-work-new.component";
 import ms from "@angular/common/locales/extra/ms";
+import { MatDialog } from "@angular/material/dialog";
+import { DialogBacklogContainerComponent } from "../dialog-backlog-container/dialog-backlog-container.component";
+import { DialogService } from "../../service/dialog.service";
+import { delay } from "rxjs";
 
 @Component({
 	selector: "app-card-backlog",
@@ -33,14 +39,35 @@ import ms from "@angular/common/locales/extra/ms";
 })
 export class CardBacklogComponent {
 	dataService = inject(DataProcessingService);
+	dialogService = inject(DialogService);
 	@Input() backlogData!: BacklogData;
 
 	@ViewChild("workChildContainer") workChildContainer!: ElementRef;
-	workChildContainerHeight = signal<number>(0);
+	workChildContainerHeight: Signal<number> = computed(() => {
+		const expanded = this.expanded();
+		const workHover = this.workHovered();
+		const workList = this.workList();
+		console.log(
+			"triggered workChildContainerHeight",
+			expanded,
+			workHover,
+			workList.length,
+		);
+		if (!expanded) return 0;
+		if (!this.workChildContainer || !this.workChildContainer.nativeElement)
+			return 0;
+		let height = 0;
+
+		height = this.workChildContainer.nativeElement.scrollHeight;
+
+		if (workHover === true && workList.length > 0) height += 50;
+		return height;
+	});
 
 	expanded = signal(false);
 	periodPercentage = signal<number>(0);
 	totalWork = signal(0);
+	workHovered = signal(false);
 
 	workList = signal<WorkData[]>([]);
 
@@ -55,22 +82,6 @@ export class CardBacklogComponent {
 		);
 	}
 
-	updateContentHeight() {
-		console.log("Updating content height");
-		if (this.expanded()) {
-			this.workChildContainerHeight.set(
-				this.workChildContainer.nativeElement.scrollHeight,
-			);
-		}
-	}
-
-	AlterContentHeightBy(difference: number) {
-		if (this.expanded()) {
-			this.workChildContainerHeight.set(
-				this.workChildContainerHeight() + difference,
-			);
-		}
-	}
 	countTotalWorkState() {
 		let total = 0;
 		for (const state of this.backlogData.workStateCountList) {
@@ -97,14 +108,11 @@ export class CardBacklogComponent {
 	}
 
 	expandWorkInside() {
-		if (!this.workList().length) this.refreshWorkList();
-		this.expanded.update((v) => {
-			const expanded = !v;
-			this.workChildContainerHeight.set(
-				expanded ? this.workChildContainer.nativeElement.scrollHeight : 0,
-			);
-			return expanded;
-		});
+		if (!this.workList().length) {
+			this.refreshWorkList();
+		} else {
+			this.expanded.set(!this.expanded());
+		}
 	}
 
 	refreshWorkList() {
@@ -113,8 +121,8 @@ export class CardBacklogComponent {
 			.subscribe((result) => {
 				this.workList.set(result);
 				setTimeout(() => {
-					this.updateContentHeight();
-				}, 4);
+					this.expanded.set(!this.expanded());
+				}, 5);
 			});
 	}
 
@@ -138,7 +146,15 @@ export class CardBacklogComponent {
 		this.countTotalWorkState();
 		this.countPercentage();
 	}
-}
-function thisupdateContentHeight() {
-	throw new Error("Function not implemented.");
+
+	openForm() {
+		// Uses the MatDialog service to open the DialogBacklogContainerComponent.
+		const dialogRef = this.dialogService.openBacklogDialog(
+			this.backlogData,
+			false,
+		);
+
+		// Subscribes to the `afterClosed` event of the dialog.
+		// This allows the component to react when the dialog is closed.
+	}
 }

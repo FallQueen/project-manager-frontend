@@ -2,19 +2,19 @@
     <div class="title">
         <h1 (click)="toggleEdit()">@if (dialogData.newProject) {
             NEW PROJECT
-            } @else { PROJECT #{{dialogData.project.projectId}} <span><mat-icon>edit</mat-icon></span> }
+            } @else { PROJECT #{{dialogData.projectData.projectId}} <span><mat-icon>edit</mat-icon></span> }
 
         </h1>
     </div>
     @if (dialogData.newProject) {
     <div>newProj</div>
-    <app-dialog-project-edit [currentPic]="currentPic"></app-dialog-project-edit>
+    <app-dialog-project-input [currentPic]="currentPic"></app-dialog-project-input>
     } @else if (editable()) {
     <div>editable</div>
-    <app-dialog-project-edit [currentPic]="currentPic" [project]="dialogData.project"></app-dialog-project-edit>
+    <app-dialog-project-input [currentPic]="currentPic" [projectData]="dialogData.projectData"></app-dialog-project-input>
     } @else if (!editable()) {
     <div>not editable</div>
-    <app-dialog-project-detail [project]="dialogData.project"></app-dialog-project-detail>
+    <app-dialog-project-detail [projectData]="dialogData.projectData"></app-dialog-project-detail>
     }
 
 
@@ -23,8 +23,8 @@
         <app-selector-user-project-role [editable]="true" [newProject]="dialogData?.newProject"
             (newPic)="currentPic.set($event)"></app-selector-user-project-role>
         } @else {
-        <app-selector-user-project-role [projectId]="dialogData?.project?.projectId"
-            [projectPicName]="dialogData?.project?.picName" [editable]="editable()"
+        <app-selector-user-project-role [projectId]="dialogData?.projectData?.projectId"
+            [projectPicName]="dialogData?.projectData?.picName" [editable]="editable()"
             [newProject]="dialogData?.newProject" (newPic)="currentPic.set($event)"></app-selector-user-project-role>
         }
     </div>

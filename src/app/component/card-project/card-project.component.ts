@@ -7,6 +7,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { DialogProjectContainerComponent } from "../dialog-project-container/dialog-project-container.component";
 import { DataProcessingService } from "../../service/data-processing.service";
 import { Router } from "@angular/router";
+import { DialogService } from "../../service/dialog.service";
 
 @Component({
 	selector: "app-card-project",
@@ -16,7 +17,7 @@ import { Router } from "@angular/router";
 })
 export class CardProjectComponent {
 	dataService = inject(DataProcessingService);
-	dialog = inject(MatDialog);
+	dialogService = inject(DialogService);
 	router = inject(Router);
 
 	@Input() isEmpty!: true;
@@ -56,15 +57,7 @@ export class CardProjectComponent {
 
 	openForm() {
 		// Uses the MatDialog service to open the DialogMoreDetailComponent.
-		const dialogRef = this.dialog.open(DialogProjectContainerComponent, {
-			autoFocus: false, // Prevents the dialog from automatically focusing an element.
-			width: "850vw",
-			height: "fit-content",
-			maxWidth: "90vw",
-			maxHeight: "90vh",
-			panelClass: "custom-dialog-container",
-			data: { project: this.project, newProject: false },
-		});
+		const dialogRef = this.dialogService.openProjectDialog(this.project, false);
 		// Subscribes to the `afterClosed` event of the dialog.
 		// This allows the component to react when the dialog is closed.
 	}

@@ -11,7 +11,7 @@ export class BacklogPageService {
 	public readonly backlogList = signal<BacklogData[]>([]);
 
 	constructor() {
-		const projectId = 2; // Replace with actual projectId as needed
+		const projectId = this.dataService.getProjectId(); // Replace with actual projectId as needed
 		this.dataService.getProjectBacklogs(projectId).subscribe((result) => {
 			this.backlogList.set(result);
 		});

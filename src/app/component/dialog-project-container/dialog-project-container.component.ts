@@ -6,7 +6,7 @@ import {
 	signal,
 	ViewChild,
 } from "@angular/core";
-import { DialogProjectEditComponent } from "../dialog-project-edit/dialog-project-edit.component";
+import { DialogProjectInputComponent } from "../dialog-project-input/dialog-project-input.component";
 import { DialogProjectDetailComponent } from "../dialog-project-detail/dialog-project-detail.component";
 import { MAT_DIALOG_DATA, MatDialogClose } from "@angular/material/dialog";
 import type { NameListItem, Project } from "../../model/format.type";
@@ -18,7 +18,7 @@ import { MatIconModule } from "@angular/material/icon";
 @Component({
 	selector: "app-dialog-project-container",
 	imports: [
-		DialogProjectEditComponent,
+		DialogProjectInputComponent,
 		DialogProjectDetailComponent,
 		SelectorUserProjectRoleComponent,
 		MatButtonModule,
@@ -33,8 +33,8 @@ export class DialogProjectContainerComponent {
 	currentPic = signal<NameListItem>({ name: "", id: 0 });
 	editable = signal<boolean>(false);
 	@Output() updatedProject = new EventEmitter<Project>();
-	@ViewChild(DialogProjectEditComponent)
-	dialogNewProject!: DialogProjectEditComponent;
+	@ViewChild(DialogProjectInputComponent)
+	dialogNewProject!: DialogProjectInputComponent;
 	@ViewChild(SelectorUserProjectRoleComponent)
 	UserSelector!: SelectorUserProjectRoleComponent;
 	dialogRef = inject(DialogRef<DialogProjectContainerComponent>);

@@ -1,11 +1,9 @@
 import {
 	Component,
-	computed,
 	EventEmitter,
 	inject,
 	Input,
 	Output,
-	type Signal,
 	signal,
 } from "@angular/core";
 import { SearchBarService } from "../../service/search-bar.service";

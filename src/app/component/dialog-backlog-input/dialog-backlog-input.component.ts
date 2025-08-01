@@ -39,6 +39,7 @@ import { TextFieldModule } from "@angular/cdk/text-field";
 import type { DialogBacklogContainerComponent } from "../dialog-backlog-container/dialog-backlog-container.component";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { SearchBarComponent } from "../search-bar/search-bar.component";
+import { DialogService } from "../../service/dialog.service";
 
 @Component({
 	selector: "app-dialog-backlog-input",
@@ -67,9 +68,9 @@ import { SearchBarComponent } from "../search-bar/search-bar.component";
 })
 export class DialogBacklogInputComponent {
 	dataService = inject(DataProcessingService);
-	@Input() projectId!: number;
-	@Input() backlog!: BacklogData;
-	containerDialogRef = inject(MatDialogRef<DialogBacklogContainerComponent>);
+	dialogService = inject(DialogService);
+	projectId = this.dataService.getProjectId();
+	@Input() backlogData!: BacklogData;
 
 	backlogForm = new FormGroup({
 		backlogName: new FormControl("", [Validators.required]),
@@ -99,25 +100,25 @@ export class DialogBacklogInputComponent {
 				this.projectUsernameList.set(result);
 			});
 
-		if (this.backlog) {
+		if (this.backlogData) {
 			this.backlogForm.patchValue({
-				backlogName: this.backlog.backlogName,
-				description: this.backlog.description,
+				backlogName: this.backlogData.backlogName,
+				description: this.backlogData.description,
 				dateRange: {
-					start: this.backlog.startDate
-						? new Date(this.backlog.startDate)
+					start: this.backlogData.startDate
+						? new Date(this.backlogData.startDate)
 						: null,
-					end: this.backlog.targetDate
-						? new Date(this.backlog.targetDate)
+					end: this.backlogData.targetDate
+						? new Date(this.backlogData.targetDate)
 						: null,
 				},
 				priority: {
-					id: this.backlog.priorityId,
-					name: this.backlog.priorityName,
+					id: this.backlogData.priorityId,
+					name: this.backlogData.priorityName,
 				},
 				pic: {
-					id: this.backlog.picId,
-					name: this.backlog.picName,
+					id: this.backlogData.picId,
+					name: this.backlogData.picName,
 				},
 			});
 		}
@@ -138,7 +139,7 @@ export class DialogBacklogInputComponent {
 			};
 			console.log("Creating new backlog:", newBacklog);
 			this.dataService.postNewBacklog(newBacklog).subscribe(() => {
-				this.containerDialogRef.close();
+				this.dialogService.getBacklogContainerDialogRef()?.close();
 			});
 		} else {
 			this.backlogForm.markAllAsTouched();

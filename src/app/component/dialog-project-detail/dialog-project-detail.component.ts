@@ -9,5 +9,5 @@ import { CommonModule } from "@angular/common";
 	styleUrl: "./dialog-project-detail.component.css",
 })
 export class DialogProjectDetailComponent {
-	@Input() project!: Project;
+	@Input() projectData!: Project;
 }

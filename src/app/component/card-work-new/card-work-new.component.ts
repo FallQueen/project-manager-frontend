@@ -3,6 +3,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { MatIconModule } from "@angular/material/icon";
 import { DialogWorkContainerComponent } from "../dialog-work-container/dialog-work-container.component";
 import type { BacklogData, NameListItem } from "../../model/format.type";
+import { DialogService } from "../../service/dialog.service";
 
 @Component({
 	selector: "app-card-work-new",
@@ -12,20 +13,17 @@ import type { BacklogData, NameListItem } from "../../model/format.type";
 })
 export class CardWorkNewComponent {
 	dialog = inject(MatDialog);
+	dialogService = inject(DialogService);
 	@Output() newWork = new EventEmitter<NameListItem>();
 	@Input() backlogData!: BacklogData;
 
 	openForm() {
 		// Uses the MatDialog service to open the DialogMoreDetailComponent.
-		const dialogRef = this.dialog.open(DialogWorkContainerComponent, {
-			autoFocus: false, // Prevents the dialog from automatically focusing an element.
-			width: "90vw",
-			height: "fit-content",
-			maxWidth: "90vw",
-			maxHeight: "90vh",
-			panelClass: "custom-dialog-container",
-			data: { newWork: true, backlogId: this.backlogData.backlogId }, // Passes data to the dialog.
-		});
+		const dialogRef = this.dialogService.openWorkDialog(
+			undefined,
+			undefined,
+			true,
+		);
 
 		// Subscribes to the `afterClosed` event of the dialog.
 		// This allows the component to react when the dialog is closed.

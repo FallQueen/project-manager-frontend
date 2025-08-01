@@ -1,13 +1,10 @@
 import {
 	Component,
-	computed,
-	effect,
 	EventEmitter,
 	inject,
 	Injector,
 	Input,
 	Output,
-	type Signal,
 	signal,
 } from "@angular/core";
 import { SearchBarService } from "../../service/search-bar.service";
@@ -21,11 +18,7 @@ import {
 	moveItemInArray,
 	transferArrayItem,
 } from "@angular/cdk/drag-drop";
-import type {
-	NameListItem,
-	NameListItemByRole,
-	UserRoleChange,
-} from "../../model/format.type";
+import type { NameListItem } from "../../model/format.type";
 import { FormsModule } from "@angular/forms";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { forkJoin } from "rxjs";
@@ -68,7 +61,7 @@ export class SelectorUserWorkComponent {
 		forkJoin({
 			assignment: this.dataService.getWorkUserAssignment(this.workId),
 			users: this.dataService.getProjectAssignedUsernames(
-				this.dataService.getprojectId(),
+				this.dataService.getProjectId(),
 				roleId,
 			),
 		}).subscribe(({ assignment, users }) => {
@@ -102,7 +95,7 @@ export class SelectorUserWorkComponent {
 		// ActivityId 1 = Development,  2 = Design
 		const roleId = this.checkActivity(activity);
 		this.dataService
-			.getProjectAssignedUsernames(this.dataService.getprojectId(), roleId)
+			.getProjectAssignedUsernames(this.dataService.getProjectId(), roleId)
 			.subscribe((users) => {
 				this.searchBarService.nameList.set(users);
 			});
