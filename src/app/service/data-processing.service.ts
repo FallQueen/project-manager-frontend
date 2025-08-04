@@ -15,6 +15,7 @@ import type {
 	NewBacklog,
 	AlterBacklog,
 	userProjectRoles,
+	UserTodoList,
 } from "../model/format.type";
 import { firstValueFrom } from "rxjs";
 
@@ -257,7 +258,16 @@ export class DataProcessingService {
 		return Math.floor(1000 * Math.min(percentage, 1)) / 10;
 	}
 
+	getUserTodoList() {
+		const url = `${this.host}/getUserTodoList?userId=${this.getUserId()}`;
+		return this.http.get<UserTodoList[]>(url);
+	}
+
 	displayName(nameItem: NameListItem): string {
 		return nameItem?.name ? nameItem.name : "";
+	}
+
+	formatClassName(name: string): string {
+		return name.toUpperCase().replace(/\s+/g, "-");
 	}
 }

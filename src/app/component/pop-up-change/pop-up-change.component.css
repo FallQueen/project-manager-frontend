@@ -1,0 +1,34 @@
+.pop-up-container {
+	position: absolute;
+	background: #fff;
+	transform: translate(-10.5em, -0.1em);
+	border: 1px solid #ccc;
+	border-radius: 12px;
+	padding: 0.4em;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	z-index: 1000;
+	min-width: 20em;
+	transition: all 0.2s ease;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 0.1em;
+}
+
+.card-status {
+	height: 100%;
+	width: 100%;
+}
+.card-status span {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+
+	padding: 0.1em 0.7em;
+	border: 1px solid rgba(51, 51, 51, 0.2);
+	border-radius: 4px;
+	font-size: 0.9em;
+	font-weight: 500;
+	font-family: Roboto, sans-serif;
+	box-sizing: border-box;
+}

@@ -1,0 +1,11 @@
+@if (popUpData.class || popUpData.class === "priority") {
+<div class="pop-up-container" [style.visibility]="visibility() ? 'visible' : 'hidden'" (click)="toggleVisibility()">
+    @for (item of itemList(); track $index) {
+
+    <div (click)="pickItem(item)" class="card-status priority-{{item.name}}">
+        <span>{{item.name}}</span>
+    </div>
+    }
+
+</div>
+}

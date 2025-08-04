@@ -23,10 +23,12 @@
             [newWork]="dialogData?.newWork" (newPic)="currentPic.set($event)"></app-selector-user-work>
     </div>
     } @else {
+    <div>not new work</div>
     <div class="selector-con">
-        <app-selector-user-work (userAssignmentEmpty)="selectorEmpty($event)" [workId]="dialogData?.work?.workId"
-            [workPicName]="dialogData?.work?.picName" [editable]="editable()"
-            [workActivity]="dialogData?.work?.activityId" (newPic)="currentPic.set($event)"></app-selector-user-work>
+        <app-selector-user-work (userAssignmentEmpty)="selectorEmpty($event)" [workId]="dialogData?.workData?.workId"
+            [workPicName]="dialogData?.workData?.picName" [editable]="editable()"
+            [workActivity]="dialogData?.workData?.activityId"
+            (newPic)="currentPic.set($event)"></app-selector-user-work>
     </div>
     }
 

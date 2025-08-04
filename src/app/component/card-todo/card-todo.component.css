@@ -15,6 +15,7 @@
 }
 
 .backlog-container {
+	position: relative;
 	display: flex;
 	align-items: center;
 	width: 100%; /* Ensures it takes full width of its parent */
@@ -206,7 +207,6 @@ app-card-work-new.empty,
 	width: 100%;
 	max-height: 0em;
 	overflow-x: auto;
-	overflow-y: hidden;
 	transition: max-height 0.6s ease-in-out;
 }
 
@@ -215,7 +215,7 @@ app-card-work-new.empty,
 	width: 100%;
 	min-width: 0em;
 	overflow-x: auto;
-	position: relative;
+
 	transition: all 1s ease;
 }
 

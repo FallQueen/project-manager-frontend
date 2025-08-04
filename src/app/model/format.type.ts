@@ -115,6 +115,12 @@ export type AlterBacklog = {
 	priorityId: number | null;
 };
 
+export type UserWorkByState = {
+	workStateId: number;
+	workStateName: string;
+	works: WorkData[];
+};
+
 export type WorkData = {
 	workId: number;
 	workName: string;
@@ -134,6 +140,8 @@ export type WorkData = {
 	trackerName: string;
 	activityId: number;
 	activityName: string;
+	backlogName: string;
+	projectName: string;
 };
 
 export type NewWork = {
@@ -154,16 +162,29 @@ export type NewWork = {
 
 export type AlterWork = {
 	workId: number;
-	workName: string | null;
-	description: string | null;
-	startDate: Date | null;
-	targetDate: Date | null;
-	picId: number | null;
-	currentState: number | null;
-	priorityId: number | null;
-	estimatedHours: number | null;
-	trackerId: number | null;
-	activityId: number | null;
-	usersRemoved: number[];
-	usersAdded: number[];
+	workName?: string | null;
+	description?: string | null;
+	startDate?: Date | null;
+	targetDate?: Date | null;
+	picId?: number | null;
+	currentState?: number | null;
+	priorityId?: number | null;
+	estimatedHours?: number | null;
+	trackerId?: number | null;
+	activityId?: number | null;
+	usersRemoved?: number[];
+	usersAdded?: number[];
+};
+
+export type UserTodoList = {
+	stateId: number;
+	stateName: string;
+	works: WorkData[];
+};
+
+export type BatteryItem = {
+	name: string;
+	id: number;
+	count: number;
+	percentage: number;
 };

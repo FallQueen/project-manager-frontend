@@ -57,6 +57,7 @@ export class SelectorUserWorkComponent {
 		if (this.newWork) {
 			return;
 		}
+
 		const roleId = this.checkActivity(this.workActivity);
 		forkJoin({
 			assignment: this.dataService.getWorkUserAssignment(this.workId),
@@ -67,7 +68,6 @@ export class SelectorUserWorkComponent {
 		}).subscribe(({ assignment, users }) => {
 			this.searchBarService.nameList.set(users);
 			this.userAssignmentList.set(assignment);
-
 			// Create a deep copy for memory/comparison logic
 			this.UserAssignmentMemory = JSON.parse(
 				JSON.stringify(this.userAssignmentList()),

@@ -16,7 +16,7 @@
                 <span class="section-label">State</span>
                 <div class="progress-bar-battery">
                     @for (item of backlogData.workStateCountList; track $index) {
-                    <div class=" progress-fill-battery state-{{item.stateId}}"
+                    <div class=" progress-fill-battery state-{{dataService.formatClassName(item.stateName)}}"
                         [matTooltip]="getTooltip(item.stateName,item.stateCount,item.percentage)"
                         [style.width.%]="item.percentage">
                     </div>
@@ -48,9 +48,9 @@
     </div>
 
     <!-- <div>height:{{workChildContainerHeight()}} </div> -->
-    <div class="child-wrapper" [style.maxHeight.px]="workChildContainerHeight()">
-        <div class="child-container" #workChildContainer (mouseleave)="workHovered.set(false)"
-            (mouseenter)="workHovered.set(true)">
+    <div class="child-wrapper" #workChildContainer [style.maxHeight.px]="workChildContainerHeight()"
+        (mouseleave)="workHovered.set(false)" (mouseenter)="workHovered.set(true)">
+        <div class="child-container">
             <div class="indicator-child priority-{{backlogData.priorityName}}"></div>
             <div class="work-list-container">
                 <div class="work-header">

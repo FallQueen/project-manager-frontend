@@ -3,8 +3,6 @@ import type { Project } from "../../model/format.type";
 import { CommonModule } from "@angular/common";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatIconModule } from "@angular/material/icon";
-import { MatDialog } from "@angular/material/dialog";
-import { DialogProjectContainerComponent } from "../dialog-project-container/dialog-project-container.component";
 import { DataProcessingService } from "../../service/data-processing.service";
 import { Router } from "@angular/router";
 import { DialogService } from "../../service/dialog.service";

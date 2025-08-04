@@ -6,6 +6,17 @@
 	--tertiary-blue: #43aa8b;
 	--primary-white: #eaeaea;
 	--primary-gold: #c89933;
+
+	--state-NEW: #ffadad;
+	--state-ASSIGNED: #ffd6a5;
+	--state-IN-PROGRESS: #fdffb6;
+	--state-WAITING: #9bf6ff;
+	--state-DONE: #caffbf;
+
+	--priority-LOW: #caffbf;
+	--priority-MEDIUM: #fdffb6;
+	--priority-HIGH: #ffd6a5;
+	--priority-CRITICAL: #ffadad;
 }
 
 body {
@@ -97,52 +108,52 @@ mat-icon {
 	background-color: #006daa !important;
 }
 
-.state-1 {
-	background-color: #ffadad !important;
-	color: #4a0f0f !important;
+.state-NEW {
+	background-color: var(--state-NEW) !important;
+	color: color-mix(in srgb, var(--state-NEW), #000000 70%) !important;
 }
 
 /* Verified */
-.state-2 {
-	background-color: #ffd6a5 !important;
-	color: #4b4318 !important;
+.state-ASSIGNED {
+	background-color: var(--state-ASSIGNED) !important;
+	color: color-mix(in srgb, var(--state-ASSIGNED), #000000 70%) !important;
 }
 
 /* In progress */
-.state-3 {
-	background-color: #fdffb6 !important;
-	color: #4a4b18 !important;
+.state-IN-PROGRESS {
+	background-color: var(--state-IN-PROGRESS) !important;
+	color: color-mix(in srgb, var(--state-IN-PROGRESS), #000000 70%) !important;
 }
 
 /* Waiting for review */
-.state-4 {
-	background-color: #9bf6ff !important;
+.state- {
+	background-color: var(--state-WAITING) !important;
 	color: #2d484a !important;
 }
 
 /* Done */
-.state-5 {
-	background-color: #caffbf !important;
+.state-DONE {
+	background-color: var(--state-DONE) !important;
 	color: #1c3e1f !important;
 }
 
 .priority-LOW {
-	background-color: #caffbf;
-	color: #1c3e1f;
+	background-color: var(--priority-LOW);
+	color: color-mix(in srgb, var(--priority-LOW), #000000 70%) !important;
 }
 
 .priority-MEDIUM {
-	background-color: #fdffb6;
+	background-color: var(--priority-MEDIUM);
 	color: #4a4b18;
 }
 
 .priority-HIGH {
-	background-color: #ffd6a5;
+	background-color: var(--priority-HIGH);
 	color: #4b4318;
 }
 
 .priority-CRITICAL {
-	background-color: #ffadad;
+	background-color: var(--priority-CRITICAL);
 	color: #4a0f0f;
 }
 
@@ -175,12 +186,13 @@ mat-icon {
 	font-family: inherit;
 	display: flex;
 	flex: 1;
+	width: 100%;
 	padding: 0.7em 0.75em 0.7em 0.75em;
 	border: none;
 	border-radius: 8px;
 	font-size: 1em;
 	color: #111827;
-	/* box-sizing: border-box; */
+	box-sizing: border-box;
 	/* height: 3em; */
 	line-height: 1.3em;
 	text-align: justify;
@@ -190,7 +202,7 @@ mat-icon {
 	content: "\00a0";
 }
 
-.form-control-input-date {
+/* .form-control-input-date {
 	display: flex;
 	flex: 1;
 	padding: 0.7em 0.75em 0.7em 0.75em;
@@ -200,7 +212,7 @@ mat-icon {
 	color: #111827;
 	box-sizing: border-box;
 	line-height: 1.1em;
-}
+} */
 
 .form-control-input:focus {
 	outline: none;
@@ -214,6 +226,7 @@ mat-icon {
 /* The label that will float */
 .form-control-label {
 	height: fit-content;
+	flex-wrap: nowrap;
 	position: absolute;
 	top: 0.6em;
 	left: 0.75em;
@@ -221,6 +234,7 @@ mat-icon {
 	color: #6b7280;
 	pointer-events: none; /* Allows clicks to pass through to the input */
 	transition: all 0.2s ease-in-out;
+	box-sizing: border-box;
 	background-color: white; /* This creates the "cutout" effect */
 	padding: 0 0.25em; /* Adds space around the label text */
 }

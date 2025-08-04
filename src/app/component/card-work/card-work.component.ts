@@ -3,13 +3,12 @@ import type { WorkData } from "../../model/format.type";
 import { CommonModule } from "@angular/common";
 import { DataProcessingService } from "../../service/data-processing.service";
 import { MatTooltipModule } from "@angular/material/tooltip";
-import { MatDialog } from "@angular/material/dialog";
-import { DialogWorkContainerComponent } from "../dialog-work-container/dialog-work-container.component";
 import { DialogService } from "../../service/dialog.service";
+import { PopUpChangeComponent } from "../pop-up-change/pop-up-change.component";
 
 @Component({
 	selector: "app-card-work",
-	imports: [CommonModule, MatTooltipModule],
+	imports: [CommonModule, MatTooltipModule, PopUpChangeComponent],
 	templateUrl: "./card-work.component.html",
 	styleUrl: "./card-work.component.css",
 })

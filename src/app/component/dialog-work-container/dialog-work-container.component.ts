@@ -29,6 +29,7 @@ export class DialogWorkContainerComponent {
 	@ViewChild(DialogWorkInputComponent)
 	DialogWorkInputComponent!: DialogWorkInputComponent;
 
+	ngOnInit() {}
 	toggleEdit() {
 		this.editable.set(!this.editable());
 	}

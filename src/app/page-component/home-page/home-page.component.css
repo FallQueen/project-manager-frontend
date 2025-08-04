@@ -2,15 +2,18 @@
 
 .home-content {
 	display: flex;
-	height: 93.7%;
+
+	height: 100%;
 	width: 100%;
+	min-height: 1em;
 }
 
 .router-outlet-body {
 	flex: 1;
-	overflow-y: auto;
+	overflow-y: hidden;
 }
 
-/* .home-body {
-	background-color: black;
-} */
+body {
+	display: flex;
+	flex-direction: column;
+}

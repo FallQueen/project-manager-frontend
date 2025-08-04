@@ -57,10 +57,10 @@ export class CardBacklogComponent {
 		if (!this.workChildContainer || !this.workChildContainer.nativeElement)
 			return 0;
 		let height = 0;
-
+		delay(50);
 		height = this.workChildContainer.nativeElement.scrollHeight;
 
-		if (workHover === true && workList.length > 0) height += 50;
+		if (workHover === true && workList.length > 0) height += 70;
 		return height;
 	});
 
