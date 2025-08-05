@@ -13,6 +13,22 @@
         </mat-error>
     </div>
 
+    @if (workData) {
+    <div class="row">
+        <div class="form-control">
+            <div class="form-control-input">{{workData.projectName}}
+            </div>
+            <label class="form-control-label label-up">Project</label>
+        </div>
+
+        <div class="form-control">
+            <div class="form-control-input">{{workData.backlogName}}
+            </div>
+            <label class="form-control-label label-up">Backlog</label>
+        </div>
+    </div>
+    }
+
     <!-- Description Input -->
     <div>
         <div class="form-control">
@@ -24,6 +40,7 @@
             Please enter the description
         </mat-error>
     </div>
+
 
     <!-- Date Range Picker (nested formGroupName) -->
     <div>

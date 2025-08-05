@@ -30,8 +30,8 @@
                 class="card-status state-{{dataService.formatClassName(workData.stateName)}}">
                 <span>{{workData.stateName}}</span>
             </div>
-            <app-pop-up-change #statePop
-                [popUpData]="{ workId: workData.workId, class: 'state', current: { name: workData.stateName, id: workData.stateId } }">
+            <app-pop-up-change #statePop (dataChange)="updateData('state', $event)"
+                [popUpData]="{class: 'state', current: { name: workData.stateName, id: workData.stateId } }">
             </app-pop-up-change>
         </div>
 
@@ -40,8 +40,8 @@
             <div (click)="priorityPop.toggleVisibility()" class="card-status priority-{{workData.priorityName}}">
                 <span>{{workData.priorityName}}</span>
             </div>
-            <app-pop-up-change #priorityPop
-                [popUpData]="{ workId: workData.workId, class: 'priority', current: { name: workData.priorityName, id: workData.priorityId} }">
+            <app-pop-up-change #priorityPop (dataChange)="updateData('priority', $event)"
+                [popUpData]="{ class: 'priority', current: { name: workData.priorityName, id: workData.priorityId} }">
             </app-pop-up-change>
         </div>
 

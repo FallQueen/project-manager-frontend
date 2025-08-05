@@ -29,8 +29,11 @@
             <div class="card-section">
                 <span class="section-label">Priority</span>
                 <div class="card-status priority-{{backlogData.priorityName}}">
-                    <span>{{backlogData.priorityName}}</span>
+                    <span (click)="priorityPop.toggleVisibility()">{{backlogData.priorityName}}</span>
                 </div>
+                <app-pop-up-change #priorityPop (dataChange)="updateBacklogData('priority', $event)"
+                    [popUpData]="{class: 'priority', current: { name: backlogData.priorityName, id: backlogData.priorityId} }">
+                </app-pop-up-change>
             </div>
 
 
@@ -46,9 +49,13 @@
             </div>
         </div>
     </div>
-
+    <div class="container-work">
+        <app-expandable-work-container (newWorkState)="doWhenNewWork($event)" [isExpanded]="expanded"
+            [indicatorClass]="'priority-' + backlogData.priorityName" [workList]="workList"
+            [backlogId]="backlogData.backlogId"></app-expandable-work-container>
+    </div>
     <!-- <div>height:{{workChildContainerHeight()}} </div> -->
-    <div class="child-wrapper" #workChildContainer [style.maxHeight.px]="workChildContainerHeight()"
+    <!-- <div class="child-wrapper" #workChildContainer [style.maxHeight.px]="workChildContainerHeight()"
         (mouseleave)="workHovered.set(false)" (mouseenter)="workHovered.set(true)">
         <div class="child-container">
             <div class="indicator-child priority-{{backlogData.priorityName}}"></div>
@@ -71,5 +78,5 @@
 
             </div>
         </div>
-    </div>
+    </div> -->
 </div>

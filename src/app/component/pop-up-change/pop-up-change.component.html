@@ -1,9 +1,10 @@
 @if (popUpData.class || popUpData.class === "priority") {
 <div class="pop-up-container" [style.visibility]="visibility() ? 'visible' : 'hidden'" (click)="toggleVisibility()">
-    @for (item of itemList(); track $index) {
+    @for (item of visibleItemList(); track $index) {
 
-    <div (click)="pickItem(item)" class="card-status priority-{{item.name}}">
-        <span>{{item.name}}</span>
+
+    <div (click)="pickItem(item)" class="card-status {{popUpData.class}}-{{ dataService.formatClassName(item.name)}}">
+        <span [class.active]="item.name === popUpData.current.name">{{item.name}}</span>
     </div>
     }
 

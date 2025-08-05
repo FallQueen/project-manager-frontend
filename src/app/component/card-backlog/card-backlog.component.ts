@@ -23,7 +23,9 @@ import ms from "@angular/common/locales/extra/ms";
 import { MatDialog } from "@angular/material/dialog";
 import { DialogBacklogContainerComponent } from "../dialog-backlog-container/dialog-backlog-container.component";
 import { DialogService } from "../../service/dialog.service";
-import { delay } from "rxjs";
+import { delay, expand } from "rxjs";
+import { PopUpChangeComponent } from "../pop-up-change/pop-up-change.component";
+import { ExpandableWorkContainerComponent } from "../expandable-work-container/expandable-work-container.component";
 
 @Component({
 	selector: "app-card-backlog",
@@ -31,8 +33,9 @@ import { delay } from "rxjs";
 		CommonModule,
 		MatTooltipModule,
 		MatIconModule,
-		CardWorkComponent,
-		CardWorkNewComponent,
+
+		PopUpChangeComponent,
+		ExpandableWorkContainerComponent,
 	],
 	templateUrl: "./card-backlog.component.html",
 	styleUrl: "./card-backlog.component.css",
@@ -42,32 +45,9 @@ export class CardBacklogComponent {
 	dialogService = inject(DialogService);
 	@Input() backlogData!: BacklogData;
 
-	@ViewChild("workChildContainer") workChildContainer!: ElementRef;
-	workChildContainerHeight: Signal<number> = computed(() => {
-		const expanded = this.expanded();
-		const workHover = this.workHovered();
-		const workList = this.workList();
-		console.log(
-			"triggered workChildContainerHeight",
-			expanded,
-			workHover,
-			workList.length,
-		);
-		if (!expanded) return 0;
-		if (!this.workChildContainer || !this.workChildContainer.nativeElement)
-			return 0;
-		let height = 0;
-		delay(50);
-		height = this.workChildContainer.nativeElement.scrollHeight;
-
-		if (workHover === true && workList.length > 0) height += 70;
-		return height;
-	});
-
 	expanded = signal(false);
 	periodPercentage = signal<number>(0);
 	totalWork = signal(0);
-	workHovered = signal(false);
 
 	workList = signal<WorkData[]>([]);
 
@@ -156,5 +136,19 @@ export class CardBacklogComponent {
 
 		// Subscribes to the `afterClosed` event of the dialog.
 		// This allows the component to react when the dialog is closed.
+	}
+
+	updateBacklogData(type: "priority", item: NameListItem) {
+		if (type === "priority") {
+			this.dataService
+				.putAlterBacklog({
+					backlogId: this.backlogData.backlogId,
+					priorityId: item.id,
+				})
+				.subscribe(() => {
+					this.backlogData.priorityId = item.id;
+					this.backlogData.priorityName = item.name;
+				});
+		}
 	}
 }

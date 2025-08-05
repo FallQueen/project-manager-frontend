@@ -14,10 +14,9 @@ export class DashboardService {
 		this.loadUserTodoList();
 	}
 
-	private loadUserTodoList() {
+	loadUserTodoList() {
 		this.dataService.getUserTodoList().subscribe((data) => {
 			this.userTodoList.set(data);
-			console.log("User Todo List loaded:", this.userTodoList());
 		});
 	}
 }

@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { inject, Injectable } from "@angular/core";
+import { inject, Injectable, type Signal } from "@angular/core";
 import { Router } from "@angular/router";
 import type {
 	NewProjectInput,
@@ -18,6 +18,7 @@ import type {
 	UserTodoList,
 } from "../model/format.type";
 import { firstValueFrom } from "rxjs";
+import { signal } from "@angular/core";
 
 @Injectable({
 	providedIn: "root",
@@ -31,10 +32,10 @@ export class DataProcessingService {
 	// host = "https://state-management-api.vercel.app/api";
 	private host = "http://localhost:9090/api";
 
-	private trackerList!: NameListItem[];
-	private activityList!: NameListItem[];
-	private priorityList!: NameListItem[];
-	private stateList!: NameListItem[];
+	trackerList = signal<NameListItem[]>([]);
+	activityList = signal<NameListItem[]>([]);
+	priorityList = signal<NameListItem[]>([]);
+	stateList = signal<NameListItem[]>([]);
 
 	constructor() {
 		this.getStartBundle();
@@ -128,40 +129,27 @@ export class DataProcessingService {
 				stateList: NameListItem[];
 			}>(url)
 			.subscribe((result) => {
-				this.trackerList = result.trackerList;
-				this.activityList = result.activityList;
-				this.priorityList = result.priorityList;
-				this.stateList = result.stateList;
+				this.trackerList.set(result.trackerList);
+				this.activityList.set(result.activityList);
+				this.priorityList.set(result.priorityList);
+				this.stateList.set(result.stateList);
 			});
 	}
 
-	getTrackerList(): NameListItem[] {
-		if (this.trackerList !== undefined) {
-			return this.trackerList;
-		}
-		return [];
+	getTrackerList(): Signal<NameListItem[]> {
+		return this.trackerList;
 	}
 
-	getActivityList(): NameListItem[] {
-		if (this.activityList !== undefined) {
-			return this.activityList;
-		}
-
-		return [];
+	getActivityList(): Signal<NameListItem[]> {
+		return this.activityList;
 	}
 
-	getPriorityList(): NameListItem[] {
-		if (this.priorityList !== undefined) {
-			return this.priorityList;
-		}
-		return [];
+	getPriorityList(): Signal<NameListItem[]> {
+		return this.priorityList;
 	}
 
-	getStateList(): NameListItem[] {
-		if (this.stateList !== undefined) {
-			return this.stateList;
-		}
-		return [];
+	getStateList(): Signal<NameListItem[]> {
+		return this.stateList;
 	}
 
 	getProjects() {

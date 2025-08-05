@@ -3,18 +3,13 @@ import type { NameListItem } from "../model/format.type";
 
 @Injectable()
 export class SearchBarService {
-	private injector = inject(Injector);
-
 	constructor() {
-		effect(
-			() => {
-				const nameInput = this.nameInput();
-				const nameList = this.nameList();
-				const filteredList = this.filter(nameInput, nameList);
-				this.filteredNameList.set(this.removeDuplicates(filteredList));
-			},
-			{ injector: this.injector },
-		);
+		effect(() => {
+			const nameInput = this.nameInput();
+			const nameList = this.nameList();
+			const filteredList = this.filter(nameInput, nameList);
+			this.filteredNameList.set(this.removeDuplicates(filteredList));
+		});
 	}
 
 	public readonly nameInput = signal<string>("");
@@ -36,7 +31,6 @@ export class SearchBarService {
 		this.filteredNameList.set(filteredList);
 	}
 	removeDuplicates(list: NameListItem[]): NameListItem[] {
-		console.log(list);
 		const uniqueMap = new Map<number, NameListItem>();
 		for (const item of list) {
 			if (!uniqueMap.has(item.id)) {

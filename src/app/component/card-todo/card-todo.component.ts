@@ -1,27 +1,33 @@
 import {
 	Component,
 	computed,
+	effect,
 	type ElementRef,
 	inject,
 	Input,
 	type Signal,
 	signal,
+	type SimpleChanges,
 	ViewChild,
 } from "@angular/core";
-import type { BatteryItem, UserTodoList } from "../../model/format.type";
+import type {
+	BatteryItem,
+	UserTodoList,
+	WorkData,
+} from "../../model/format.type";
 import { MatIconModule } from "@angular/material/icon";
 import { CardWorkComponent } from "../card-work/card-work.component";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { DataProcessingService } from "../../service/data-processing.service";
-import { PopUpChangeComponent } from "../pop-up-change/pop-up-change.component";
+import { ExpandableWorkContainerComponent } from "../expandable-work-container/expandable-work-container.component";
 
 @Component({
 	selector: "app-card-todo",
 	imports: [
 		MatIconModule,
 		CardWorkComponent,
-		PopUpChangeComponent,
 		MatTooltipModule,
+		ExpandableWorkContainerComponent,
 	],
 	templateUrl: "./card-todo.component.html",
 	styleUrl: "./card-todo.component.css",
@@ -33,15 +39,18 @@ export class CardTodoComponent {
 		stateName: "",
 		works: [],
 	};
+	workList = signal<WorkData[]>([]);
 	priorityBatteryItems: BatteryItem[] = [];
 
 	expanded = signal(false);
 	periodPercentage = signal<number>(0);
 	totalWork = signal(0);
+	containerTrigger = signal(false);
 
 	@ViewChild("childContainer") childContainer!: ElementRef;
 	childContainerHeight: Signal<number> = computed(() => {
 		const expanded = this.expanded();
+		const containerTrigger = this.containerTrigger();
 		if (!expanded) return 0;
 		if (!this.childContainer || !this.childContainer.nativeElement) return 0;
 		let height = 0;
@@ -49,16 +58,38 @@ export class CardTodoComponent {
 		height = this.childContainer.nativeElement.scrollHeight;
 		return height;
 	});
-	ngOnInit() {
-		this.countBatteryTotal();
-		this.countItemAndPercentage();
-		console.log(this.todoList);
+
+	// ngOnInit() {
+	// 	this.refreshBattery();
+	// }
+
+	constructor() {
+		effect(() => {
+			const work = this.workList();
+			this.refreshBattery();
+		});
+	}
+	triggerContainerResize() {
+		this.containerTrigger.set(!this.containerTrigger());
 	}
 
+	ngOnChanges() {
+		if (this.todoList) {
+			// This runs whenever todoList changes
+			this.refreshBattery();
+			this.workList.set(this.todoList.works);
+		}
+	}
+
+	refreshBattery() {
+		this.countBatteryTotal();
+		this.countItemAndPercentage();
+	}
 	countBatteryTotal() {
 		this.totalWork.set(this.todoList.works.length);
 	}
 	countItemAndPercentage() {
+		this.priorityBatteryItems = [];
 		for (const work of this.todoList.works) {
 			const priorityItem = this.priorityBatteryItems.find(
 				(i) => i.id === work.priorityId,
@@ -74,6 +105,7 @@ export class CardTodoComponent {
 				});
 			}
 		}
+		this.priorityBatteryItems.sort((a, b) => a.id - b.id);
 
 		for (const item of this.priorityBatteryItems) {
 			item.percentage = (100 * item.count) / this.totalWork();

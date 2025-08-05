@@ -24,6 +24,10 @@ body {
 	font-family: "Segoe UI", "Helvetica Neue", sans-serif;
 }
 
+html {
+	overflow: hidden;
+}
+
 html,
 body {
 	width: 100%;
@@ -197,6 +201,7 @@ mat-icon {
 	line-height: 1.3em;
 	text-align: justify;
 }
+
 .form-control-input:invalid::before,
 .form-control-input:empty::before {
 	content: "\00a0";

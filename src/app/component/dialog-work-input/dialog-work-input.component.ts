@@ -100,10 +100,10 @@ export class DialogWorkInputComponent {
 	}
 
 	ngOnInit() {
-		this.trackerList.set(this.dataService.getTrackerList());
-		this.activityList.set(this.dataService.getActivityList());
-		this.priorityList.set(this.dataService.getPriorityList());
-		this.stateList.set(this.dataService.getStateList());
+		this.trackerList.set(this.dataService.getTrackerList()());
+		this.activityList.set(this.dataService.getActivityList()());
+		this.priorityList.set(this.dataService.getPriorityList()());
+		this.stateList.set(this.dataService.getStateList()());
 		this.trackerList.set(
 			this.trackerList().filter((item) => item.name.toLowerCase() !== "bug"),
 		);
@@ -167,7 +167,7 @@ export class DialogWorkInputComponent {
 			usersAdded,
 			picId: this.currentPic().id || null,
 		};
-		console.log("New Work Data:", newWork);
+		console.log("newWork", newWork);
 		this.dialogService
 			.getWorkContainerDialogRef()
 			?.close(this.workForm.value.state);
@@ -243,9 +243,11 @@ export class DialogWorkInputComponent {
 			usersRemoved,
 		};
 
-		console.log("Payload to be sent:", alterWork);
 		this.dataService.putAlterWork(alterWork).subscribe(() => {
 			this.updateExistingWork();
+			this.dialogService
+				.getWorkContainerDialogRef()
+				?.close(this.workForm.value.state);
 		});
 	}
 

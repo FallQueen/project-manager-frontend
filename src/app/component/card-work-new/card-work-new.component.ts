@@ -15,21 +15,22 @@ export class CardWorkNewComponent {
 	dialog = inject(MatDialog);
 	dialogService = inject(DialogService);
 	@Output() newWork = new EventEmitter<NameListItem>();
-	@Input() backlogData!: BacklogData;
+	@Input() backlogId!: number;
 
 	openForm() {
+		console.log("openForm", this.backlogId);
 		// Uses the MatDialog service to open the DialogMoreDetailComponent.
 		const dialogRef = this.dialogService.openWorkDialog(
 			undefined,
-			undefined,
+			this.backlogId,
 			true,
 		);
 
 		// Subscribes to the `afterClosed` event of the dialog.
 		// This allows the component to react when the dialog is closed.
-		dialogRef.afterClosed().subscribe((result) => {
-			if (result) {
-				this.newWork.emit(result); // Emits an event to refresh the parent component.
+		dialogRef.afterClosed().subscribe((newState) => {
+			if (newState) {
+				this.newWork.emit(newState); // Emits an event to refresh the parent component.
 			}
 		});
 	}

@@ -61,7 +61,7 @@ export class DialogService {
 
 	openWorkDialog(
 		workData: WorkData | undefined,
-		dialogId: number | undefined,
+		backlogId: number | undefined,
 		newWork: boolean,
 	): MatDialogRef<DialogWorkContainerComponent> {
 		const dialogRef = this.dialog.open(DialogWorkContainerComponent, {
@@ -71,9 +71,10 @@ export class DialogService {
 			maxWidth: "90vw",
 			maxHeight: "90vh",
 			panelClass: "custom-dialog-container",
-			data: { workData, newWork },
+			data: { workData, newWork, backlogId },
 		});
 		this.workContainerDialogRef = dialogRef;
+		console.log("openWorkDialog", workData, backlogId, newWork);
 		return dialogRef;
 	}
 

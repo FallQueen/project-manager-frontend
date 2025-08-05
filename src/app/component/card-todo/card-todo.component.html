@@ -1,45 +1,49 @@
+<!-- Card Todo Component -->
 <div class="card backlog">
     <div class="backlog-container">
-        <div class="indicator priority-{{todoList.stateId}}"></div>
+        <!-- State Indicator -->
+        <div class="indicator state-{{dataService.formatClassName(todoList.stateName)}}"></div>
         <div class="backlog-inner-container">
-            <span class="arrow-icon-container" (click)="expandWorkInside()"> <mat-icon class="arrow-icon">@if
-                    (!expanded()){keyboard_arrow_right} @else {keyboard_arrow_down}</mat-icon>
+            <!-- Expand/Collapse Arrow -->
+            <span class="arrow-icon-container" (click)="expandWorkInside()">
+                <mat-icon class="arrow-icon">
+                    @if (!expanded()) { keyboard_arrow_right } @else { keyboard_arrow_down }
+                </mat-icon>
             </span>
 
-
+            <!-- Card Name -->
             <div class="card-name">
                 <span>{{todoList.stateName}}</span>
             </div>
 
-
+            <!-- Priority Section -->
             <div class="card-section">
                 <span class="section-label">Priority</span>
                 <div class="progress-bar-battery">
+                    <!-- Priority Battery Items -->
                     @for (item of priorityBatteryItems; track $index) {
-                    <div class=" progress-fill-battery priority-{{dataService.formatClassName(item.name)}}"
+                    <div class="progress-fill-battery priority-{{dataService.formatClassName(item.name)}}"
                         [matTooltip]="getTooltip(item.name,item.count,item.percentage)"
                         [style.width.%]="item.percentage">
                     </div>
-
                     }
-
-
                 </div>
             </div>
-
-
-
         </div>
     </div>
 
-    <!-- <div>height:{{workChildContainerHeight()}} </div> -->
+    <div class="work-container">
+        <app-expandable-work-container [isExpanded]="expanded"
+            [indicatorClass]="'state-' + dataService.formatClassName(todoList.stateName)"
+            [workList]="workList"></app-expandable-work-container>
+    </div>
+    <!-- Child Container: Work Items -->
     <div class="child-wrapper" [style.maxHeight.px]="childContainerHeight()" #childContainer>
-
         <div class="child-container">
-
-            <div class="indicator-child priority-{{todoList.stateId}}"></div>
+            <!-- Child State Indicator -->
+            <div class="indicator-child state-{{dataService.formatClassName(todoList.stateName)}}"></div>
             <div class="work-list-container">
-
+                <!-- Work Header -->
                 <div class="work-header">
                     <span class="section-label name">FUNCTION</span>
                     <span class="section-label">TRACKER</span>
@@ -48,10 +52,9 @@
                     <span class="section-label">PRIORITY</span>
                     <span class="section-label">PERIOD</span>
                 </div>
-
-
+                <!-- Work Items -->
                 @for (work of todoList.works; track $index) {
-                <app-card-work [workData]="work"></app-card-work>
+                <app-card-work (triggerbatteryRefresh)="refreshBattery()" [workData]="work"></app-card-work>
                 }
             </div>
         </div>

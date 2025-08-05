@@ -93,7 +93,7 @@ export class DialogBacklogInputComponent {
 	}
 
 	ngOnInit() {
-		this.priorityList.set(this.dataService.getPriorityList());
+		this.priorityList.set(this.dataService.getPriorityList()());
 		this.dataService
 			.getProjectAssignedUsernames(this.projectId)
 			.subscribe((result) => {
@@ -137,7 +137,6 @@ export class DialogBacklogInputComponent {
 				picId: this.backlogForm.value.pic?.id || 0,
 				priorityId: this.backlogForm.value.priority?.id || 0,
 			};
-			console.log("Creating new backlog:", newBacklog);
 			this.dataService.postNewBacklog(newBacklog).subscribe(() => {
 				this.dialogService.getBacklogContainerDialogRef()?.close();
 			});

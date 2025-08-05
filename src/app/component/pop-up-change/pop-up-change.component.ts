@@ -1,4 +1,12 @@
-import { Component, inject, Input, signal } from "@angular/core";
+import {
+	Component,
+	effect,
+	EventEmitter,
+	inject,
+	Input,
+	Output,
+	signal,
+} from "@angular/core";
 import type { NameListItem } from "../../model/format.type";
 import { DataProcessingService } from "../../service/data-processing.service";
 
@@ -11,40 +19,56 @@ import { DataProcessingService } from "../../service/data-processing.service";
 export class PopUpChangeComponent {
 	dataService = inject(DataProcessingService);
 	@Input() popUpData!: {
-		workId: number;
 		class: "priority" | "state" | "period";
 		current: NameListItem;
 	};
+	@Output() dataChange = new EventEmitter<NameListItem>();
 	itemList = signal<NameListItem[]>([]);
+	visibleItemList = signal<NameListItem[]>([]);
 	datepicker = signal<boolean>(false);
 	visibility = signal<boolean>(false);
 
-	ngOnInit() {
-		if (this.popUpData.class === "priority") {
-			this.itemList.set(this.dataService.getPriorityList());
-		} else if (this.popUpData.class === "state") {
-			this.itemList.set(this.dataService.getStateList());
+	constructor() {
+		effect(() => {
+			if (this.popUpData.class === "priority") {
+				this.itemList.set(this.dataService.getPriorityList()());
+			} else if (this.popUpData.class === "state") {
+				this.itemList.set(this.dataService.getStateList()());
+			}
+			this.setVisibleItemList();
+		});
+	}
+
+	ngOnChanges() {
+		if (this.popUpData) {
+			this.setVisibleItemList();
+		}
+	}
+
+	setVisibleItemList() {
+		if (this.popUpData.class === "state") {
+			const currentId = this.popUpData.current.id;
+			this.visibleItemList.set(
+				this.itemList().filter((item) => {
+					return (
+						item.id < currentId + 2 && item.id > currentId - 2 && item.id !== 1
+					);
+				}),
+			);
+		} else {
+			this.visibleItemList.set(this.itemList());
 		}
 	}
 
 	pickItem(item: NameListItem) {
-		if (this.popUpData.class === "priority") {
-			this.dataService.putAlterWork({
-				workId: this.popUpData.workId,
-				priorityId: item.id,
-			});
-		} else if (this.popUpData.class === "state") {
-			this.dataService.putAlterWork({
-				workId: this.popUpData.workId,
-				currentState: item.id,
-			});
-		} else if (this.popUpData.class === "period") {
-			this.datepicker.set(true);
-		}
+		this.dataChange.emit(item);
 	}
 
 	toggleVisibility() {
-		this.visibility.set(!this.visibility());
+		console.log("current", this.popUpData.current.name);
+		if (this.popUpData.current.name !== "NEW") {
+			this.visibility.set(!this.visibility());
+		}
 	}
 
 	ngAfterViewInit() {

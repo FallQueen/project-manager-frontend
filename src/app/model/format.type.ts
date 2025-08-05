@@ -15,16 +15,6 @@ export type userProjectRoles = {
 	roles: number[];
 };
 
-// export type project = {
-// 	projectId: number;
-// 	projectName: string;
-// 	pic: string;
-// 	startDate: Date;
-// 	description: string;
-// 	totalTask: number;
-// 	doneTask: number;
-// };
-
 export type Project = {
 	projectId: number;
 	projectName: string;
@@ -107,12 +97,12 @@ export type NewBacklog = {
 
 export type AlterBacklog = {
 	backlogId: number;
-	backlogName: string | null;
-	description: string | null;
-	startDate: Date | null;
-	targetDate: Date | null;
-	picId: number | null;
-	priorityId: number | null;
+	backlogName?: string | null;
+	description?: string | null;
+	startDate?: Date | null;
+	targetDate?: Date | null;
+	picId?: number | null;
+	priorityId?: number | null;
 };
 
 export type UserWorkByState = {

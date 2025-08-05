@@ -23,7 +23,6 @@
 	align-items: center;
 	justify-content: center;
 	height: 100%;
-
 	padding: 0.1em 0.7em;
 	border: 1px solid rgba(51, 51, 51, 0.2);
 	border-radius: 4px;
@@ -31,4 +30,11 @@
 	font-weight: 500;
 	font-family: Roboto, sans-serif;
 	box-sizing: border-box;
+	opacity: 50%;
+	transition: opacity 0.3s ease;
+}
+
+.card-status span:hover,
+.card-status span.active {
+	opacity: 100%;
 }

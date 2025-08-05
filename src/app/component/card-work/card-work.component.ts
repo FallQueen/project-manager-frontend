@@ -1,10 +1,18 @@
-import { Component, inject, Input, signal } from "@angular/core";
-import type { WorkData } from "../../model/format.type";
+import {
+	Component,
+	EventEmitter,
+	inject,
+	Input,
+	Output,
+	signal,
+} from "@angular/core";
+import type { NameListItem, WorkData } from "../../model/format.type";
 import { CommonModule } from "@angular/common";
 import { DataProcessingService } from "../../service/data-processing.service";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { DialogService } from "../../service/dialog.service";
 import { PopUpChangeComponent } from "../pop-up-change/pop-up-change.component";
+import { DashboardService } from "../../service/dashboard.service";
 
 @Component({
 	selector: "app-card-work",
@@ -14,8 +22,10 @@ import { PopUpChangeComponent } from "../pop-up-change/pop-up-change.component";
 })
 export class CardWorkComponent {
 	dataService = inject(DataProcessingService);
+	dashboardService = inject(DashboardService);
 	dialogService = inject(DialogService);
 	@Input() workData!: WorkData;
+	@Output() triggerbatteryRefresh = new EventEmitter<void>();
 	periodPercentage = signal<number>(0);
 
 	ngOnInit() {
@@ -37,5 +47,34 @@ export class CardWorkComponent {
 
 		// Subscribes to the `afterClosed` event of the dialog.
 		// This allows the component to react when the dialog is closed.
+	}
+
+	updateData(type: "priority" | "state", item: NameListItem) {
+		if (type === "priority") {
+			this.dataService
+				.putAlterWork({
+					workId: this.workData.workId,
+					priorityId: item.id,
+				})
+				.subscribe(() => {
+					this.workData.priorityId = item.id;
+					this.workData.priorityName = item.name;
+					this.triggerbatteryRefresh.emit();
+				});
+		} else if (type === "state") {
+			this.workData.stateId = item.id;
+			this.workData.stateName = item.name;
+			this.dataService
+				.putAlterWork({
+					workId: this.workData.workId,
+					currentState: item.id,
+				})
+				.subscribe(() => {
+					this.workData.stateId = item.id;
+					this.workData.stateName = item.name;
+					// this.triggerbatteryRefresh.emit();
+					this.dashboardService.loadUserTodoList();
+				});
+		}
 	}
 }

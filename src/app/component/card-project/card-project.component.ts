@@ -32,7 +32,8 @@ export class CardProjectComponent {
 
 	setProjectPercentageAndTooltip() {
 		this.projectPercentage.set(
-			(this.project.doneTask / this.project.totalTask) * 100,
+			Math.floor((this.project.doneTask / this.project.totalTask) * 10000) /
+				100,
 		);
 
 		this.progressTooltip.set(
@@ -50,7 +51,13 @@ export class CardProjectComponent {
 		}
 
 		const percentage = (Date.now() - start) / total;
-		this.periodPercentage.set(100 * Math.min(percentage, 1));
+		this.periodPercentage.set(
+			Number(Math.min(Math.floor(percentage * 10000) / 100, 100)),
+		);
+
+		this.periodPercentage.set(
+			Number(Math.min(Math.floor(percentage * 10000) / 100, 100)),
+		);
 	}
 
 	openForm() {
