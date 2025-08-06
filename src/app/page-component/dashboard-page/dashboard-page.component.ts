@@ -12,8 +12,4 @@ import { signal } from "@angular/core";
 export class DashboardPageComponent {
 	dashboardService = inject(DashboardService);
 	todoList = this.dashboardService.userTodoList;
-
-	getIndexOfWorkType(type: string): number {
-		return this.todoList().findIndex((item) => item.stateName === type);
-	}
 }

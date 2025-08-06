@@ -168,9 +168,11 @@ export class DialogWorkInputComponent {
 			picId: this.currentPic().id || null,
 		};
 		console.log("newWork", newWork);
-		this.dialogService
-			.getWorkContainerDialogRef()
-			?.close(this.workForm.value.state);
+		this.dataService.postNewWork(newWork).subscribe(() => {
+			this.dialogService
+				.getWorkContainerDialogRef()
+				?.close(this.workForm.value.state);
+		});
 	}
 
 	changeState(empty: boolean) {

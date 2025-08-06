@@ -6,7 +6,7 @@ import {
 	Output,
 	signal,
 } from "@angular/core";
-import type { NameListItem, WorkData } from "../../model/format.type";
+import type { BugData, NameListItem, WorkData } from "../../model/format.type";
 import { CommonModule } from "@angular/common";
 import { DataProcessingService } from "../../service/data-processing.service";
 import { MatTooltipModule } from "@angular/material/tooltip";
@@ -24,11 +24,16 @@ export class CardWorkComponent {
 	dataService = inject(DataProcessingService);
 	dashboardService = inject(DashboardService);
 	dialogService = inject(DialogService);
-	@Input() workData!: WorkData;
+	@Input() workData!: WorkData | BugData;
 	@Output() triggerbatteryRefresh = new EventEmitter<void>();
 	periodPercentage = signal<number>(0);
 
 	ngOnInit() {
+		console.log("workData", this.workData);
+		if ("defectCause" in this.workData) {
+			console.log("workData is BugData");
+		}
+		console.log("workData", this.workData);
 		this.periodPercentage.set(
 			this.dataService.getPeriodDonePercentage(
 				this.workData.startDate,

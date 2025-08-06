@@ -1,7 +1,8 @@
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import { RouterOutlet } from "@angular/router";
 import { HeaderComponent } from "../../component/header/header.component";
 import { SideBarComponent } from "../../component/side-bar/side-bar.component";
+import { DataProcessingService } from "../../service/data-processing.service";
 
 @Component({
 	selector: "app-home-page",
@@ -9,4 +10,10 @@ import { SideBarComponent } from "../../component/side-bar/side-bar.component";
 	templateUrl: "./home-page.component.html",
 	styleUrl: "./home-page.component.css",
 })
-export class HomePageComponent {}
+export class HomePageComponent {
+	dataService = inject(DataProcessingService);
+	ngOnInit() {
+		this.dataService.getandSetStartBundle();
+		this.dataService.setRoleOfProject();
+	}
+}

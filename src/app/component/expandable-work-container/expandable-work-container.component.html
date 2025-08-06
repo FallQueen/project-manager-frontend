@@ -5,20 +5,20 @@
         <div class="work-list-container">
             <div class="work-header">
                 <span class="section-label name">FUNCTION</span>
-                <span class="section-label">TRACKER</span>
-                <span class="section-label">ACTIVITY</span>
-                <span class="section-label">STATE</span>
-                <span class="section-label">PRIORITY</span>
-                <span class="section-label">PERIOD</span>
+                @for (item of sectionLabel(); track $index) {
+                <span class="section-label">{{item}}</span>
+                }
+
             </div>
 
 
             @for (work of workList(); track $index) {
-            <app-card-work [workData]="work"></app-card-work>
+            <app-card-work [workData]="work" (triggerbatteryRefresh)="triggerbatteryRefresh.emit()"></app-card-work>
             }
+            @if(isBacklogPage()){
             <app-card-work-new (newWork)="newWorkState.emit($event)" [backlogId]="backlogId"
                 [class.empty]="!workList().length"></app-card-work-new>
-
+            }
         </div>
     </div>
 </div>

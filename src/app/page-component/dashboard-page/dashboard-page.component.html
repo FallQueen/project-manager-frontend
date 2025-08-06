@@ -8,6 +8,7 @@
     @if(todoList().length >0){
     <div class="card-container-vertical">
         @for (item of todoList(); track $index) {
+
         <app-card-todo [todoList]="item"></app-card-todo>
         }
 

@@ -7,9 +7,9 @@
         </div>
 
 
-
+        @if (dataService.isWorkData(workData)) {
         <div class="card-section">
-            <!-- <span class="section-label">State</span> -->
+
             <div class="card-status">
                 <span>{{workData.trackerName}}</span>
             </div>
@@ -17,15 +17,35 @@
 
 
         <div class="card-section">
-            <!-- <span class="section-label">State</span> -->
+
             <div class="card-status">
                 <span>{{workData.activityName}}</span>
             </div>
 
         </div>
+        }
+
+        @if(dataService.isBugData(workData)){
+        <div class="card-section">
+
+            <div class="card-status">
+                <span>{{workData.defectCause}}</span>
+            </div>
+
+        </div>
 
         <div class="card-section">
-            <!-- <span class="section-label">State</span> -->
+            <div class="card-status">
+                <span> <!-- This is the flex container for centering -->
+                    <span>{{ workData.workAffected }}</span> <!-- This handles the text and ellipsis -->
+                </span>
+            </div>
+
+        </div>
+        }
+
+        <div class="card-section">
+
             <div (click)="statePop.toggleVisibility()"
                 class="card-status state-{{dataService.formatClassName(workData.stateName)}}">
                 <span>{{workData.stateName}}</span>

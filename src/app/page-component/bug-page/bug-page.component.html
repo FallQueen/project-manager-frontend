@@ -1,1 +1,17 @@
-<p>bug-page works!</p>
+<div class="page-container">
+
+
+    <div class="page-title">
+        <h1>Bugs</h1>
+    </div>
+
+    @if(bugList().length >0){
+    <div class="card-container-vertical">
+        @for (item of bugList(); track $index) {
+
+        <app-card-todo [todoList]="item"></app-card-todo>
+        }
+
+    </div>
+    }
+</div>

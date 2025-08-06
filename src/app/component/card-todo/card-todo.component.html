@@ -1,9 +1,9 @@
 <!-- Card Todo Component -->
-<div class="card backlog">
-    <div class="backlog-container">
+<div class="card todo">
+    <div class="todo-container">
         <!-- State Indicator -->
         <div class="indicator state-{{dataService.formatClassName(todoList.stateName)}}"></div>
-        <div class="backlog-inner-container">
+        <div class="todo-inner-container">
             <!-- Expand/Collapse Arrow -->
             <span class="arrow-icon-container" (click)="expandWorkInside()">
                 <mat-icon class="arrow-icon">
@@ -33,30 +33,9 @@
     </div>
 
     <div class="work-container">
-        <app-expandable-work-container [isExpanded]="expanded"
+        <app-expandable-work-container (triggerbatteryRefresh)="refreshBattery()" [isExpanded]="expanded"
             [indicatorClass]="'state-' + dataService.formatClassName(todoList.stateName)"
             [workList]="workList"></app-expandable-work-container>
     </div>
-    <!-- Child Container: Work Items -->
-    <div class="child-wrapper" [style.maxHeight.px]="childContainerHeight()" #childContainer>
-        <div class="child-container">
-            <!-- Child State Indicator -->
-            <div class="indicator-child state-{{dataService.formatClassName(todoList.stateName)}}"></div>
-            <div class="work-list-container">
-                <!-- Work Header -->
-                <div class="work-header">
-                    <span class="section-label name">FUNCTION</span>
-                    <span class="section-label">TRACKER</span>
-                    <span class="section-label">ACTIVITY</span>
-                    <span class="section-label">STATE</span>
-                    <span class="section-label">PRIORITY</span>
-                    <span class="section-label">PERIOD</span>
-                </div>
-                <!-- Work Items -->
-                @for (work of todoList.works; track $index) {
-                <app-card-work (triggerbatteryRefresh)="refreshBattery()" [workData]="work"></app-card-work>
-                }
-            </div>
-        </div>
-    </div>
+
 </div>

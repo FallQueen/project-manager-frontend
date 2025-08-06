@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { inject, Injectable, type Signal } from "@angular/core";
+import { effect, inject, Injectable, type Signal } from "@angular/core";
 import { Router } from "@angular/router";
 import type {
 	NewProjectInput,
@@ -16,6 +16,8 @@ import type {
 	AlterBacklog,
 	userProjectRoles,
 	UserTodoList,
+	ProjectBugList,
+	BugData,
 } from "../model/format.type";
 import { firstValueFrom } from "rxjs";
 import { signal } from "@angular/core";
@@ -32,14 +34,13 @@ export class DataProcessingService {
 	// host = "https://state-management-api.vercel.app/api";
 	private host = "http://localhost:9090/api";
 
+	private currentProjectRoles = signal<number[]>([]);
+	private projectIdSignal = signal(this.getProjectId());
 	trackerList = signal<NameListItem[]>([]);
 	activityList = signal<NameListItem[]>([]);
 	priorityList = signal<NameListItem[]>([]);
 	stateList = signal<NameListItem[]>([]);
 
-	constructor() {
-		this.getStartBundle();
-	}
 	// Stores user information in localStorage after a successful login.
 	storeUserInfo(u: User) {
 		localStorage.setItem("userId", u.userId.toString());
@@ -74,15 +75,6 @@ export class DataProcessingService {
 		return projectRoles ? JSON.parse(projectRoles) : [];
 	}
 
-	checkUserProjectRole(projectId: number): number[] {
-		const projectRoles = this.getProjectRoles();
-		const role = projectRoles.find((pr) => pr.projectId === projectId);
-		if (role) {
-			return role.roles;
-		}
-		return [];
-	}
-
 	resetUserData() {
 		localStorage.removeItem("userId");
 		localStorage.removeItem("username");
@@ -91,14 +83,47 @@ export class DataProcessingService {
 		localStorage.removeItem("projectRoles");
 	}
 
-	setProject(projectId: number, projectName: string) {
+	setRoleOfProject() {
+		this.currentProjectRoles.set(this.getUserProjectRole());
+	}
+
+	getUserProjectRole(projectId: number = this.getProjectId()): number[] {
+		const currentRoles = this.currentProjectRoles() ?? [];
+		if (projectId === this.getProjectId() && currentRoles.length > 0) {
+			return currentRoles;
+		}
+
+		const projectRoles = this.getProjectRoles();
+		const role = projectRoles.find((pr) => pr.projectId === projectId);
+		if (role) {
+			return role.projectRoles;
+		}
+		return [];
+	}
+
+	changeProject(projectId: number, projectName: string) {
+		const roles = this.getUserProjectRole(projectId);
+		if (roles.length === 0) {
+			alert("You have no roles in this project.");
+			return;
+		}
+
 		localStorage.setItem("projectId", projectId.toString());
+		this.projectIdSignal.set(projectId);
 		localStorage.setItem("projectName", projectName);
+
+		this.currentProjectRoles.set(roles);
+		this.router.navigate(["/home", { outlets: { home: "backlog" } }]);
 	}
 
 	getProjectId(): number {
 		return Number(this.returnIfNotNull(localStorage.getItem("projectId")));
 	}
+
+	getProjectIdSignal(): Signal<number> {
+		return this.projectIdSignal;
+	}
+
 	getprojectName(): string {
 		return this.returnIfNotNull(localStorage.getItem("projectName"));
 	}
@@ -118,7 +143,7 @@ export class DataProcessingService {
 		return input;
 	}
 
-	getStartBundle() {
+	getandSetStartBundle() {
 		const url = `${this.host}/getStartBundle`;
 
 		this.http
@@ -251,11 +276,24 @@ export class DataProcessingService {
 		return this.http.get<UserTodoList[]>(url);
 	}
 
+	getProjectBugs(projectId: number) {
+		const url = `${this.host}/getProjectBugs?projectId=${projectId}`;
+		return this.http.get<ProjectBugList[]>(url);
+	}
+
 	displayName(nameItem: NameListItem): string {
 		return nameItem?.name ? nameItem.name : "";
 	}
 
 	formatClassName(name: string): string {
 		return name.toUpperCase().replace(/\s+/g, "-");
+	}
+
+	isWorkData(data: WorkData | BugData | undefined): data is WorkData {
+		return !!data && !("defectCause" in data);
+	}
+
+	isBugData(data: WorkData | BugData | undefined): data is BugData {
+		return !!data && "defectCause" in data;
 	}
 }

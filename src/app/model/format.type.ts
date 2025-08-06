@@ -12,7 +12,7 @@ export type User = {
 
 export type userProjectRoles = {
 	projectId: number;
-	roles: number[];
+	projectRoles: number[];
 };
 
 export type Project = {
@@ -111,7 +111,7 @@ export type UserWorkByState = {
 	works: WorkData[];
 };
 
-export type WorkData = {
+export interface WorkData {
 	workId: number;
 	workName: string;
 	priorityId: number;
@@ -132,10 +132,14 @@ export type WorkData = {
 	activityName: string;
 	backlogName: string;
 	projectName: string;
-};
+}
 
-export type NewWork = {
-	backlogId: number;
+export interface BugData extends WorkData {
+	defectCause: string;
+	workAffected: string;
+}
+
+export interface BaseWork {
 	workName: string;
 	description: string;
 	startDate: Date | null;
@@ -148,7 +152,15 @@ export type NewWork = {
 	trackerId: number;
 	activityId: number;
 	usersAdded: number[];
-};
+}
+export interface NewWork extends BaseWork {
+	backlogId: number;
+}
+
+export interface NewBug extends BaseWork {
+	defect_cause_id_input: number;
+	affected_work_id_input: number;
+}
 
 export type AlterWork = {
 	workId: number;
@@ -170,6 +182,12 @@ export type UserTodoList = {
 	stateId: number;
 	stateName: string;
 	works: WorkData[];
+};
+
+export type ProjectBugList = {
+	stateId: number;
+	stateName: string;
+	works: BugData[];
 };
 
 export type BatteryItem = {

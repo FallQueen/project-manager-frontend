@@ -1,4 +1,4 @@
-import { inject, Injectable, signal } from "@angular/core";
+import { effect, inject, Injectable, signal } from "@angular/core";
 import { DataProcessingService } from "./data-processing.service";
 import type { BacklogData } from "../model/format.type";
 
@@ -7,12 +7,16 @@ import type { BacklogData } from "../model/format.type";
 })
 export class BacklogPageService {
 	private dataService = inject(DataProcessingService);
-	private projectId = this.dataService.getProjectId(); // Replace with actual projectId as needed
+	projectId = this.dataService.getProjectIdSignal();
 
 	public readonly backlogList = signal<BacklogData[]>([]);
 
 	constructor() {
-		this.getProjectBacklogs(this.projectId);
+		this.getProjectBacklogs(this.projectId());
+		effect(() => {
+			const projectId = this.projectId();
+			this.getProjectBacklogs(projectId);
+		});
 	}
 
 	getProjectBacklogs(projectId: number) {
@@ -21,11 +25,10 @@ export class BacklogPageService {
 		});
 	}
 
-	getCurrentProjectIdOfCurrentBacklog(): number {
-		return this.projectId;
-	}
-
-	setCurrentProjectIdOfCurrentBacklog(projectId: number) {
-		this.projectId = projectId;
-	}
+	// recheckProjectId() {
+	// 	if (this.projectId() !== this.dataService.getProjectId()) {
+	// 		this.projectId.set(this.dataService.getProjectId());
+	// 		this.getProjectBacklogs(this.projectId());
+	// 	}
+	// }
 }

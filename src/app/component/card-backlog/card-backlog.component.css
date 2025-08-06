@@ -237,4 +237,5 @@ app-card-work-new.empty,
 
 .container-work {
 	width: 100%;
+	position: relative;
 }

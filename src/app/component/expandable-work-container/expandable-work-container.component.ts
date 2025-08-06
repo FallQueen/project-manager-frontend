@@ -3,16 +3,19 @@ import {
 	computed,
 	type ElementRef,
 	EventEmitter,
+	inject,
 	Input,
 	Output,
 	type Signal,
 	signal,
 	ViewChild,
 } from "@angular/core";
-import type { NameListItem, WorkData } from "../../model/format.type";
+import type { BugData, NameListItem, WorkData } from "../../model/format.type";
 import { CardWorkComponent } from "../card-work/card-work.component";
 import { CardWorkNewComponent } from "../card-work-new/card-work-new.component";
 import { delay } from "rxjs";
+import { Router } from "@angular/router";
+import { DataProcessingService } from "../../service/data-processing.service";
 
 @Component({
 	selector: "app-expandable-work-container",
@@ -21,19 +24,39 @@ import { delay } from "rxjs";
 	styleUrl: "./expandable-work-container.component.css",
 })
 export class ExpandableWorkContainerComponent {
+	dataService = inject(DataProcessingService);
+	router = inject(Router);
 	@Input() isExpanded = signal(false);
-	@Input() workList = signal<WorkData[]>([]);
+	@Input() workList = signal<WorkData[] | BugData[]>([]);
 	@Input() indicatorClass = "";
 	@Input() backlogId = 0;
 	@Output() newWorkState = new EventEmitter<NameListItem>();
+	@Output() triggerbatteryRefresh = new EventEmitter<void>();
 	workHovered = signal<boolean>(false);
+	@Input() sectionLabel = signal<string[]>([
+		"TRACKER",
+		"ACTIVITY",
+		"STATE",
+		"PRIORITY",
+		"PERIOD",
+	]);
 
+	ngOnInit() {
+		if (this.dataService.isBugData(this.workList()[0])) {
+			this.sectionLabel.set([
+				"DEFECT CAUSE",
+				"AFFECTED WORK",
+				"STATE",
+				"PRIORITY",
+				"PERIOD",
+			]);
+		}
+	}
 	@ViewChild("workChildContainer") workChildContainer!: ElementRef;
 	workChildContainerHeight: Signal<number> = computed(() => {
 		const expanded = this.isExpanded();
 		const workHover = this.workHovered();
 		const workList = this.workList();
-
 		if (!expanded) return 0;
 		if (!this.workChildContainer || !this.workChildContainer.nativeElement)
 			return 0;
@@ -44,4 +67,8 @@ export class ExpandableWorkContainerComponent {
 		if (workHover === true && workList.length > 0) height += 70;
 		return height;
 	});
+
+	isBacklogPage(): boolean {
+		return this.router.url.includes("/home/(home:backlog)");
+	}
 }

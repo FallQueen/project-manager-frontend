@@ -68,10 +68,9 @@ export class CardProjectComponent {
 	}
 
 	goToProject() {
-		this.dataService.setProject(
+		this.dataService.changeProject(
 			this.project.projectId,
 			this.project.projectName,
 		);
-		this.router.navigate(["/home", { outlets: { home: "backlog" } }]);
 	}
 }

@@ -13,17 +13,10 @@ import { DataProcessingService } from "../../service/data-processing.service";
 	styleUrl: "./backlog-page.component.css",
 })
 export class BacklogPageComponent {
-	dataService = inject(DataProcessingService);
 	backlogPageService = inject(BacklogPageService);
 	backlogList: Signal<BacklogData[]> = this.backlogPageService.backlogList;
 
 	ngOnInit() {
-		const currentProjectId =
-			this.backlogPageService.getCurrentProjectIdOfCurrentBacklog();
-		const newProjectId = this.dataService.getProjectId();
-
-		if (currentProjectId !== newProjectId) {
-			this.backlogPageService.getProjectBacklogs(newProjectId);
-		}
+		// this.backlogPageService.recheckProjectId();
 	}
 }
