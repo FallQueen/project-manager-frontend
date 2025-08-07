@@ -17,4 +17,10 @@ export class ProjectPageService {
 			this.Projects.set(result);
 		});
 	}
+
+	removeProjectFromArray(projectId: number) {
+		this.Projects.update((projects) =>
+			projects.filter((project) => project.projectId !== projectId),
+		);
+	}
 }

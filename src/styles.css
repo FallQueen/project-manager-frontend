@@ -7,6 +7,9 @@
 	--primary-white: #eaeaea;
 	--primary-gold: #c89933;
 
+	--warning-red: #ff6b6b;
+	--success-green: #6bcb77;
+
 	--state-NEW: #ffadad;
 	--state-ASSIGNED: #ffd6a5;
 	--state-IN-PROGRESS: #fdffb6;
@@ -193,11 +196,10 @@ mat-icon {
 	width: 100%;
 	padding: 0.7em 0.75em 0.7em 0.75em;
 	border: none;
-	border-radius: 8px;
+	border-radius: 6px;
 	font-size: 1em;
 	color: #111827;
 	box-sizing: border-box;
-	/* height: 3em; */
 	line-height: 1.3em;
 	text-align: justify;
 }
@@ -206,18 +208,6 @@ mat-icon {
 .form-control-input:empty::before {
 	content: "\00a0";
 }
-
-/* .form-control-input-date {
-	display: flex;
-	flex: 1;
-	padding: 0.7em 0.75em 0.7em 0.75em;
-	border: none;
-	border-radius: 8px;
-	font-size: 1em;
-	color: #111827;
-	box-sizing: border-box;
-	line-height: 1.1em;
-} */
 
 .form-control-input:focus {
 	outline: none;

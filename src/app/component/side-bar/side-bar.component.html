@@ -5,10 +5,10 @@
             <span>Dashboard</span>
 
         </li>
-        <li [routerLink]="[{ outlets: { home: ['kanban'] } }]" routerLinkActive="active" tabindex="0">
+        <!-- <li [routerLink]="[{ outlets: { home: ['kanban'] } }]" routerLinkActive="active" tabindex="0">
             <mat-icon>view_kanban</mat-icon>
             <span>Kanban</span>
-        </li>
+        </li> -->
         <li [routerLink]="[{ outlets: { home: ['backlog'] } }]" routerLinkActive="active" tabindex="0">
             <mat-icon>list_alt</mat-icon>
             <span>Backlog</span>
@@ -22,6 +22,13 @@
             <mat-icon>assignment</mat-icon>
             <span>Project</span>
         </li>
+        <li class="search-item">
+            <mat-icon>search</mat-icon>
+            <input matInput type="text" placeholder="Search..." [(ngModel)]="searchInput" />
+
+        </li>
+        <app-search-bar [textInput]="searchInput()"></app-search-bar>
+
     </ul>
     <li (click)="loginService.logOut()"> <mat-icon>account_circle</mat-icon><span>{{username()}}</span></li>
 </div>

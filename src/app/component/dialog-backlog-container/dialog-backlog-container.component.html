@@ -1,30 +1,24 @@
 <div class="dialog-container">
-    <div class="title">
-        <h1 (click)="toggleEdit()">@if (dialogData.newBacklog) {
-            NEW BACKLOG
-            } @else { Backlog #{{dialogData.backlogData.backlogId}} <span><mat-icon>edit</mat-icon></span> }
+    <!-- Dialog Title Section -->
+    <app-dialog-util-title [new]="dialogData.newBacklog" [editable]="editable()" (edit)="toggleEdit()"
+        (delete)="triggerDeleteBacklog()" title="Backlog #{{dialogData.backlogData.backlogId}}"
+        titleNew="NEW BACKLOG"></app-dialog-util-title>
 
-        </h1>
-    </div>
+
+    <!-- Dialog Content Section -->
     @if (dialogData.newBacklog) {
+    <!-- Input form for new backlog -->
     <app-dialog-backlog-input></app-dialog-backlog-input>
-    }
-    @else if (editable()) {
-
+    } @else if (editable()) {
+    <!-- Editable form for existing backlog -->
     <app-dialog-backlog-input [backlogData]="dialogData.backlogData"></app-dialog-backlog-input>
     } @else if (!editable()) {
-
+    <!-- Read-only details for existing backlog -->
     <app-dialog-backlog-detail [backlogData]="dialogData.backlogData"></app-dialog-backlog-detail>
     }
 
-    <div class="row-right-aligned">
-        @if (dialogData.newBacklog) {
-        <button mat-flat-button [mat-dialog-close]="true">Cancel</button>
-        <button mat-flat-button (click)="triggerNewBacklogSubmit()">Create</button>
-        } @else if (!dialogData.newBacklog && !editable()) {
-        <button mat-flat-button [mat-dialog-close]="true">Ok</button>
-        } @else {
-        <button mat-flat-button (click)="triggerEditBacklogSubmit()">Save</button>
-        }
-    </div>
+
+    <app-dialog-util-button-row [new]="dialogData.newBacklog" [editable]="editable()" (cancelEdit)="toggleEdit()"
+        (save)="triggerEditBacklogSubmit()" (create)="triggerNewBacklogSubmit()"></app-dialog-util-button-row>
+
 </div>

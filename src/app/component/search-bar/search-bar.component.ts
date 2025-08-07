@@ -11,24 +11,22 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatInputModule } from "@angular/material/input";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatFormFieldModule } from "@angular/material/form-field";
-import { SearchBarService } from "../../service/search-bar.service";
+import { SearchService } from "../../service/search.service";
 import { DataProcessingService } from "../../service/data-processing.service";
 @Component({
 	selector: "app-search-bar",
 	imports: [
-		ReactiveFormsModule,
 		MatInputModule,
 		MatAutocompleteModule,
 		MatFormFieldModule,
 		FormsModule,
-		ReactiveFormsModule,
 	],
 	templateUrl: "./search-bar.component.html",
 	styleUrl: "./search-bar.component.css",
-	providers: [SearchBarService],
+	providers: [SearchService],
 })
 export class SearchBarComponent {
-	searchBarService = inject(SearchBarService);
+	searchBarService = inject(SearchService);
 	dataService = inject(DataProcessingService);
 	// Input: The full list of userNames to search from
 	projectNames = signal<NameListItem[]>([]);
@@ -38,10 +36,16 @@ export class SearchBarComponent {
 	@Output() clicked = new EventEmitter<void>();
 	@Input() fieldLabel = "";
 	@Input() nameList = signal<NameListItem[]>([]);
+	@Input() textInput = "";
 
 	// The filtering logic
 	ngOnInit() {
 		this.searchBarService.nameList = this.nameList;
+	}
+
+	ngOnChanges() {
+		const input = this.textInput;
+		this.searchBarService.nameInput.set(input);
 	}
 	// When an option is selected from the list
 	onSelection(selectedName: NameListItem) {

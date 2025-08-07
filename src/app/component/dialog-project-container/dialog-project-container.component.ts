@@ -14,6 +14,9 @@ import { SelectorUserProjectRoleComponent } from "../selector-user-project-role/
 import { MatButtonModule } from "@angular/material/button";
 import { DialogRef } from "@angular/cdk/dialog";
 import { MatIconModule } from "@angular/material/icon";
+import { DataProcessingService } from "../../service/data-processing.service";
+import { DialogUtilButtonRowComponent } from "../dialog-util-button-row/dialog-util-button-row.component";
+import { DialogUtilTitleComponent } from "../dialog-util-title/dialog-util-title.component";
 
 @Component({
 	selector: "app-dialog-project-container",
@@ -23,12 +26,14 @@ import { MatIconModule } from "@angular/material/icon";
 		SelectorUserProjectRoleComponent,
 		MatButtonModule,
 		MatIconModule,
-		MatDialogClose,
+		DialogUtilButtonRowComponent,
+		DialogUtilTitleComponent,
 	],
 	templateUrl: "./dialog-project-container.component.html",
 	styleUrl: "./dialog-project-container.component.css",
 })
 export class DialogProjectContainerComponent {
+	dataService = inject(DataProcessingService);
 	dialogData = inject(MAT_DIALOG_DATA);
 	currentPic = signal<NameListItem>({ name: "", id: 0 });
 	editable = signal<boolean>(false);

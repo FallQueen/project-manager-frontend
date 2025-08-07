@@ -26,6 +26,7 @@ export class CardWorkComponent {
 	dialogService = inject(DialogService);
 	@Input() workData!: WorkData | BugData;
 	@Output() triggerbatteryRefresh = new EventEmitter<void>();
+	@Output() cardDeleted = new EventEmitter<number>();
 	periodPercentage = signal<number>(0);
 
 	ngOnInit() {
@@ -52,6 +53,12 @@ export class CardWorkComponent {
 
 		// Subscribes to the `afterClosed` event of the dialog.
 		// This allows the component to react when the dialog is closed.
+
+		dialogRef.afterClosed().subscribe((result) => {
+			if (result?.drop) {
+				this.cardDeleted.emit(result.drop);
+			}
+		});
 	}
 
 	updateData(type: "priority" | "state", item: NameListItem) {

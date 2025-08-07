@@ -25,6 +25,12 @@ export class BacklogPageService {
 		});
 	}
 
+	removeBacklogFromArray(backlogId: number) {
+		this.backlogList.update((backlogs) =>
+			backlogs.filter((backlog) => backlog.backlogId !== backlogId),
+		);
+	}
+
 	// recheckProjectId() {
 	// 	if (this.projectId() !== this.dataService.getProjectId()) {
 	// 		this.projectId.set(this.dataService.getProjectId());

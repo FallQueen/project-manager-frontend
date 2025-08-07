@@ -17,6 +17,7 @@ import {
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatError, MatInputModule } from "@angular/material/input";
 import type {
+	AlterBacklog,
 	AlterProject,
 	BacklogData,
 	NameListItem,
@@ -143,5 +144,85 @@ export class DialogBacklogInputComponent {
 		} else {
 			this.backlogForm.markAllAsTouched();
 		}
+	}
+
+	backlogEdit() {
+		// 1. First, check if the form is valid
+		if (!this.backlogForm.valid) {
+			this.backlogForm.markAllAsTouched();
+			return;
+		}
+
+		// 2. Build the payload, sending `null` for any value that hasn't changed.
+		const alterBacklog: AlterBacklog = {
+			backlogId: this.backlogData.backlogId,
+			backlogName:
+				this.backlogForm.value.backlogName === this.backlogData.backlogName
+					? null
+					: this.backlogForm.value.backlogName || null,
+			description:
+				this.backlogForm.value.description === this.backlogData.description
+					? null
+					: this.backlogForm.value.description || null,
+			startDate:
+				this.backlogForm.value.dateRange?.start &&
+				this.backlogData.startDate &&
+				new Date(this.backlogData.startDate).getTime() ===
+					this.backlogForm.value.dateRange.start.getTime()
+					? null
+					: this.backlogForm.value.dateRange?.start || null,
+			targetDate:
+				this.backlogForm.value.dateRange?.end &&
+				this.backlogData.targetDate &&
+				new Date(this.backlogData.targetDate).getTime() ===
+					this.backlogForm.value.dateRange.end.getTime()
+					? null
+					: this.backlogForm.value.dateRange?.end || null,
+			picId:
+				this.backlogForm.value.pic?.id === this.backlogData.picId
+					? null
+					: this.backlogForm.value.pic?.id || null,
+			priorityId:
+				this.backlogForm.value.priority?.id === this.backlogData.priorityId
+					? null
+					: this.backlogForm.value.priority?.id || null,
+		};
+
+		this.dataService.putAlterBacklog(alterBacklog).subscribe(() => {
+			this.updateExistingBacklog();
+		});
+	}
+
+	updateExistingBacklog() {
+		this.backlogData.backlogName =
+			this.backlogForm.value.backlogName || this.backlogData.backlogName;
+		this.backlogData.description =
+			this.backlogForm.value.description || this.backlogData.description;
+		this.backlogData.startDate =
+			this.backlogForm.value.dateRange?.start !== undefined &&
+			this.backlogForm.value.dateRange?.start !== null
+				? this.backlogForm.value.dateRange.start
+				: this.backlogData.startDate;
+		this.backlogData.targetDate =
+			this.backlogForm.value.dateRange?.end !== undefined &&
+			this.backlogForm.value.dateRange?.end !== null
+				? this.backlogForm.value.dateRange.end
+				: this.backlogData.targetDate;
+		this.backlogData.picId =
+			Number(this.backlogForm.value.pic) || this.backlogData.picId;
+		this.backlogData.picName =
+			this.backlogForm.value.pic?.name || this.backlogData.picName;
+		this.backlogData.priorityId =
+			this.backlogForm.value.priority?.id || this.backlogData.priorityId;
+		this.backlogData.priorityName =
+			this.backlogForm.value.priority?.name || this.backlogData.priorityName;
+	}
+
+	dropBacklog() {
+		this.dataService.dropBacklog(this.backlogData.backlogId).subscribe(() => {
+			this.dialogService
+				.getBacklogContainerDialogRef()
+				?.close({ drop: this.backlogData.backlogId });
+		});
 	}
 }

@@ -1,0 +1,11 @@
+<div class="row-right-aligned">
+    @if (new) {
+    <button mat-flat-button [mat-dialog-close]="true">Cancel</button>
+    <button mat-flat-button (click)="create.emit()">Create</button>
+    } @else if (!new && !editable) {
+    <button mat-flat-button [mat-dialog-close]="true">Ok</button>
+    } @else {
+    <button mat-flat-button (click)="cancelEdit.emit()">Cancel</button>
+    <button mat-flat-button (click)="save.emit()">Save</button>
+    }
+</div>

@@ -7,7 +7,7 @@ import {
 	Output,
 	signal,
 } from "@angular/core";
-import { SearchBarService } from "../../service/search-bar.service";
+import { SearchService } from "../../service/search.service";
 import { DataProcessingService } from "../../service/data-processing.service";
 import {
 	CdkDrag,
@@ -35,10 +35,10 @@ import { forkJoin } from "rxjs";
 	],
 	templateUrl: "./selector-user-work.component.html",
 	styleUrl: "./selector-user-work.component.css",
-	providers: [SearchBarService],
+	providers: [SearchService],
 })
 export class SelectorUserWorkComponent {
-	searchBarService = inject(SearchBarService);
+	searchBarService = inject(SearchService);
 	dataService = inject(DataProcessingService);
 	userAssignmentList = signal<NameListItem[]>([]);
 	injector = inject(Injector);

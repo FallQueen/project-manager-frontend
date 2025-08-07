@@ -1,0 +1,18 @@
+<div class="dialog-container">
+    @if (dialogData.type === 'fail') {
+    <mat-icon class="red">close</mat-icon>
+    } @else if (dialogData.type === 'success') {
+    <mat-icon class="green">check</mat-icon>
+    }
+
+    <h2 mat-dialog-title class="basic-text">{{dialogData.reportMessage}}</h2>
+
+    <div class="row">
+        @if (dialogData.type === 'confirmation') {
+        <button mat-flat-button color="primary" class="wide-field" [matDialogClose]="false">Cancel</button>
+        <button mat-flat-button color="primary" class="wide-field" [matDialogClose]="true">Confirm</button>
+        } @else {
+        <button mat-flat-button color="primary" class="wide-field" matDialogClose>ok</button>
+        }
+    </div>
+</div>

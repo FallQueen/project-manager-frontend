@@ -1,7 +1,8 @@
 <div class="card-container">
     @if (projectPageService.Projects() !== []) {
     @for (project of projectPageService.Projects(); track $index) {
-    <app-card-project [project]="project"></app-card-project>
+    <app-card-project [project]="project"
+        (cardDeleted)="projectPageService.removeProjectFromArray(project.projectId)"></app-card-project>
     }
     }
     <!-- 

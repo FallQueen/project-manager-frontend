@@ -46,6 +46,7 @@
 }
 
 /* The hover effect for the icons */
+.title mat-icon.active,
 .title mat-icon:hover {
 	transform: scale(1.2);
 	color: var(--primary-blue);

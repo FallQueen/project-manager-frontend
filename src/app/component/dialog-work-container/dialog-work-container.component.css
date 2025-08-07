@@ -20,19 +20,21 @@
 }
 
 .title {
-	position: relative;
-	/* width: 100%; */
+	width: 100%;
 	margin-left: -0.1em;
 	margin-bottom: 0.1em;
 	font-size: 1em;
 	display: flex;
 	align-items: center;
 	gap: 0.5em;
-	justify-content: center;
+	justify-content: center; /* Centers content horizontally */
 }
 
 .title h1 {
+	display: flex;
+	justify-content: center; /* Ensures h1 content is centered */
 	font-weight: 500;
+	width: 100%;
 }
 .title mat-icon {
 	height: auto;
@@ -46,7 +48,17 @@
 }
 
 /* The hover effect for the icons */
+.title mat-icon.active,
 .title mat-icon:hover {
 	transform: scale(1.2);
 	color: var(--primary-blue);
+}
+
+.title mat-icon.delete:hover {
+	color: var(--warning-red);
+}
+
+.title-icons {
+	position: absolute;
+	transform: translate(3.2em, 0);
 }

@@ -54,29 +54,4 @@
             [indicatorClass]="'priority-' + backlogData.priorityName" [workList]="workList"
             [backlogId]="backlogData.backlogId"></app-expandable-work-container>
     </div>
-    <!-- <div>height:{{workChildContainerHeight()}} </div> -->
-    <!-- <div class="child-wrapper" #workChildContainer [style.maxHeight.px]="workChildContainerHeight()"
-        (mouseleave)="workHovered.set(false)" (mouseenter)="workHovered.set(true)">
-        <div class="child-container">
-            <div class="indicator-child priority-{{backlogData.priorityName}}"></div>
-            <div class="work-list-container">
-                <div class="work-header">
-                    <span class="section-label name">FUNCTION</span>
-                    <span class="section-label">TRACKER</span>
-                    <span class="section-label">ACTIVITY</span>
-                    <span class="section-label">STATE</span>
-                    <span class="section-label">PRIORITY</span>
-                    <span class="section-label">PERIOD</span>
-                </div>
-
-
-                @for (work of workList(); track $index) {
-                <app-card-work [workData]="work"></app-card-work>
-                }
-                <app-card-work-new [class.empty]="!workList().length" [backlogData]="backlogData"
-                    (newWork)="doWhenNewWork($event)"></app-card-work-new>
-
-            </div>
-        </div>
-    </div> -->
 </div>

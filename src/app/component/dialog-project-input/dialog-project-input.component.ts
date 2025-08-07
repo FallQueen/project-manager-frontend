@@ -180,4 +180,12 @@ export class DialogProjectInputComponent {
 		this.projectData.picName =
 			this.currentPic().name || this.projectData.picName;
 	}
+
+	dropProject() {
+		this.dataService.dropProject(this.projectData.projectId).subscribe(() => {
+			this.dialogService
+				.getProjectContainerDialogRef()
+				?.close({ drop: this.projectData.projectId });
+		});
+	}
 }

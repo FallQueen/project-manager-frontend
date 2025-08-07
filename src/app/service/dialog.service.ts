@@ -4,6 +4,7 @@ import { DialogBacklogContainerComponent } from "../component/dialog-backlog-con
 import type { BacklogData, Project, WorkData } from "../model/format.type";
 import { DialogProjectContainerComponent } from "../component/dialog-project-container/dialog-project-container.component";
 import { DialogWorkContainerComponent } from "../component/dialog-work-container/dialog-work-container.component";
+import { DialogUtilityComponent } from "../component/dialog-utility/dialog-utility.component";
 
 @Injectable({
 	providedIn: "root",
@@ -80,5 +81,23 @@ export class DialogService {
 
 	getWorkContainerDialogRef() {
 		return this.workContainerDialogRef;
+	}
+	openReportDialog(
+		reportMessage: string,
+		type: "fail" | "success" | "confirmation",
+	): MatDialogRef<DialogUtilityComponent> {
+		// Uses the MatDialog service to open the DialogActionReportComponent.
+		const dialogRefReport = this.dialog.open(DialogUtilityComponent, {
+			autoFocus: false,
+			width: "60vw",
+			height: "90vh",
+			maxWidth: "90vw",
+			maxHeight: "fit-content",
+			panelClass: "custom-dialog-container",
+			data: { reportMessage, type }, // Passes the request ID to the dialog.
+		});
+
+		// Returns the refrence to the dialog opened
+		return dialogRefReport;
 	}
 }

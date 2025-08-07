@@ -36,9 +36,6 @@ import { MatButtonModule } from "@angular/material/button";
 import { DataProcessingService } from "../../service/data-processing.service";
 import { TextFieldModule } from "@angular/cdk/text-field";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
-import { MatDialogRef } from "@angular/material/dialog";
-import type { DialogWorkContainerComponent } from "../dialog-work-container/dialog-work-container.component";
-import { Dialog } from "@angular/cdk/dialog";
 import { DialogService } from "../../service/dialog.service";
 
 @Component({
@@ -247,9 +244,6 @@ export class DialogWorkInputComponent {
 
 		this.dataService.putAlterWork(alterWork).subscribe(() => {
 			this.updateExistingWork();
-			this.dialogService
-				.getWorkContainerDialogRef()
-				?.close(this.workForm.value.state);
 		});
 	}
 
@@ -285,5 +279,13 @@ export class DialogWorkInputComponent {
 			this.workForm.value.activity?.id || this.workData.activityId;
 		this.workData.activityName =
 			this.workForm.value.activity?.name || this.workData.activityName;
+	}
+
+	dropWork() {
+		this.dataService.dropWork(this.workData.workId).subscribe(() => {
+			this.dialogService
+				.getWorkContainerDialogRef()
+				?.close({ drop: this.workData.workId });
+		});
 	}
 }

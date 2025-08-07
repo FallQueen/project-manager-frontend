@@ -7,6 +7,8 @@ import {
 	signal,
 	ViewChild,
 	computed,
+	Output,
+	EventEmitter,
 } from "@angular/core";
 import type {
 	BacklogData,
@@ -44,6 +46,7 @@ export class CardBacklogComponent {
 	dataService = inject(DataProcessingService);
 	dialogService = inject(DialogService);
 	@Input() backlogData!: BacklogData;
+	@Output() cardDeleted = new EventEmitter<number>();
 
 	expanded = signal(false);
 	periodPercentage = signal<number>(0);
@@ -133,6 +136,12 @@ export class CardBacklogComponent {
 			this.backlogData,
 			false,
 		);
+
+		dialogRef.afterClosed().subscribe((result) => {
+			if (result?.drop) {
+				this.cardDeleted.emit(result.drop);
+			}
+		});
 
 		// Subscribes to the `afterClosed` event of the dialog.
 		// This allows the component to react when the dialog is closed.

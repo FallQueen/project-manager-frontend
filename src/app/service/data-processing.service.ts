@@ -66,8 +66,12 @@ export class DataProcessingService {
 	}
 
 	// Retrieves the current user's role ID from localStorage.
-	getwebRole(): string {
-		return this.returnIfNotNull(localStorage.getItem("webRole"));
+	getwebRole(): number {
+		return Number(this.returnIfNotNull(localStorage.getItem("webRole")));
+	}
+
+	isWebMaster(): boolean {
+		return this.getwebRole() === 1;
 	}
 
 	getProjectRoles(): userProjectRoles[] {
@@ -192,6 +196,11 @@ export class DataProcessingService {
 		return this.http.put(url, alterProject);
 	}
 
+	dropProject(projectId: number) {
+		const url = `${this.host}/dropProject?projectId=${projectId}`;
+		return this.http.delete(url);
+	}
+
 	getUsernames() {
 		const url = `${this.host}/getUsernames`;
 		return this.http.get<NameListItem[]>(url);
@@ -232,6 +241,11 @@ export class DataProcessingService {
 		return this.http.post(url, newBacklog);
 	}
 
+	dropBacklog(backlogId: number) {
+		const url = `${this.host}/dropBacklog?backlogId=${backlogId}`;
+		return this.http.delete(url);
+	}
+
 	getBacklogWorks(backlogId: number) {
 		const url = `${this.host}/getBacklogWorks?backlogId=${backlogId}`;
 		return this.http.get<WorkData[]>(url);
@@ -250,6 +264,11 @@ export class DataProcessingService {
 	putAlterWork(alterWork: AlterWork) {
 		const url = `${this.host}/putAlterWork`;
 		return this.http.put(url, alterWork);
+	}
+
+	dropWork(workId: number) {
+		const url = `${this.host}/dropWork?workId=${workId}`;
+		return this.http.delete(url);
 	}
 
 	getWorkUserAssignment(workId: number) {

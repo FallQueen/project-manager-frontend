@@ -71,4 +71,9 @@ export class ExpandableWorkContainerComponent {
 	isBacklogPage(): boolean {
 		return this.router.url.includes("/home/(home:backlog)");
 	}
+
+	removeWorkFromArray(workId: number) {
+		this.workList.update((list) => list.filter((w) => w.workId !== workId));
+		this.triggerbatteryRefresh.emit();
+	}
 }

@@ -13,7 +13,8 @@
 
 
             @for (work of workList(); track $index) {
-            <app-card-work [workData]="work" (triggerbatteryRefresh)="triggerbatteryRefresh.emit()"></app-card-work>
+            <app-card-work [workData]="work" (cardDeleted)="removeWorkFromArray(work.workId)"
+                (triggerbatteryRefresh)="triggerbatteryRefresh.emit()"></app-card-work>
             }
             @if(isBacklogPage()){
             <app-card-work-new (newWork)="newWorkState.emit($event)" [backlogId]="backlogId"

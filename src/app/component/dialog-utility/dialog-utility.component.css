@@ -1,0 +1,37 @@
+/* Container of the dialog */
+.dialog-container {
+	padding: 0.9em 1.2em;
+	max-width: 100%;
+	gap: 0;
+	justify-content: center;
+	align-items: center;
+}
+
+/* specific basic text style */
+.basic-text {
+	text-align: center;
+	font-size: 1.2em;
+}
+/* The icon display */
+mat-icon {
+	font-size: 5em !important;
+
+	width: fit-content;
+	height: fit-content;
+	align-self: center;
+}
+
+/* Red color on icon for failure */
+.red {
+	color: #ec4040;
+}
+
+/* Green color on icon for success */
+.green {
+	color: rgb(48, 201, 48);
+}
+
+/* full width row */
+.row {
+	width: 100%;
+}

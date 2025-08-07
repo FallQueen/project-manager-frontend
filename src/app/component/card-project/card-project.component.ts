@@ -1,4 +1,11 @@
-import { Component, inject, Input, signal } from "@angular/core";
+import {
+	Component,
+	EventEmitter,
+	inject,
+	Input,
+	Output,
+	signal,
+} from "@angular/core";
 import type { Project } from "../../model/format.type";
 import { CommonModule } from "@angular/common";
 import { MatTooltipModule } from "@angular/material/tooltip";
@@ -20,6 +27,7 @@ export class CardProjectComponent {
 
 	@Input() isEmpty!: true;
 	@Input() project!: Project;
+	@Output() cardDeleted = new EventEmitter<number>();
 	projectPercentage = signal(0);
 	progressTooltip = signal("");
 	periodPercentage = signal(0);
@@ -65,6 +73,11 @@ export class CardProjectComponent {
 		const dialogRef = this.dialogService.openProjectDialog(this.project, false);
 		// Subscribes to the `afterClosed` event of the dialog.
 		// This allows the component to react when the dialog is closed.
+		dialogRef.afterClosed().subscribe((result) => {
+			if (result?.drop) {
+				this.cardDeleted.emit(result.drop);
+			}
+		});
 	}
 
 	goToProject() {

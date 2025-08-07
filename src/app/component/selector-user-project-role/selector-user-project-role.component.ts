@@ -6,7 +6,7 @@ import {
 	Output,
 	signal,
 } from "@angular/core";
-import { SearchBarService } from "../../service/search-bar.service";
+import { SearchService } from "../../service/search.service";
 import { DataProcessingService } from "../../service/data-processing.service";
 import {
 	CdkDrag,
@@ -38,10 +38,10 @@ import { forkJoin } from "rxjs";
 	],
 	templateUrl: "./selector-user-project-role.component.html",
 	styleUrl: "./selector-user-project-role.component.css",
-	providers: [SearchBarService],
+	providers: [SearchService],
 })
 export class SelectorUserProjectRoleComponent {
-	searchBarService = inject(SearchBarService);
+	searchBarService = inject(SearchService);
 	dataService = inject(DataProcessingService);
 	fullUserRoleList = signal<NameListItemByRole[]>([]);
 	fullUserRoleListMemory!: NameListItemByRole[];

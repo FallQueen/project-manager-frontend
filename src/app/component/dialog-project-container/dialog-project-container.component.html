@@ -1,17 +1,18 @@
 <div class="dialog-container">
-    <div class="title">
-        <h1 (click)="toggleEdit()">@if (dialogData.newProject) {
-            NEW PROJECT
-            } @else { PROJECT #{{dialogData.projectData.projectId}} <span><mat-icon>edit</mat-icon></span> }
 
-        </h1>
-    </div>
+    <app-dialog-util-title [new]="dialogData.newProject" [editable]="editable()"
+        title="PROJECT #{{dialogData.projectData.projectId}}" titleNew="NEW PROJECT"
+        (edit)="toggleEdit()"></app-dialog-util-title>
+
+
+
     @if (dialogData.newProject) {
     <div>newProj</div>
     <app-dialog-project-input [currentPic]="currentPic"></app-dialog-project-input>
     } @else if (editable()) {
     <div>editable</div>
-    <app-dialog-project-input [currentPic]="currentPic" [projectData]="dialogData.projectData"></app-dialog-project-input>
+    <app-dialog-project-input [currentPic]="currentPic"
+        [projectData]="dialogData.projectData"></app-dialog-project-input>
     } @else if (!editable()) {
     <div>not editable</div>
     <app-dialog-project-detail [projectData]="dialogData.projectData"></app-dialog-project-detail>
@@ -28,15 +29,9 @@
             [newProject]="dialogData?.newProject" (newPic)="currentPic.set($event)"></app-selector-user-project-role>
         }
     </div>
-    <div class="row-right-aligned">
-        @if (dialogData.newProject) {
-        <button mat-flat-button [mat-dialog-close]="true">Cancel</button>
-        <button mat-flat-button (click)="triggerNewProjectSubmit()">Create</button>
-        } @else if (!dialogData.newProject && !editable()) {
-        <button mat-flat-button [mat-dialog-close]="true">Ok</button>
-        } @else {
-        <button mat-flat-button (click)="toggleEdit()">Cancel</button>
-        <button mat-flat-button (click)="triggerEditProjectSubmit()">Save</button>
-        }
-    </div>
+
+    <app-dialog-util-button-row [new]="dialogData.newProject" [editable]="editable()" (cancel)="toggleEdit()"
+        (save)="triggerEditProjectSubmit()" (create)="triggerNewProjectSubmit()"></app-dialog-util-button-row>
+
+
 </div>

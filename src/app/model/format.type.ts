@@ -81,6 +81,7 @@ export type BacklogData = {
 	createdBy: string;
 	startDate: Date;
 	targetDate: Date;
+	projectName: string;
 	workStateCountList: WorkStateCount[];
 };
 

@@ -1,0 +1,7 @@
+.row-right-aligned {
+	width: 100%;
+	height: auto;
+	display: flex;
+	gap: 0.5em;
+	justify-content: flex-end;
+}

@@ -5,7 +5,8 @@
 
     <div class="vertical-card-container">
         @for (backlog of backlogList(); track $index) {
-        <app-card-backlog [backlogData]="backlog"></app-card-backlog>
+        <app-card-backlog [backlogData]="backlog"
+            (cardDeleted)="backlogPageService.removeBacklogFromArray(backlog.backlogId)"></app-card-backlog>
         }
         <app-card-backlog-new></app-card-backlog-new>
     </div>

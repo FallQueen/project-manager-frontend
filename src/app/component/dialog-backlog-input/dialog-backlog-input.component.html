@@ -12,6 +12,15 @@
             Tolong isi nama projek
         </mat-error>
     </div>
+    @if(backlogData) {
+    <div>
+        <div class="form-control">
+            <div class="form-control-input">{{backlogData.projectName}}
+            </div>
+            <label class="form-control-label label-up">Project</label>
+        </div>
+    </div>
+    }
 
     <!-- Description Input -->
     <div>

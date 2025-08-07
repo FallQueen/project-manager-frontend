@@ -79,6 +79,27 @@
         </div>
     </div>
 
+
+    @if(dataService.isBugData(workData)){
+    <div class="row">
+
+        <div class="form-control">
+            <!-- <textarea type="text" class="form-control-input" formControlName="description" rows="3"
+                placeholder="Description"></textarea> -->
+            <div class="form-control-input">
+                {{workData.defectCause}}</div>
+            <label class="form-control-label label-up">Defect Cause</label>
+        </div>
+
+
+
+        <div class="form-control">
+            <div class="form-control-input">{{workData.workAffected}}
+            </div>
+            <label class="form-control-label label-up">Work Affected</label>
+        </div>
+    </div>
+    }
     <div class="row">
 
         <div class="form-control">

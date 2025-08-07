@@ -6,16 +6,19 @@ import type { NameListItem } from "../../model/format.type";
 import { MatIconModule } from "@angular/material/icon";
 import { SelectorUserWorkComponent } from "../selector-user-work/selector-user-work.component";
 import { MatButtonModule } from "@angular/material/button";
+import { DataProcessingService } from "../../service/data-processing.service";
+import { DialogUtilButtonRowComponent } from "../dialog-util-button-row/dialog-util-button-row.component";
+import { DialogUtilTitleComponent } from "../dialog-util-title/dialog-util-title.component";
 
 @Component({
 	selector: "app-dialog-work-container",
 	imports: [
-		MatDialogClose,
 		DialogWorkDetailComponent,
 		DialogWorkInputComponent,
 		SelectorUserWorkComponent,
-		MatIconModule,
 		MatButtonModule,
+		DialogUtilButtonRowComponent,
+		DialogUtilTitleComponent,
 	],
 	templateUrl: "./dialog-work-container.component.html",
 	styleUrl: "./dialog-work-container.component.css",
@@ -55,4 +58,6 @@ export class DialogWorkContainerComponent {
 		);
 		this.toggleEdit();
 	}
+
+	triggerDeleteWork() {}
 }

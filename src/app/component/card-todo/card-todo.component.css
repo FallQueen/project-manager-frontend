@@ -1,13 +1,11 @@
-/* General Card Styling */
 .card.todo {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	width: 100%; /* Ensures it takes full width of its parent */
+	width: 100%;
 	box-shadow: none;
-	/* padding: 0.3em 0em 0.4em 0em; */
 	border-radius: 6px;
-	overflow: hidden;
+
 	padding: 0;
 	border: 1px solid rgba(51, 51, 51, 0.25);
 }
@@ -16,16 +14,17 @@
 	position: relative;
 	display: flex;
 	align-items: center;
-	width: 100%; /* Ensures it takes full width of its parent */
+	width: 100%;
 	height: 3.2em;
 }
 
 .todo-inner-container {
 	display: flex;
 	align-items: center;
-	width: 100%; /* Ensures it takes full width of its parent */
+	width: 100%;
 	height: 3.2em;
 }
+
 .arrow-icon-container {
 	display: flex;
 }
@@ -34,20 +33,9 @@
 	width: 9px;
 	min-width: 9px;
 	height: 100%;
-	/* background-color: var(--primary-blue); */
 	position: sticky;
-	/* left: 0; */
-	z-index: 2;
-}
-
-.indicator-child {
-	width: 9px;
-	min-width: 9px;
-	max-width: 9px;
-	/* height: 100%; */
-	/* background-color: var(--primary-blue); */
-	position: sticky;
-	left: 0;
+	border-top-left-radius: 6px;
+	border-bottom-left-radius: 6px;
 	z-index: 2;
 }
 
@@ -56,6 +44,7 @@
 	height: auto;
 	width: auto;
 }
+
 .card-name {
 	display: flex;
 	align-items: center;
@@ -67,9 +56,9 @@
 	transition: color 0.2s ease-in-out;
 }
 
-.card-name:hover {
+/* .card-name:hover {
 	color: var(--primary-blue);
-}
+} */
 
 .card-name span {
 	overflow: hidden;
@@ -83,76 +72,19 @@
 	display: flex;
 	flex: 1;
 	height: 100%;
-
 	flex-direction: column;
 	gap: 0.05em;
 	justify-items: center;
 	align-items: center;
 	padding: 0.1em 0.5em 0.5em 0.5em;
-
-	/* border-left: 1px solid rgba(51, 51, 51, 0.5); */
 	box-sizing: border-box;
 }
 
 .section-label {
-	/* display: flex;
-	flex: 1; */
 	font-size: 0.85em;
 	font-weight: 500;
 	color: #555;
 	text-transform: uppercase;
-}
-/* .section-label.name {
-	flex: 1.2;
-} */
-
-.card-status {
-	height: 100%;
-	width: 100%;
-}
-.card-status span {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	height: 100%;
-
-	padding: 0.1em 0.7em;
-	border: 1px solid rgba(51, 51, 51, 0.2);
-	border-radius: 4px;
-	font-size: 0.95em;
-	font-weight: 500;
-	font-family: Roboto, sans-serif;
-	box-sizing: border-box;
-}
-
-.date-label {
-	position: relative;
-	z-index: 2;
-	font-size: 0.8em;
-	font-weight: 500;
-	color: #1f2937;
-}
-
-.progress-bar {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	position: relative;
-	width: 100%;
-	height: 100%;
-	background-color: aliceblue;
-	border-radius: 4px;
-	border: 1px solid rgba(51, 51, 51, 0.2);
-	overflow: hidden;
-}
-
-.progress-fill {
-	position: absolute;
-	left: 0;
-	top: 0;
-	height: 100%;
-	background-color: #3b82f6;
-	z-index: 1;
 }
 
 .progress-bar-battery {
@@ -169,61 +101,6 @@
 .progress-fill-battery:hover {
 	transform: scaleY(1.2);
 	border-radius: 4px;
-}
-
-.work-header {
-	display: flex;
-	align-items: center; /* This will now correctly center the spans vertically */
-	width: 100%;
-	height: 2em;
-	margin-left: 0px;
-}
-
-.work-header span {
-	flex: 1;
-	text-align: center;
-	box-sizing: border-box;
-	padding: 0 0.4em 0 0em;
-}
-
-.work-header span.name {
-	flex: 1.27;
-}
-
-app-card-work-new {
-	max-height: 0;
-	transition: all 0.4s ease-in-out;
-}
-app-card-work-new.empty,
-.child-container:hover app-card-work-new {
-	max-height: 6em;
-}
-
-.child-wrapper {
-	width: 100%;
-	max-height: 0em;
-	overflow-x: auto;
-	overflow-y: hidden;
-	transition: max-height 0.6s ease-in-out;
-}
-
-.child-container {
-	display: flex;
-	width: 100%;
-	min-width: 0em;
-	overflow-x: auto;
-
-	transition: all 1s ease;
-}
-
-.work-list-container {
-	display: flex;
-
-	flex-direction: column;
-	width: calc(100% - 9px); /* Reserve space for indicator */
-	min-width: calc(55em - 9px); /* Adjust min-width too */
-
-	margin: 0.2em 0em 0em 0em;
 }
 
 .work-container {
