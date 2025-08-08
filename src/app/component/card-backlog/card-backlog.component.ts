@@ -103,9 +103,11 @@ export class CardBacklogComponent {
 			.getBacklogWorks(this.backlogData.backlogId)
 			.subscribe((result) => {
 				this.workList.set(result);
-				setTimeout(() => {
-					this.expanded.set(!this.expanded());
-				}, 5);
+				if (!this.expanded()) {
+					setTimeout(() => {
+						this.expanded.set(!this.expanded());
+					}, 5);
+				}
 			});
 	}
 

@@ -24,7 +24,7 @@ import { DataProcessingService } from "../../service/data-processing.service";
 export class LoginPageComponent {
 	// Injects necessary services
 	loginService = inject(LoginService);
-	data_service = inject(DataProcessingService);
+	dataService = inject(DataProcessingService);
 	// Injects Router to handle routing
 	router = inject(Router);
 	// Signal to display messages on UI that the login has failed
@@ -41,9 +41,9 @@ export class LoginPageComponent {
 	// else go  to dashboard
 	ngOnInit(): void {
 		// Checks if there is already data regarding user (previously logged in)
-		if (Number(this.data_service.getUserId()) > 0) {
+		if (this.dataService.userIdSignal() > 0) {
 			// If role is more than 1 (2 [worker] or 3 [validator]) it would directly go to the todo page
-			// if (Number(this.data_service.getUserRole()) > 1) {
+			// if (Number(this.dataService.getUserRole()) > 1) {
 			// 	this.router.navigate(["/home", { outlets: { home: "todo" } }]);
 			// }
 			// if role = 1 then go to dashboard

@@ -17,6 +17,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { DataProcessingService } from "../../service/data-processing.service";
 import { DialogUtilButtonRowComponent } from "../dialog-util-button-row/dialog-util-button-row.component";
 import { DialogUtilTitleComponent } from "../dialog-util-title/dialog-util-title.component";
+import { DialogService } from "../../service/dialog.service";
 
 @Component({
 	selector: "app-dialog-project-container",
@@ -33,35 +34,42 @@ import { DialogUtilTitleComponent } from "../dialog-util-title/dialog-util-title
 	styleUrl: "./dialog-project-container.component.css",
 })
 export class DialogProjectContainerComponent {
+	dialogService = inject(DialogService);
 	dataService = inject(DataProcessingService);
 	dialogData = inject(MAT_DIALOG_DATA);
 	currentPic = signal<NameListItem>({ name: "", id: 0 });
 	editable = signal<boolean>(false);
 	@Output() updatedProject = new EventEmitter<Project>();
 	@ViewChild(DialogProjectInputComponent)
-	dialogNewProject!: DialogProjectInputComponent;
+	DialogProjectInputComponent!: DialogProjectInputComponent;
 	@ViewChild(SelectorUserProjectRoleComponent)
 	UserSelector!: SelectorUserProjectRoleComponent;
-	dialogRef = inject(DialogRef<DialogProjectContainerComponent>);
-
-	triggerNewProjectSubmit() {
-		this.dialogNewProject.newProjectCreate(
-			this.UserSelector.getCurrentArrayChanges(),
-		);
-	}
-
-	triggerEditProjectSubmit() {
-		this.dialogNewProject.projectEdit(
-			this.UserSelector.getCurrentArrayChanges(),
-		);
-		this.toggleEdit();
-	}
 
 	toggleEdit() {
 		this.editable.set(!this.editable());
 	}
 
-	// updateProject() {
-	// 	this.toggleEdit();
-	// }
+	triggerNewProjectSubmit() {
+		console.log("trigger in container");
+		this.DialogProjectInputComponent.newProjectCreate(
+			this.UserSelector.getCurrentArrayChanges(),
+		);
+	}
+
+	triggerEditProjectSubmit() {
+		this.DialogProjectInputComponent.projectEdit(
+			this.UserSelector.getCurrentArrayChanges(),
+		);
+		this.toggleEdit();
+	}
+
+	triggerDeleteProject() {
+		this.dataService
+			.dropProject(this.dialogData?.projectData?.projectId)
+			.subscribe(() => {
+				this.dialogService
+					.getProjectContainerDialogRef()
+					?.close({ drop: this.dialogData?.projectData?.projectId });
+			});
+	}
 }

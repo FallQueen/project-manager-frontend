@@ -1,8 +1,8 @@
 <div class="dialog-container">
 
-    <app-dialog-util-title [new]="dialogData.newProject" [editable]="editable()"
-        title="PROJECT #{{dialogData.projectData.projectId}}" titleNew="NEW PROJECT"
-        (edit)="toggleEdit()"></app-dialog-util-title>
+    <app-dialog-util-title [new]="dialogData?.newProject" [editable]="editable()"
+        title="PROJECT #{{dialogData?.projectData?.projectId}}" titleNew="NEW PROJECT" (edit)="toggleEdit()"
+        (delete)="triggerDeleteProject()"></app-dialog-util-title>
 
 
 

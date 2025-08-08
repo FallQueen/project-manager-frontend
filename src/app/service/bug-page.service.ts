@@ -20,6 +20,10 @@ export class BugPageService {
 	}
 
 	getProjectBugs(projectId: number) {
+		if (projectId === 0) {
+			this.bugList.set([]);
+			return;
+		}
 		this.dataService.getProjectBugs(projectId).subscribe((result) => {
 			this.bugList.set(result);
 		});

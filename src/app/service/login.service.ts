@@ -62,7 +62,7 @@ export class LoginService {
 
 	// Clears all relevant data and return to login page
 	logOut() {
-		this.dataService.clearUserData();
+		this.dataService.resetUserData();
 		this.router.navigate([""]);
 	}
 }

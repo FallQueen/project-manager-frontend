@@ -12,4 +12,11 @@ import { CardProjectNewComponent } from "../../component/card-project-new/card-p
 })
 export class ProjectPageComponent {
 	projectPageService = inject(ProjectPageService);
+	pageTitle = signal("My Projects");
+	isWebMaster = this.projectPageService.dataService.isWebMaster();
+	ngOnInit() {
+		if (this.isWebMaster) {
+			this.pageTitle.set("All Projects");
+		}
+	}
 }

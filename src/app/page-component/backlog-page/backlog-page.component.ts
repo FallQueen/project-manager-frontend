@@ -14,7 +14,5 @@ export class BacklogPageComponent {
 	backlogPageService = inject(BacklogPageService);
 	backlogList: Signal<BacklogData[]> = this.backlogPageService.backlogList;
 
-	ngOnInit() {
-		// this.backlogPageService.recheckProjectId();
-	}
+	ngOnInit() {}
 }

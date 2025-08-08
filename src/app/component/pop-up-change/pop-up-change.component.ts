@@ -62,23 +62,36 @@ export class PopUpChangeComponent {
 
 	pickItem(item: NameListItem) {
 		this.dataChange.emit(item);
+		this.toggleVisibility();
 	}
 
-	toggleVisibility() {
-		console.log("current", this.popUpData.current.name);
-		if (this.popUpData.current.name !== "NEW") {
-			this.visibility.set(!this.visibility());
+	toggleVisibility(bool = !this.visibility()) {
+		if (
+			this.popUpData.current.name !== "NEW" &&
+			(this.dataService.isWebMaster() || this.dataService.isRole("manager"))
+		) {
+			this.visibility.set(bool);
 		}
 	}
 
+	// Add this new handler for the scroll event
+
 	ngAfterViewInit() {
 		window.addEventListener("mousedown", this.handleClickOutside);
+		// Add the scroll event listener
+		window.addEventListener("scroll", this.handleScroll, true);
 	}
 
 	ngOnDestroy() {
 		window.removeEventListener("mousedown", this.handleClickOutside);
+		// Make sure to remove the scroll event listener to avoid memory leaks
+		window.removeEventListener("scroll", this.handleScroll, true);
 	}
 
+	handleScroll = () => {
+		// This will hide the popup as soon as the user scrolls
+		this.visibility.set(false);
+	};
 	handleClickOutside = (event: MouseEvent) => {
 		const popupElement = document.querySelector("app-pop-up-change");
 		if (popupElement && !popupElement.contains(event.target as Node)) {

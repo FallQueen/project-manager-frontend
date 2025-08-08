@@ -6,16 +6,23 @@ import { DataProcessingService } from "./data-processing.service";
 	providedIn: "root",
 })
 export class ProjectPageService {
-	private dataService = inject(DataProcessingService);
+	public dataService = inject(DataProcessingService);
 	public readonly Projects = signal<Project[]>([]);
 
 	constructor() {
 		this.getProjectData();
 	}
+
 	getProjectData() {
-		this.dataService.getProjects().subscribe((result) => {
-			this.Projects.set(result);
-		});
+		if (this.dataService.isWebMaster()) {
+			this.dataService.getAllProjects().subscribe((result) => {
+				this.Projects.set(result);
+			});
+		} else {
+			this.dataService.getUserProjects().subscribe((result) => {
+				this.Projects.set(result);
+			});
+		}
 	}
 
 	removeProjectFromArray(projectId: number) {

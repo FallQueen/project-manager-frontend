@@ -1,5 +1,11 @@
 import { HttpClient } from "@angular/common/http";
-import { effect, inject, Injectable, type Signal } from "@angular/core";
+import {
+	computed,
+	effect,
+	inject,
+	Injectable,
+	type Signal,
+} from "@angular/core";
 import { Router } from "@angular/router";
 import type {
 	NewProjectInput,
@@ -35,11 +41,33 @@ export class DataProcessingService {
 	private host = "http://localhost:9090/api";
 
 	private currentProjectRoles = signal<number[]>([]);
-	private projectIdSignal = signal(this.getProjectId());
-	trackerList = signal<NameListItem[]>([]);
-	activityList = signal<NameListItem[]>([]);
-	priorityList = signal<NameListItem[]>([]);
-	stateList = signal<NameListItem[]>([]);
+	public readonly isWebMasterOrManager = computed(() => {
+		const currentProjectId = this.projectIdSignal();
+		const currentProjectRoles = this.currentProjectRoles();
+		return this.isWebMaster() || this.isRole("manager");
+	});
+
+	public readonly projectIdSignal = signal(this.getProjectId());
+	public readonly userIdSignal = signal(
+		Number(localStorage.getItem("userId")) || 0,
+	);
+	private readonly usernameSignal = signal(
+		localStorage.getItem("username") || "",
+	);
+	private readonly userEmailSignal = signal(
+		localStorage.getItem("userEmail") || "",
+	);
+	private readonly webRoleSignal = signal(
+		Number(localStorage.getItem("webRole") || 0),
+	);
+	private readonly projectRoles = signal<userProjectRoles[]>(
+		JSON.parse(localStorage.getItem("projectRoles") || "[]"),
+	);
+
+	public readonly trackerList = signal<NameListItem[]>([]);
+	public readonly activityList = signal<NameListItem[]>([]);
+	public readonly priorityList = signal<NameListItem[]>([]);
+	public readonly stateList = signal<NameListItem[]>([]);
 
 	// Stores user information in localStorage after a successful login.
 	storeUserInfo(u: User) {
@@ -48,11 +76,6 @@ export class DataProcessingService {
 		localStorage.setItem("userEmail", u.email);
 		localStorage.setItem("webRole", u.webRole.toString());
 		localStorage.setItem("projectRoles", JSON.stringify(u.projectRoles || []));
-	}
-
-	// Retrieves the current user's ID from localStorage.
-	getUserId(): string {
-		return this.returnIfNotNull(localStorage.getItem("userId"));
 	}
 
 	// Retrieves the current user's name from localStorage.
@@ -74,6 +97,33 @@ export class DataProcessingService {
 		return this.getwebRole() === 1;
 	}
 
+	isRole(role: "manager" | "developer" | "tester" | "designer"): boolean {
+		let roleId: number;
+		switch (role) {
+			case "manager":
+				roleId = 1;
+				break;
+			case "developer":
+				roleId = 2;
+				break;
+			case "tester":
+				roleId = 3;
+				break;
+			case "designer":
+				roleId = 4;
+				break;
+			default:
+				throw new Error("Invalid role");
+		}
+		const projectRoles = this.getProjectRoles();
+		return projectRoles.some((role) => {
+			return (
+				role.projectId === this.getProjectId() &&
+				role.projectRoles.includes(roleId)
+			);
+		});
+	}
+
 	getProjectRoles(): userProjectRoles[] {
 		const projectRoles = localStorage.getItem("projectRoles");
 		return projectRoles ? JSON.parse(projectRoles) : [];
@@ -85,6 +135,16 @@ export class DataProcessingService {
 		localStorage.removeItem("userEmail");
 		localStorage.removeItem("webRole");
 		localStorage.removeItem("projectRoles");
+		localStorage.removeItem("projectId");
+		localStorage.removeItem("projectName");
+		this.currentProjectRoles.set([]);
+		this.projectIdSignal.set(0);
+		this.usernameSignal.set("");
+		this.userEmailSignal.set("");
+		this.webRoleSignal.set(0);
+		this.projectRoles.set([]);
+
+		console.log("User data reset.");
 	}
 
 	setRoleOfProject() {
@@ -107,7 +167,8 @@ export class DataProcessingService {
 
 	changeProject(projectId: number, projectName: string) {
 		const roles = this.getUserProjectRole(projectId);
-		if (roles.length === 0) {
+		console.log("web master:", this.isWebMaster());
+		if (roles.length === 0 && !this.isWebMaster()) {
 			alert("You have no roles in this project.");
 			return;
 		}
@@ -130,13 +191,6 @@ export class DataProcessingService {
 
 	getprojectName(): string {
 		return this.returnIfNotNull(localStorage.getItem("projectName"));
-	}
-
-	clearUserData() {
-		localStorage.setItem("userId", "0");
-		localStorage.setItem("username", "");
-		localStorage.setItem("userEmail", "");
-		localStorage.setItem("webRole", "");
 	}
 
 	// A private utility to handle null values from localStorage, returning an empty string instead.
@@ -181,12 +235,18 @@ export class DataProcessingService {
 		return this.stateList;
 	}
 
-	getProjects() {
-		const url = `${this.host}/getProjects`;
+	getAllProjects() {
+		const url = `${this.host}/getAllProjects`;
 		return this.http.get<Project[]>(url);
 	}
 
+	getUserProjects() {
+		const url = `${this.host}/getUserProjects?userId=${this.userIdSignal()}`;
+		return this.http.get<Project[]>(url);
+	}
 	postNewProject(newProject: NewProjectInput) {
+		console.log("Creating new project with data:", newProject);
+
 		const url = `${this.host}/postNewProject`;
 		return this.http.post(url, newProject);
 	}
@@ -291,7 +351,7 @@ export class DataProcessingService {
 	}
 
 	getUserTodoList() {
-		const url = `${this.host}/getUserTodoList?userId=${this.getUserId()}`;
+		const url = `${this.host}/getUserTodoList?userId=${this.userIdSignal()}`;
 		return this.http.get<UserTodoList[]>(url);
 	}
 

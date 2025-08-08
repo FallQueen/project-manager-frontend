@@ -1,7 +1,7 @@
 <div class="dialog-container">
 
-    <app-dialog-util-title [new]="dialogData.newWork" [editable]="editable()"
-        title="WORK #{{dialogData.workData.workId}}" titleNew="NEW WORK" (edit)="toggleEdit()"
+    <app-dialog-util-title [new]="dialogData?.newWork" [editable]="editable()"
+        title="WORK #{{dialogData?.workData?.workId || ''}}" titleNew="NEW WORK" (edit)="toggleEdit()"
         (delete)="triggerDeleteWork()"></app-dialog-util-title>
 
     @if (dialogData.newWork) {

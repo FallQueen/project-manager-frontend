@@ -23,7 +23,7 @@ export class CardProjectNewComponent {
 		// Subscribes to the `afterClosed` event of the dialog.
 		// This allows the component to react when the dialog is closed.
 		dialogRef.afterClosed().subscribe((result) => {
-			if (result) {
+			if (result === "new") {
 				this.refresh.emit(); // Emits an event to refresh the parent component.
 			}
 		});

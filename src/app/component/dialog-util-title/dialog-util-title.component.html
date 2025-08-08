@@ -3,14 +3,14 @@
         {{titleNew}}
         } @else {
         {{title}}
-        @if (dataService.getwebRole()){
+        @if (dataService.getwebRole() || dataService.isRole('manager')){
         <div class="title-icons">
             <span (click)="edit.emit()">
                 <mat-icon [class.active]="editable">edit</mat-icon>
             </span>
 
             <span>
-                <mat-icon class="delete" (click)="delete.emit()">delete</mat-icon>
+                <mat-icon class="delete" (click)="openDeleteConfirmation()">delete</mat-icon>
             </span>
         </div>
 

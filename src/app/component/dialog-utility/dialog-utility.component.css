@@ -1,8 +1,10 @@
 /* Container of the dialog */
 .dialog-container {
+	display: flex;
+	flex-direction: column;
+	/* gap: 1em; */
 	padding: 0.9em 1.2em;
 	max-width: 100%;
-	gap: 0;
 	justify-content: center;
 	align-items: center;
 }
@@ -10,7 +12,8 @@
 /* specific basic text style */
 .basic-text {
 	text-align: center;
-	font-size: 1.2em;
+	font-size: 1.4em;
+	font-weight: 500;
 }
 /* The icon display */
 mat-icon {
@@ -30,8 +33,11 @@ mat-icon {
 .green {
 	color: rgb(48, 201, 48);
 }
+button {
+	/* font-size: 0.8em; */
+	scale: 0.95;
+}
 
-/* full width row */
-.row {
-	width: 100%;
+.row-space-between {
+	margin-top: 0.8em;
 }

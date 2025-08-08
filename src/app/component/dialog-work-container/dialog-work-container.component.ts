@@ -9,6 +9,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { DataProcessingService } from "../../service/data-processing.service";
 import { DialogUtilButtonRowComponent } from "../dialog-util-button-row/dialog-util-button-row.component";
 import { DialogUtilTitleComponent } from "../dialog-util-title/dialog-util-title.component";
+import { DialogService } from "../../service/dialog.service";
 
 @Component({
 	selector: "app-dialog-work-container",
@@ -24,6 +25,8 @@ import { DialogUtilTitleComponent } from "../dialog-util-title/dialog-util-title
 	styleUrl: "./dialog-work-container.component.css",
 })
 export class DialogWorkContainerComponent {
+	dataService = inject(DataProcessingService);
+	dialogService = inject(DialogService);
 	dialogData = inject(MAT_DIALOG_DATA);
 	currentPic = signal<NameListItem>({ name: "", id: 0 });
 	editable = signal<boolean>(false);
@@ -59,5 +62,13 @@ export class DialogWorkContainerComponent {
 		this.toggleEdit();
 	}
 
-	triggerDeleteWork() {}
+	triggerDeleteWork() {
+		this.dataService
+			.dropWork(this.dialogData?.workData?.workId)
+			.subscribe(() => {
+				this.dialogService
+					.getWorkContainerDialogRef()
+					?.close({ drop: this.dialogData?.workData?.workId });
+			});
+	}
 }

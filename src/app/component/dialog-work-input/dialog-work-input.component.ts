@@ -153,7 +153,7 @@ export class DialogWorkInputComponent {
 			backlogId: this.backlogId,
 			workName: this.workForm.value.workName || "",
 			description: this.workForm.value.description || "",
-			createdBy: Number(this.dataService.getUserId()),
+			createdBy: this.dataService.userIdSignal(),
 			startDate: this.workForm.value.dateRange?.start || null,
 			targetDate: this.workForm.value.dateRange?.end || null,
 			currentState: this.workForm.value.state?.id || 0,
@@ -279,13 +279,5 @@ export class DialogWorkInputComponent {
 			this.workForm.value.activity?.id || this.workData.activityId;
 		this.workData.activityName =
 			this.workForm.value.activity?.name || this.workData.activityName;
-	}
-
-	dropWork() {
-		this.dataService.dropWork(this.workData.workId).subscribe(() => {
-			this.dialogService
-				.getWorkContainerDialogRef()
-				?.close({ drop: this.workData.workId });
-		});
 	}
 }

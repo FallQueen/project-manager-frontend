@@ -1,7 +1,8 @@
 .child-wrapper {
 	width: 100%;
-	max-height: 0em;
+	max-height: 0;
 	overflow-x: auto;
+	border-radius: 5px;
 	overflow-y: hidden;
 	transition: max-height 0.6s ease-in-out;
 }
@@ -9,10 +10,9 @@
 .child-container {
 	display: flex;
 	width: 100%;
-	min-width: 0em;
 	overflow-x: auto;
 	overflow-y: hidden;
-	transition: all 1s ease;
+	transition: max-width 1s ease;
 }
 
 .indicator-child {
@@ -22,6 +22,7 @@
 	position: sticky;
 	left: 0;
 	z-index: 2;
+	border-bottom-left-radius: 5px;
 }
 
 .work-list-container {
@@ -29,7 +30,7 @@
 	flex-direction: column;
 	width: calc(100% - 9px);
 	min-width: calc(55em - 9px);
-	margin: 0.2em 0em 0em 0em;
+	margin-top: 0.2em;
 	overflow-y: hidden;
 }
 
@@ -38,7 +39,6 @@
 	align-items: center;
 	width: 100%;
 	height: 2em;
-	margin-left: 0px;
 }
 
 .work-header .section-label {
@@ -49,7 +49,7 @@
 	flex: 1;
 	text-align: center;
 	box-sizing: border-box;
-	padding: 0 0.4em 0 0em;
+	padding-right: 0.4em;
 }
 
 .work-header .section-label.name {
@@ -58,9 +58,9 @@
 
 app-card-work-new {
 	max-height: 0;
-	transition: all 0.4s ease-in-out;
+	transition: max-height 0.6s ease-in-out;
 }
 app-card-work-new.empty,
 .child-container:hover app-card-work-new {
-	max-height: 6em;
+	max-height: 70px;
 }

@@ -7,6 +7,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { DataProcessingService } from "../../service/data-processing.service";
 import { DialogUtilButtonRowComponent } from "../dialog-util-button-row/dialog-util-button-row.component";
 import { DialogUtilTitleComponent } from "../dialog-util-title/dialog-util-title.component";
+import { DialogService } from "../../service/dialog.service";
 
 @Component({
 	selector: "app-dialog-backlog-container",
@@ -23,6 +24,7 @@ import { DialogUtilTitleComponent } from "../dialog-util-title/dialog-util-title
 })
 export class DialogBacklogContainerComponent {
 	dataService = inject(DataProcessingService);
+	dialogService = inject(DialogService);
 	dialogData = inject(MAT_DIALOG_DATA);
 	editable = signal<boolean>(false);
 
@@ -44,6 +46,12 @@ export class DialogBacklogContainerComponent {
 	}
 
 	triggerDeleteBacklog() {
-		this.DialogBacklogInput.dropBacklog();
+		this.dataService
+			.dropBacklog(this.dialogData?.backlogData?.backlogId)
+			.subscribe(() => {
+				this.dialogService
+					.getBacklogContainerDialogRef()
+					?.close({ drop: this.dialogData?.backlogData?.backlogId });
+			});
 	}
 }

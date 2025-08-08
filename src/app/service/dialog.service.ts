@@ -82,22 +82,21 @@ export class DialogService {
 	getWorkContainerDialogRef() {
 		return this.workContainerDialogRef;
 	}
-	openReportDialog(
-		reportMessage: string,
+	openUtilityDialog(
+		message: string,
 		type: "fail" | "success" | "confirmation",
 	): MatDialogRef<DialogUtilityComponent> {
-		// Uses the MatDialog service to open the DialogActionReportComponent.
-		const dialogRefReport = this.dialog.open(DialogUtilityComponent, {
+		const dialogRef = this.dialog.open(DialogUtilityComponent, {
 			autoFocus: false,
 			width: "60vw",
 			height: "90vh",
 			maxWidth: "90vw",
 			maxHeight: "fit-content",
 			panelClass: "custom-dialog-container",
-			data: { reportMessage, type }, // Passes the request ID to the dialog.
+			data: { message, type }, // Passes the request ID to the dialog.
 		});
 
 		// Returns the refrence to the dialog opened
-		return dialogRefReport;
+		return dialogRef;
 	}
 }

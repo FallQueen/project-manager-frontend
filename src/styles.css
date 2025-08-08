@@ -43,10 +43,24 @@ h3 {
 	color: #1a1a1a;
 }
 
+.dialog-container {
+	display: flex;
+	flex-direction: column;
+	height: fit-content;
+	max-width: 100%;
+	padding: 0.9em 1.2em 1.2em 1.2em;
+	gap: 1em;
+	background-color: white;
+}
+
 mat-icon {
 	color: #444;
 	width: fit-content;
 	height: fit-content;
+}
+
+.mat-warn {
+	color: rgb(255, 19, 19) !important;
 }
 
 .page-container {
@@ -60,19 +74,19 @@ mat-icon {
 
 .card {
 	background-color: #fff9f9;
-	border: 0.0625em solid #ddd; /* 1px */
-	border-radius: 0.5em; /* 8px */
+	border: 0.0625em solid #ddd;
+	border-radius: 0.5em;
 	padding: 0.5em 1em 1em 1em;
 	width: 20em;
-	box-shadow: 0 0.125em 0.3125em rgba(0, 0, 0, 0.1); /* 2px 5px */
+	/* box-shadow: 0 0.125em 0.3125em rgba(0, 0, 0, 0.1); */
 	box-sizing: border-box;
 }
 
-.card:hover {
-	box-shadow: 0 0.25em 0.5em rgba(44, 62, 80, 0.18), /* 4px 8px */ 0 0.1875em
-		0.5em rgba(44, 62, 80, 0.1); /* 3px 8px */
+/* .card:hover {
+	box-shadow: 0 0.25em 0.5em rgba(44, 62, 80, 0.18), 0 0.1875em
+		0.5em rgba(44, 62, 80, 0.1);
 	cursor: pointer;
-}
+} */
 
 .card-header {
 	display: flex;
@@ -92,7 +106,7 @@ mat-icon {
 .card-container {
 	width: 100%;
 	gap: 2em;
-	padding: 1em 2em 2em 2em;
+
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(21em, 1fr));
 	transition: all 1s ease;
@@ -164,7 +178,22 @@ mat-icon {
 	color: #4a0f0f;
 }
 
-/* STYLR FOR CUSTOM INPUTS */
+.row-right-aligned {
+	width: 100%;
+	height: auto;
+	display: flex;
+	gap: 0.5em;
+	justify-content: flex-end;
+}
+
+.row-space-between {
+	width: 100%;
+	height: auto;
+	display: flex;
+	justify-content: space-between;
+}
+
+/* STYLES FOR CUSTOM INPUTS */
 .row {
 	display: flex;
 	gap: 0.5em;
@@ -178,11 +207,11 @@ mat-icon {
 	display: flex;
 	flex: 1;
 	width: 100%;
-	position: relative; /* This is crucial for positioning the label */
-	border: 2px solid #d1d5db; /* Border is now on the container */
+	position: relative;
+	border: 2px solid #d1d5db;
 	border-radius: 8px;
 	transition: border-color 0.2s ease-in-out;
-	/* width: 10em; */
+	box-sizing: border-box;
 }
 
 .form-control:focus-within {

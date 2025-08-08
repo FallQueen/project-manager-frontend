@@ -1,7 +1,7 @@
 <div class="dialog-container">
     <!-- Dialog Title Section -->
-    <app-dialog-util-title [new]="dialogData.newBacklog" [editable]="editable()" (edit)="toggleEdit()"
-        (delete)="triggerDeleteBacklog()" title="Backlog #{{dialogData.backlogData.backlogId}}"
+    <app-dialog-util-title [new]="dialogData?.newBacklog" [editable]="editable()" (edit)="toggleEdit()"
+        (delete)="triggerDeleteBacklog()" title="Backlog #{{dialogData?.backlogData?.backlogId}}"
         titleNew="NEW BACKLOG"></app-dialog-util-title>
 
 

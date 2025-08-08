@@ -1,12 +1,17 @@
-<div class="card-container">
-    @if (projectPageService.Projects() !== []) {
-    @for (project of projectPageService.Projects(); track $index) {
-    <app-card-project [project]="project"
-        (cardDeleted)="projectPageService.removeProjectFromArray(project.projectId)"></app-card-project>
-    }
-    }
-    <!-- 
-    <app-card-project [isEmpty]="true
-    "></app-card-project> -->
-    <app-card-project-new (refresh)="projectPageService.getProjectData()"></app-card-project-new>
+<div class="page-container">
+    <div class="page-title">
+        <h1>{{pageTitle()}}</h1>
+    </div>
+    <div class="card-container">
+        @if (projectPageService.Projects() !== []) {
+        @for (project of projectPageService.Projects(); track $index) {
+        <app-card-project [project]="project"
+            (cardDeleted)="projectPageService.removeProjectFromArray(project.projectId)"></app-card-project>
+        }
+        }
+        @if(isWebMaster){
+        <app-card-project-new (refresh)="projectPageService.getProjectData()"></app-card-project-new>
+
+        }
+    </div>
 </div>

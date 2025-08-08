@@ -1,4 +1,4 @@
-import { inject, Injectable, signal } from "@angular/core";
+import { effect, inject, Injectable, signal } from "@angular/core";
 import { DataProcessingService } from "./data-processing.service";
 import type { UserTodoList } from "../model/format.type";
 
@@ -7,11 +7,19 @@ import type { UserTodoList } from "../model/format.type";
 })
 export class DashboardService {
 	private dataService = inject(DataProcessingService);
-
 	public readonly userTodoList = signal<UserTodoList[]>([]);
+	private userId = this.dataService.userIdSignal;
 
 	constructor() {
-		this.loadUserTodoList();
+		effect(() => {
+			const currentUserId = this.userId();
+			if (currentUserId === 0) {
+				this.userTodoList.set([]);
+				return;
+			}
+
+			this.loadUserTodoList();
+		});
 	}
 
 	loadUserTodoList() {

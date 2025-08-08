@@ -5,6 +5,7 @@ import {
 	Input,
 	Output,
 	EventEmitter,
+	effect,
 } from "@angular/core";
 import {
 	DateAdapter,
@@ -81,6 +82,16 @@ export class DialogProjectInputComponent {
 		return this.projectForm.controls;
 	}
 
+	constructor() {
+		effect(() => {
+			const currentPic = this.currentPic();
+			if (currentPic) {
+				this.projectForm.patchValue({
+					picId: currentPic.id,
+				});
+			}
+		});
+	}
 	ngOnInit() {
 		if (this.projectData) {
 			this.projectForm.patchValue({
@@ -116,14 +127,15 @@ export class DialogProjectInputComponent {
 			const newProject: NewProjectInput = {
 				projectName: this.projectForm.value.projectName || "",
 				description: this.projectForm.value.description || "",
-				createdBy: Number(this.dataService.getUserId()),
+				createdBy: this.dataService.userIdSignal(),
 				startDate: this.projectForm.value.dateRange?.start || null,
 				targetDate: this.projectForm.value.dateRange?.end || null,
 				userRoles,
 				picId: this.currentPic().id,
 			};
+			console.log("Creating new project with data:", newProject);
 			this.dataService.postNewProject(newProject).subscribe(() => {
-				this.dialogService.getProjectContainerDialogRef()?.close();
+				this.dialogService.getProjectContainerDialogRef()?.close("new");
 			});
 		} else {
 			this.projectForm.markAllAsTouched();
@@ -179,13 +191,5 @@ export class DialogProjectInputComponent {
 			this.projectForm.value.dateRange?.end || this.projectData.targetDate;
 		this.projectData.picName =
 			this.currentPic().name || this.projectData.picName;
-	}
-
-	dropProject() {
-		this.dataService.dropProject(this.projectData.projectId).subscribe(() => {
-			this.dialogService
-				.getProjectContainerDialogRef()
-				?.close({ drop: this.projectData.projectId });
-		});
 	}
 }

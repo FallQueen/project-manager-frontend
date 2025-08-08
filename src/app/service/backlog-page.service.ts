@@ -15,11 +15,16 @@ export class BacklogPageService {
 		this.getProjectBacklogs(this.projectId());
 		effect(() => {
 			const projectId = this.projectId();
+
 			this.getProjectBacklogs(projectId);
 		});
 	}
 
-	getProjectBacklogs(projectId: number) {
+	getProjectBacklogs(projectId: number = this.projectId()) {
+		if (projectId === 0) {
+			this.backlogList.set([]);
+			return;
+		}
 		this.dataService.getProjectBacklogs(projectId).subscribe((result) => {
 			this.backlogList.set(result);
 		});

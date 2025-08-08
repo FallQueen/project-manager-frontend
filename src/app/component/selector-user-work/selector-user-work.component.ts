@@ -164,7 +164,7 @@ export class SelectorUserWorkComponent {
 	}
 
 	setCurrentUserAsPic() {
-		const tempUserId = Number(this.dataService.getUserId());
+		const tempUserId = this.dataService.userIdSignal();
 		if (!tempUserId) return;
 		const newPic = this.searchBarService
 			.nameList()

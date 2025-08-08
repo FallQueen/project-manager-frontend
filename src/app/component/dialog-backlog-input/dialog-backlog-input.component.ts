@@ -132,7 +132,7 @@ export class DialogBacklogInputComponent {
 				projectId: this.projectId,
 				backlogName: this.backlogForm.value.backlogName || "",
 				description: this.backlogForm.value.description || "",
-				createdBy: Number(this.dataService.getUserId()),
+				createdBy: this.dataService.userIdSignal(),
 				startDate: this.backlogForm.value.dateRange?.start || null,
 				targetDate: this.backlogForm.value.dateRange?.end || null,
 				picId: this.backlogForm.value.pic?.id || 0,
@@ -216,13 +216,5 @@ export class DialogBacklogInputComponent {
 			this.backlogForm.value.priority?.id || this.backlogData.priorityId;
 		this.backlogData.priorityName =
 			this.backlogForm.value.priority?.name || this.backlogData.priorityName;
-	}
-
-	dropBacklog() {
-		this.dataService.dropBacklog(this.backlogData.backlogId).subscribe(() => {
-			this.dialogService
-				.getBacklogContainerDialogRef()
-				?.close({ drop: this.backlogData.backlogId });
-		});
 	}
 }

@@ -1,6 +1,6 @@
 <div class="card backlog">
     <div class="backlog-container">
-        <div class="indicator priority-{{backlogData.priorityName}}"></div>
+        <div class="indicator priority-{{backlogData.priorityName}}" [class.expanded]="expanded()"></div>
         <div class="backlog-inner-container">
             <span class="arrow-icon-container" (click)="expandWorkInside()"> <mat-icon class="arrow-icon">@if
                     (!expanded()){keyboard_arrow_right} @else {keyboard_arrow_down}</mat-icon>
@@ -21,8 +21,6 @@
                         [style.width.%]="item.percentage">
                     </div>
                     }
-
-
                 </div>
             </div>
 
@@ -31,7 +29,8 @@
                 <div class="card-status priority-{{backlogData.priorityName}}">
                     <span (click)="priorityPop.toggleVisibility()">{{backlogData.priorityName}}</span>
                 </div>
-                <app-pop-up-change #priorityPop (dataChange)="updateBacklogData('priority', $event)"
+                <app-pop-up-change [style.visibility]="" #priorityPop
+                    (dataChange)="updateBacklogData('priority', $event)"
                     [popUpData]="{class: 'priority', current: { name: backlogData.priorityName, id: backlogData.priorityId} }">
                 </app-pop-up-change>
             </div>
