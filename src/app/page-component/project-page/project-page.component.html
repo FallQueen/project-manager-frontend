@@ -9,7 +9,7 @@
             (cardDeleted)="projectPageService.removeProjectFromArray(project.projectId)"></app-card-project>
         }
         }
-        @if(isWebMaster){
+        @if(isWebMaster()){
         <app-card-project-new (refresh)="projectPageService.getProjectData()"></app-card-project-new>
 
         }

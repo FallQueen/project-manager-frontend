@@ -16,7 +16,7 @@ export class CardBacklogNewComponent {
 	dataService = inject(DataProcessingService);
 	dialogService = inject(DialogService);
 	dialog = inject(MatDialog);
-	@Output() newWork = new EventEmitter<NameListItem>();
+	@Output() newBacklog = new EventEmitter<NameListItem>();
 
 	openForm() {
 		// Uses the MatDialog service to open the DialogMoreDetailComponent.
@@ -25,8 +25,10 @@ export class CardBacklogNewComponent {
 		// Subscribes to the `afterClosed` event of the dialog.
 		// This allows the component to react when the dialog is closed.
 		dialogRef.afterClosed().subscribe((result) => {
+			console.log("New work check:", result);
 			if (result) {
-				this.newWork.emit(result); // Emits an event to refresh the parent component.
+				this.newBacklog.emit(result); // Emits an event to refresh the parent component.
+				console.log("New work added:", result);
 			}
 		});
 	}

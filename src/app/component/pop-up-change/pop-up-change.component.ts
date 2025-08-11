@@ -31,9 +31,9 @@ export class PopUpChangeComponent {
 	constructor() {
 		effect(() => {
 			if (this.popUpData.class === "priority") {
-				this.itemList.set(this.dataService.getPriorityList()());
+				this.itemList.set(this.dataService.priorityList());
 			} else if (this.popUpData.class === "state") {
-				this.itemList.set(this.dataService.getStateList()());
+				this.itemList.set(this.dataService.stateList());
 			}
 			this.setVisibleItemList();
 		});
@@ -68,7 +68,7 @@ export class PopUpChangeComponent {
 	toggleVisibility(bool = !this.visibility()) {
 		if (
 			this.popUpData.current.name !== "NEW" &&
-			(this.dataService.isWebMaster() || this.dataService.isRole("manager"))
+			this.dataService.isWebMasterOrManager()
 		) {
 			this.visibility.set(bool);
 		}

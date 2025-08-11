@@ -2,7 +2,8 @@
 <div class="card todo">
     <div class="todo-container">
         <!-- State Indicator -->
-        <div class="indicator state-{{dataService.formatClassName(todoList.stateName)}}"></div>
+        <div [class.expanded]="expanded()" class="indicator state-{{dataService.formatClassName(todoList.stateName)}}">
+        </div>
         <div class="todo-inner-container">
             <!-- Expand/Collapse Arrow -->
             <span class="arrow-icon-container" (click)="expandWorkInside()">

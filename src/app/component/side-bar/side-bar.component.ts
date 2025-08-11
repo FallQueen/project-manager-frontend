@@ -21,6 +21,6 @@ import { FormsModule } from "@angular/forms";
 export class SideBarComponent {
 	dataService = inject(DataProcessingService);
 	loginService = inject(LoginService);
-	username = signal<string>(this.dataService.getUserName());
+	username = signal<string>(this.dataService.usernameSignal());
 	searchInput = signal<string>("");
 }

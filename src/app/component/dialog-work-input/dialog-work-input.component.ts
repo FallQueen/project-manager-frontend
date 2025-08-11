@@ -97,10 +97,10 @@ export class DialogWorkInputComponent {
 	}
 
 	ngOnInit() {
-		this.trackerList.set(this.dataService.getTrackerList()());
-		this.activityList.set(this.dataService.getActivityList()());
-		this.priorityList.set(this.dataService.getPriorityList()());
-		this.stateList.set(this.dataService.getStateList()());
+		this.trackerList.set(this.dataService.trackerList());
+		this.activityList.set(this.dataService.activityList());
+		this.priorityList.set(this.dataService.priorityList());
+		this.stateList.set(this.dataService.stateList());
 		this.trackerList.set(
 			this.trackerList().filter((item) => item.name.toLowerCase() !== "bug"),
 		);

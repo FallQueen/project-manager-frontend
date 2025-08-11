@@ -51,6 +51,17 @@ export class ExpandableWorkContainerComponent {
 				"PERIOD",
 			]);
 		}
+
+		if (this.dataService.isPage("dashboard")) {
+			this.sectionLabel.set([
+				"PROJECT",
+				"TRACKER",
+				"ACTIVITY",
+				"STATE",
+				"PRIORITY",
+				"PERIOD",
+			]);
+		}
 	}
 	@ViewChild("workChildContainer") workChildContainer!: ElementRef;
 	workChildContainerHeight: Signal<number> = computed(() => {

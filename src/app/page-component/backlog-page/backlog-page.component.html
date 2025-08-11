@@ -8,6 +8,6 @@
         <app-card-backlog [backlogData]="backlog"
             (cardDeleted)="backlogPageService.removeBacklogFromArray(backlog.backlogId)"></app-card-backlog>
         }
-        <app-card-backlog-new (newWork)="backlogPageService.getProjectBacklogs()"></app-card-backlog-new>
+        <app-card-backlog-new (newBacklog)="backlogPageService.getProjectBacklogs()"></app-card-backlog-new>
     </div>
 </div>

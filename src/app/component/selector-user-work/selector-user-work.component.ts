@@ -62,7 +62,7 @@ export class SelectorUserWorkComponent {
 		forkJoin({
 			assignment: this.dataService.getWorkUserAssignment(this.workId),
 			users: this.dataService.getProjectAssignedUsernames(
-				this.dataService.getProjectId(),
+				this.dataService.projectIdSignal(),
 				roleId,
 			),
 		}).subscribe(({ assignment, users }) => {
@@ -95,7 +95,7 @@ export class SelectorUserWorkComponent {
 		// ActivityId 1 = Development,  2 = Design
 		const roleId = this.checkActivity(activity);
 		this.dataService
-			.getProjectAssignedUsernames(this.dataService.getProjectId(), roleId)
+			.getProjectAssignedUsernames(this.dataService.projectIdSignal(), roleId)
 			.subscribe((users) => {
 				this.searchBarService.nameList.set(users);
 			});

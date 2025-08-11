@@ -1,4 +1,10 @@
-import { Component, inject, signal } from "@angular/core";
+import {
+	Component,
+	computed,
+	inject,
+	type Signal,
+	signal,
+} from "@angular/core";
 import { CardProjectComponent } from "../../component/card-project/card-project.component";
 import type { Project } from "../../model/format.type";
 import { ProjectPageService } from "../../service/project-page.service";
@@ -13,9 +19,12 @@ import { CardProjectNewComponent } from "../../component/card-project-new/card-p
 export class ProjectPageComponent {
 	projectPageService = inject(ProjectPageService);
 	pageTitle = signal("My Projects");
-	isWebMaster = this.projectPageService.dataService.isWebMaster();
+	isWebMaster: Signal<boolean> = computed(() => {
+		const webRole = this.projectPageService.dataService.webRoleSignal();
+		return this.projectPageService.dataService.isWebMaster();
+	});
 	ngOnInit() {
-		if (this.isWebMaster) {
+		if (this.isWebMaster()) {
 			this.pageTitle.set("All Projects");
 		}
 	}

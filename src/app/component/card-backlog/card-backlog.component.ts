@@ -91,7 +91,7 @@ export class CardBacklogComponent {
 	}
 
 	expandWorkInside() {
-		if (!this.workList().length) {
+		if (!this.workList().length && !this.expanded()) {
 			this.refreshWorkList();
 		} else {
 			this.expanded.set(!this.expanded());
@@ -133,7 +133,6 @@ export class CardBacklogComponent {
 	}
 
 	openForm() {
-		// Uses the MatDialog service to open the DialogBacklogContainerComponent.
 		const dialogRef = this.dialogService.openBacklogDialog(
 			this.backlogData,
 			false,
@@ -144,9 +143,6 @@ export class CardBacklogComponent {
 				this.cardDeleted.emit(result.drop);
 			}
 		});
-
-		// Subscribes to the `afterClosed` event of the dialog.
-		// This allows the component to react when the dialog is closed.
 	}
 
 	updateBacklogData(type: "priority", item: NameListItem) {

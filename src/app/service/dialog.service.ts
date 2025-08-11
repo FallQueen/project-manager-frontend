@@ -10,7 +10,10 @@ import { DialogUtilityComponent } from "../component/dialog-utility/dialog-utili
 	providedIn: "root",
 })
 export class DialogService {
+	// Injects the Angular Material Dialog service for opening dialogs.
 	private dialog = inject(MatDialog);
+
+	// Stores references to the currently opened dialogs for each dialog type.
 	private projectContainerDialogRef: MatDialogRef<DialogProjectContainerComponent> | null =
 		null;
 	private backlogContainerDialogRef: MatDialogRef<DialogBacklogContainerComponent> | null =
@@ -18,6 +21,10 @@ export class DialogService {
 	private workContainerDialogRef: MatDialogRef<DialogWorkContainerComponent> | null =
 		null;
 
+	// Opens the Project dialog with the provided project data.
+	// @param projectData The project data to be passed to the dialog.
+	// @param newProject Indicates if the dialog is for creating a new project.
+	// @returns Reference to the opened Project dialog.
 	openProjectDialog(
 		projectData: Project | undefined,
 		newProject: boolean,
@@ -35,9 +42,16 @@ export class DialogService {
 		return dialogRef;
 	}
 
+	// Returns the reference to the currently opened Project dialog, if any.
+
 	getProjectContainerDialogRef() {
 		return this.projectContainerDialogRef;
 	}
+
+	// Opens the Backlog dialog with the provided backlog data.
+	// @param backlogData The backlog data to be passed to the dialog.
+	// @param newBacklog Indicates if the dialog is for creating a new backlog item.
+	// @returns Reference to the opened Backlog dialog.
 
 	openBacklogDialog(
 		backlogData: BacklogData | undefined,
@@ -56,10 +70,17 @@ export class DialogService {
 		return dialogRef;
 	}
 
+	// Returns the reference to the currently opened Backlog dialog, if any.
+
 	getBacklogContainerDialogRef() {
 		return this.backlogContainerDialogRef;
 	}
 
+	// Opens the Work dialog with the provided work data.
+	// @param workData The work data to be passed to the dialog.
+	// @param backlogId The ID of the associated backlog item.
+	// @param newWork Indicates if the dialog is for creating a new work item.
+	// @returns Reference to the opened Work dialog.
 	openWorkDialog(
 		workData: WorkData | undefined,
 		backlogId: number | undefined,
@@ -79,9 +100,17 @@ export class DialogService {
 		return dialogRef;
 	}
 
+	// Returns the reference to the currently opened Work dialog, if any.
+
 	getWorkContainerDialogRef() {
 		return this.workContainerDialogRef;
 	}
+
+	// Opens a utility dialog for displaying messages such as errors, successes, or confirmations.
+	// @param message The message to display in the dialog.
+	// @param type The type of message ('fail', 'success', or 'confirmation').
+	// @returns Reference to the opened Utility dialog.
+
 	openUtilityDialog(
 		message: string,
 		type: "fail" | "success" | "confirmation",
@@ -93,10 +122,10 @@ export class DialogService {
 			maxWidth: "90vw",
 			maxHeight: "fit-content",
 			panelClass: "custom-dialog-container",
-			data: { message, type }, // Passes the request ID to the dialog.
+			data: { message, type }, // Passes the message and type to the dialog.
 		});
 
-		// Returns the refrence to the dialog opened
+		// Returns the reference to the opened dialog.
 		return dialogRef;
 	}
 }

@@ -30,7 +30,7 @@
         }
     </div>
 
-    <app-dialog-util-button-row [new]="dialogData.newProject" [editable]="editable()" (cancel)="toggleEdit()"
+    <app-dialog-util-button-row [new]="dialogData.newProject" [editable]="editable()" (cancelEdit)="toggleEdit()"
         (save)="triggerEditProjectSubmit()" (create)="triggerNewProjectSubmit()"></app-dialog-util-button-row>
 
 

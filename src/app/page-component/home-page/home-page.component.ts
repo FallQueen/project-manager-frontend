@@ -14,6 +14,5 @@ export class HomePageComponent {
 	dataService = inject(DataProcessingService);
 	ngOnInit() {
 		this.dataService.getandSetStartBundle();
-		this.dataService.setRoleOfProject();
 	}
 }

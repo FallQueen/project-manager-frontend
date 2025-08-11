@@ -2,10 +2,28 @@
     <!-- <div class="indicator priority-{{workData.priorityName}}"></div> -->
     <div class="work-inner-container">
 
-        <div (click)="openForm()" class="card-name">
-            <span class="backlog-name" [matTooltip]="workData.workName">{{workData.workName}}</span>
+        <!-- <div class="work-id">
+            <span class="work-name">{{workData.workId}}</span>
+        </div> -->
+        <div class="work-name-id-container">
+            <div class="work-id">
+                <span class="work-id">#{{workData.workId}}</span>
+            </div>
+            <div class="card-name">
+                <span (click)="openForm()" class="work-name" [matTooltip]="workData.workName">
+                    {{workData.workName}}</span>
+            </div>
         </div>
 
+        @if (dataService.isPage('dashboard')) {
+        <div class="card-section">
+
+            <div class="card-status">
+                <span>{{workData.projectName}}</span>
+            </div>
+        </div>
+
+        }
 
         @if (dataService.isWorkData(workData)) {
         <div class="card-section">

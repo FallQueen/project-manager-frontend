@@ -11,7 +11,7 @@ import type { User } from "../model/format.type";
 export class LoginService {
 	http = inject(HttpClient); //enables the use of HTTP client calls for the application
 	router = inject(Router); // enables navigation using the Router
-	// Inject necessary sevices (to reset for next login)
+	// Inject necessary services (to reset for next login)
 	dataService = inject(DataProcessingService);
 	// host = "https://state-management-api.vercel.app/api";
 	host = "http://localhost:9090/api";
@@ -36,14 +36,6 @@ export class LoginService {
 						success = true;
 						// Store all user data to local using dataService's storeUserInfo()
 						this.dataService.storeUserInfo(response);
-						// When user is > 1 (2 [Worker], 3 [Validator])
-						// if (Number(response.roleId) > 1) {
-						// 	// Go to todo page
-						// 	this.router.navigate(["/home", { outlets: { home: "todo" } }]);
-						// } else {
-						// 	// else,if role == 1, then go to dashboard page
-						// 	this.router.navigate(["/home"]);
-						// }
 						this.router.navigate(["/home"]);
 					}
 

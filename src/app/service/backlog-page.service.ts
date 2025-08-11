@@ -7,12 +7,11 @@ import type { BacklogData } from "../model/format.type";
 })
 export class BacklogPageService {
 	private dataService = inject(DataProcessingService);
-	projectId = this.dataService.getProjectIdSignal();
+	projectId = this.dataService.projectIdSignal;
 
 	public readonly backlogList = signal<BacklogData[]>([]);
 
 	constructor() {
-		this.getProjectBacklogs(this.projectId());
 		effect(() => {
 			const projectId = this.projectId();
 
@@ -37,8 +36,8 @@ export class BacklogPageService {
 	}
 
 	// recheckProjectId() {
-	// 	if (this.projectId() !== this.dataService.getProjectId()) {
-	// 		this.projectId.set(this.dataService.getProjectId());
+	// 	if (this.projectId() !== this.dataService.projectIdSignal()) {
+	// 		this.projectId.set(this.dataService.projectIdSignal());
 	// 		this.getProjectBacklogs(this.projectId());
 	// 	}
 	// }

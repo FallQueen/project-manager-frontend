@@ -33,10 +33,19 @@
 	width: 9px;
 	min-width: 9px;
 	height: 100%;
+	filter: saturate(1.4);
 	position: sticky;
-	border-top-left-radius: 6px;
-	border-bottom-left-radius: 6px;
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
 	z-index: 2;
+}
+.indicator.expanded {
+	border-bottom-left-radius: 0px;
+	transition: border-bottom-left-radius 0.1s step-start 0s;
+}
+
+.indicator:not(.expanded) {
+	transition: border-bottom-left-radius 0.1s step-end 0.44s;
 }
 
 .arrow-icon {

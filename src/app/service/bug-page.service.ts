@@ -7,12 +7,11 @@ import type { ProjectBugList } from "../model/format.type";
 })
 export class BugPageService {
 	private dataService = inject(DataProcessingService);
-	projectId = this.dataService.getProjectIdSignal();
+	projectId = this.dataService.projectIdSignal;
 
 	public readonly bugList = signal<ProjectBugList[]>([]);
 
 	constructor() {
-		this.getProjectBugs(this.projectId());
 		effect(() => {
 			const projectId = this.projectId();
 			this.getProjectBugs(projectId);

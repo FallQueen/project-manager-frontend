@@ -1,11 +1,4 @@
-import {
-	Component,
-	inject,
-	signal,
-	Input,
-	Output,
-	EventEmitter,
-} from "@angular/core";
+import { Component, inject, signal, Input } from "@angular/core";
 import {
 	DateAdapter,
 	MAT_DATE_FORMATS,
@@ -18,11 +11,9 @@ import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatError, MatInputModule } from "@angular/material/input";
 import type {
 	AlterBacklog,
-	AlterProject,
 	BacklogData,
 	NameListItem,
 	NewBacklog,
-	UserRoleChange,
 } from "../../model/format.type";
 import {
 	FormControl,
@@ -35,9 +26,7 @@ import { CommonModule, NgIf } from "@angular/common";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatButtonModule } from "@angular/material/button";
 import { DataProcessingService } from "../../service/data-processing.service";
-import { MatDialogRef } from "@angular/material/dialog";
 import { TextFieldModule } from "@angular/cdk/text-field";
-import type { DialogBacklogContainerComponent } from "../dialog-backlog-container/dialog-backlog-container.component";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { SearchBarComponent } from "../search-bar/search-bar.component";
 import { DialogService } from "../../service/dialog.service";
@@ -70,7 +59,7 @@ import { DialogService } from "../../service/dialog.service";
 export class DialogBacklogInputComponent {
 	dataService = inject(DataProcessingService);
 	dialogService = inject(DialogService);
-	projectId = this.dataService.getProjectId();
+	projectId = this.dataService.projectIdSignal();
 	@Input() backlogData!: BacklogData;
 
 	backlogForm = new FormGroup({
@@ -94,7 +83,7 @@ export class DialogBacklogInputComponent {
 	}
 
 	ngOnInit() {
-		this.priorityList.set(this.dataService.getPriorityList()());
+		this.priorityList.set(this.dataService.priorityList());
 		this.dataService
 			.getProjectAssignedUsernames(this.projectId)
 			.subscribe((result) => {
@@ -139,7 +128,7 @@ export class DialogBacklogInputComponent {
 				priorityId: this.backlogForm.value.priority?.id || 0,
 			};
 			this.dataService.postNewBacklog(newBacklog).subscribe(() => {
-				this.dialogService.getBacklogContainerDialogRef()?.close();
+				this.dialogService.getBacklogContainerDialogRef()?.close(true);
 			});
 		} else {
 			this.backlogForm.markAllAsTouched();
