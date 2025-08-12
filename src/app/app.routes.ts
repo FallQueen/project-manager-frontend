@@ -26,14 +26,6 @@ export const routes: Routes = [
 				outlet: "home",
 			},
 			{
-				path: "kanban",
-				loadComponent: () =>
-					import("./page-component/kanban-page/kanban-page.component").then(
-						(c) => c.KanbanPageComponent,
-					),
-				outlet: "home",
-			},
-			{
 				path: "project",
 				loadComponent: () =>
 					import("./page-component/project-page/project-page.component").then(

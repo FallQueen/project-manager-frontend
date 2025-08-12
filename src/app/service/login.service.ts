@@ -13,8 +13,8 @@ export class LoginService {
 	router = inject(Router); // enables navigation using the Router
 	// Inject necessary services (to reset for next login)
 	dataService = inject(DataProcessingService);
-	// host = "https://state-management-api.vercel.app/api";
-	host = "http://localhost:9090/api";
+	host = "https://project-manager-backend-theta.vercel.app/api";
+	// host = "http://localhost:9090/api";
 
 	// Handles the process of user login
 	login(username: string, password: string): Observable<boolean> {

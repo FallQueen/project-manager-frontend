@@ -22,53 +22,47 @@ import { DataProcessingService } from "../../service/data-processing.service";
 	styleUrl: "./login-page.component.css",
 })
 export class LoginPageComponent {
-	// Injects necessary services
+	// Injects necessary services for login and data processing
 	loginService = inject(LoginService);
 	dataService = inject(DataProcessingService);
-	// Injects Router to handle routing
+	// Injects Router to handle navigation between pages
 	router = inject(Router);
-	// Signal to display messages on UI that the login has failed
+	// Signal to display messages on UI when the login has failed
 	loginFail = signal<boolean>(false);
 
-	// variable to hold user's input box values
+	// Object to hold user's input values for username and password
 	loginData = {
 		username: "",
 		password: "",
 	};
 
-	// On init check if there is already data regarding user (previously logged in),
-	// if role is more than 1 (2 or 3) it would direcly go to the todo page
-	// else go  to dashboard
+	// On component initialization, check if the user is already logged in
 	ngOnInit(): void {
-		// Checks if there is already data regarding user (previously logged in)
+		// If userIdSignal returns a value greater than 0, user is logged in, redirect to home
 		if (this.dataService.userIdSignal() > 0) {
-			// If role is more than 1 (2 [worker] or 3 [validator]) it would directly go to the todo page
-			// if (Number(this.dataService.getUserRole()) > 1) {
-			// 	this.router.navigate(["/home", { outlets: { home: "todo" } }]);
-			// }
-			// if role = 1 then go to dashboard
 			this.router.navigate(["/home"]);
 		}
 	}
 
-	// Function to handle login when the button is clicked
+	// Function to handle login when the login button is clicked
 	checkLogin(form: NgForm) {
-		// checks if all fields are filled, if not, return, triggers errors on each box
+		// If any form field is invalid, do not proceed and trigger validation errors
 		if (form.invalid) {
 			return;
 		}
 
-		// Otherwise, proceed with login, calls a function from loginService
-		// to execute an api call for login, if falsy, set call function to set loginFail to true
+		// Extract username and password from loginData
 		const { username, password } = this.loginData;
+		// Call login service to authenticate user
 		this.loginService.login(username, password).subscribe((result) => {
+			// If login fails, set loginFail signal to true to display error message
 			if (!result) {
 				this.setLoginFail();
 			}
 		});
 	}
 
-	//Set loginFail to true
+	// Set loginFail signal to true to indicate login failure
 	setLoginFail() {
 		this.loginFail.set(true);
 	}

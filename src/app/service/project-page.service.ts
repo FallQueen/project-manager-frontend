@@ -49,4 +49,9 @@ export class ProjectPageService {
 			projects.filter((project) => project.projectId !== projectId),
 		);
 	}
+
+	getProjectNameFromId(projectId: number): string | null {
+		const project = this.Projects().find((p) => p.projectId === projectId);
+		return project ? project.projectName : null;
+	}
 }

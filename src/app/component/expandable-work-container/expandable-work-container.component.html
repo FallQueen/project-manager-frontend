@@ -4,9 +4,9 @@
         <div class="indicator-child {{indicatorClass}}"></div>
         <div class="work-list-container">
             <div class="work-header">
-                <span class="section-label name">FUNCTION</span>
+                <span class="section-label name" (click)="sortBySectionLabel('workName')">FUNCTION</span>
                 @for (item of sectionLabel(); track $index) {
-                <span class="section-label">{{item}}</span>
+                <span class="section-label" (click)="sortBySectionLabel(item.column || '')">{{item.label}}</span>
                 }
 
             </div>

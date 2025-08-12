@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { computed, inject, Injectable } from "@angular/core";
+import { computed, inject, Injectable, Injector } from "@angular/core";
 import { Router } from "@angular/router";
 import type {
 	NewProjectInput,
@@ -18,14 +18,24 @@ import type {
 	UserTodoList,
 	ProjectBugList,
 	BugData,
+	workNameListItem,
 } from "../model/format.type";
 
 import { signal } from "@angular/core";
+import { ProjectPageService } from "./project-page.service";
 
 @Injectable({
 	providedIn: "root",
 })
 export class DataProcessingService {
+	// Injects the ProjectPageService for getting project data (used in changeProject)
+	private injector = inject(Injector);
+	// Remove direct: private pageService = inject(ProjectPageService);
+
+	// Use this getter when you need ProjectPageService
+	private get pageService(): ProjectPageService {
+		return this.injector.get(ProjectPageService);
+	}
 	// Injects Angular's HttpClient for making HTTP requests to the backend API.
 	private http = inject(HttpClient);
 
@@ -33,8 +43,8 @@ export class DataProcessingService {
 	private router = inject(Router);
 
 	// The base URL for the backend API.
-	// host = "https://state-management-api.vercel.app/api";
-	private host = "http://localhost:9090/api";
+	host = "https://project-manager-backend-theta.vercel.app/api";
+	// private host = "http://localhost:9090/api";
 
 	// Computes the current user's roles for the selected project.
 	private currentProjectRoles = computed(() => {
@@ -159,17 +169,22 @@ export class DataProcessingService {
 	// Changes the current project context, updates localStorage and navigates to the backlog page.
 	// @param projectId The ID of the new project.
 	// @param projectName The name of the new project.
-	changeProject(projectId: number, projectName: string) {
+	changeProject(projectId: number, projectName = "") {
 		const roles = this.getUserProjectRole(projectId);
-		console.log("web master:", this.isWebMaster());
 		if (roles.length === 0 && !this.isWebMaster()) {
 			alert("You have no roles in this project.");
 			return;
 		}
+		let projectN: string;
+		if (projectName === "") {
+			projectN = this.pageService.getProjectNameFromId(projectId) ?? "";
+		} else {
+			projectN = projectName;
+		}
 		localStorage.setItem("projectId", projectId.toString());
 		this.projectIdSignal.set(projectId);
-		localStorage.setItem("projectName", projectName);
-		this.projectnameSignal.set(projectName);
+		localStorage.setItem("projectName", projectN);
+		this.projectnameSignal.set(projectN);
 		this.router.navigate(["/home", { outlets: { home: "backlog" } }]);
 	}
 
@@ -261,16 +276,12 @@ export class DataProcessingService {
 
 	// Retrieves all project names.
 	// @returns An Observable of project name list items.
-	getProjectNames() {
-		const url = `${this.host}/getProjectNames`;
-		return this.http.get<NameListItem[]>(url);
-	}
-
-	// Retrieves all task names.
-	// @returns An Observable of task name list items.
-	getTaskNames() {
-		const url = `${this.host}/getTaskNames`;
-		return this.http.get<NameListItem[]>(url);
+	getProjectAndWorkNames() {
+		const url = `${this.host}/getProjectAndWorkNames?userId=${this.userIdSignal()}`;
+		return this.http.get<{
+			projectList: NameListItem[];
+			workList: workNameListItem[];
+		}>(url);
 	}
 
 	// Retrieves user roles for a specific project.

@@ -1,7 +1,3 @@
-// The data of the authenticated user that will be stored to local.
-// Used for session management, logic, and user info.
-// The data of the authenticated user that will be stored to local.
-// Used for session management, logic, and user info.
 export type User = {
 	userId: number;
 	username: string;
@@ -46,10 +42,15 @@ export type AlterProject = {
 	userRoles: UserRoleChange[];
 };
 
-export type NameListItem = {
+export interface NameListItem {
 	name: string;
 	id: number;
-};
+}
+
+// Specific use for work names, used in searchbar to search for work items
+export interface workNameListItem extends NameListItem {
+	projectId: number;
+}
 
 export type NameListItemByRole = {
 	roleId: number;

@@ -6,7 +6,7 @@ import {
 	Output,
 	signal,
 } from "@angular/core";
-import type { NameListItem } from "../../model/format.type";
+import type { NameListItem, workNameListItem } from "../../model/format.type";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatInputModule } from "@angular/material/input";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
@@ -26,7 +26,8 @@ import { DataProcessingService } from "../../service/data-processing.service";
 	providers: [SearchService],
 })
 export class SearchBarComponent {
-	searchBarService = inject(SearchService);
+	searchBarService1 = inject(SearchService);
+
 	dataService = inject(DataProcessingService);
 	// Input: The full list of userNames to search from
 	projectNames = signal<NameListItem[]>([]);
@@ -35,17 +36,21 @@ export class SearchBarComponent {
 	@Output() nameItemSelected = new EventEmitter<NameListItem>();
 	@Output() clicked = new EventEmitter<void>();
 	@Input() fieldLabel = "";
-	@Input() nameList = signal<NameListItem[]>([]);
+	@Input() enableFilterById = false;
+	@Input() nameListLabel = "";
+	@Input() nameListSecondLabel = "";
+	@Input() nameList = signal<NameListItem[] | workNameListItem[]>([]);
+	@Input() nameListSecond = signal<NameListItem[] | workNameListItem[]>([]);
 	@Input() textInput = "";
 
 	// The filtering logic
 	ngOnInit() {
-		this.searchBarService.nameList = this.nameList;
+		this.searchBarService1.nameList = this.nameList;
 	}
 
 	ngOnChanges() {
 		const input = this.textInput;
-		this.searchBarService.nameInput.set(input);
+		this.searchBarService1.nameInput.set(input);
 	}
 	// When an option is selected from the list
 	onSelection(selectedName: NameListItem) {

@@ -1,9 +1,17 @@
-<body class="home-body">
-    <app-header></app-header>
+<!-- Main body -->
+
+<body>
+    <!-- Custom header component for the application -->
+    <app-side-bar></app-side-bar>
+
+    <!-- Container for sidebar and main content -->
     <div class="home-content">
-        <app-side-bar></app-side-bar>
+        <!-- Custom sidebar component for navigation -->
+        <app-header></app-header>
+        <!-- Wrapper for routed content -->
         <div class="router-outlet-body">
-            <router-outlet name="home" />
+            <!-- Angular named router outlet for displaying routed components -->
+            <router-outlet name="home"></router-outlet>
         </div>
     </div>
 </body>

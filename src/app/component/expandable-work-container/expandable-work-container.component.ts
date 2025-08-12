@@ -33,36 +33,37 @@ export class ExpandableWorkContainerComponent {
 	@Output() newWorkState = new EventEmitter<NameListItem>();
 	@Output() triggerbatteryRefresh = new EventEmitter<void>();
 	workHovered = signal<boolean>(false);
-	@Input() sectionLabel = signal<string[]>([
-		"TRACKER",
-		"ACTIVITY",
-		"STATE",
-		"PRIORITY",
-		"PERIOD",
+	@Input() sectionLabel = signal<{ label: string; column?: string }[]>([
+		{ label: "TRACKER", column: "trackerId" },
+		{ label: "ACTIVITY", column: "activityId" },
+		{ label: "STATE", column: "stateId" },
+		{ label: "PRIORITY", column: "priorityId" },
+		{ label: "PERIOD" },
 	]);
 
 	ngOnInit() {
 		if (this.dataService.isBugData(this.workList()[0])) {
 			this.sectionLabel.set([
-				"DEFECT CAUSE",
-				"AFFECTED WORK",
-				"STATE",
-				"PRIORITY",
-				"PERIOD",
+				{ label: "DEFECT CAUSE", column: "defectCause" },
+				{ label: "AFFECTED WORK", column: "affectedWork" },
+				{ label: "STATE", column: "stateId" },
+				{ label: "PRIORITY", column: "priorityId" },
+				{ label: "PERIOD" },
 			]);
 		}
 
 		if (this.dataService.isPage("dashboard")) {
 			this.sectionLabel.set([
-				"PROJECT",
-				"TRACKER",
-				"ACTIVITY",
-				"STATE",
-				"PRIORITY",
-				"PERIOD",
+				{ label: "PROJECT", column: "projectName" },
+				{ label: "TRACKER", column: "trackerId" },
+				{ label: "ACTIVITY", column: "activityId" },
+				{ label: "STATE", column: "stateId" },
+				{ label: "PRIORITY", column: "priorityId" },
+				{ label: "PERIOD" },
 			]);
 		}
 	}
+
 	@ViewChild("workChildContainer") workChildContainer!: ElementRef;
 	workChildContainerHeight: Signal<number> = computed(() => {
 		const expanded = this.isExpanded();
@@ -86,5 +87,24 @@ export class ExpandableWorkContainerComponent {
 	removeWorkFromArray(workId: number) {
 		this.workList.update((list) => list.filter((w) => w.workId !== workId));
 		this.triggerbatteryRefresh.emit();
+	}
+
+	sortBySectionLabel(column: string, ascending = true) {
+		console.log("should sort");
+		const index = this.sectionLabel().findIndex(
+			(item) => item.column === column,
+		);
+		// if (index === -1 && label !== "workName") return;
+		console.log("Sorting by label:", column, "Ascending:", ascending);
+		this.workList.update((list) => {
+			// biome-ignore lint/suspicious/noExplicitAny: <for sorting>
+			return [...list].sort((a: any, b: any) => {
+				const aValue = a[column] ?? "";
+				const bValue = b[column] ?? "";
+				if (aValue < bValue) return ascending ? -1 : 1;
+				if (aValue > bValue) return ascending ? 1 : -1;
+				return 0;
+			});
+		});
 	}
 }

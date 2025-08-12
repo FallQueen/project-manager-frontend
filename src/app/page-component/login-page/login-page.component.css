@@ -1,48 +1,48 @@
+/* Styles for the main container */
 main {
 	display: flex;
-	justify-content: center; /* Center horizontally */
-	align-items: center; /* Center vertically */
+	justify-content: center;
+	align-items: center;
 	height: 100vh;
 	width: 100%;
 	background-color: #111827;
 }
 
+/* Styles for the login text */
 .login-text {
-	font-size: 1.9em; /* Font size */
-	font-weight: bold; /* Bold text */
-	margin-bottom: 0.3em; /* Space below the text */
+	font-size: 1.9em;
+	font-weight: bold;
+	margin-bottom: 0.3em;
 	margin-top: 0;
 	text-align: center;
 }
+
+/* Styles for the text labels */
 .text-label {
 	font-size: 1.01em;
 	margin-bottom: 0.3em;
 }
 
+/* Styles for the login box */
 .login-box {
 	background-color: #eaeaea;
-	border: 1px solid grey; /* Visible border */
+	border: 1px solid grey;
 	border-radius: 20px;
 	padding: 1.1em;
 	display: flex;
 	flex-direction: column;
 	gap: 0em;
-	width: 18em; /* Adjust width as needed */
-	box-sizing: border-box; /* Ensures padding doesn't expand width */
+	width: 18em;
+	box-sizing: border-box;
 }
 
+/* Styles for the error message when login fails */
 .err-message {
-	/* Color: This uses the standard 'warn' color from your Angular Material theme. 
-     The #f44336 is a fallback red color. */
-	/* color: var(--mat-form-field-error-text-color, #f44336); */
-
-	/* Font Size: Makes the text the same small size as mat-error. */
 	font-size: 0.8em;
-
-	/* Spacing: Adds some space between the button and the error message. */
 	padding-left: 0.5em;
 }
 
+/* Styles for the login button */
 button {
 	margin-top: 0.5em;
 }

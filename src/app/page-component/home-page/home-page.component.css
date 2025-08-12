@@ -2,7 +2,7 @@
 
 .home-content {
 	display: flex;
-
+	flex-direction: column;
 	height: 100%;
 	width: 100%;
 	min-height: 1em;
@@ -15,5 +15,5 @@
 
 body {
 	display: flex;
-	flex-direction: column;
+	/* flex-direction: column; */
 }

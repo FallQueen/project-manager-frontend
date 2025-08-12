@@ -1,10 +1,11 @@
 import { Component, inject } from "@angular/core";
 import { DataProcessingService } from "../../service/data-processing.service";
-import { LoginService } from "../../service/login.service";
+import { MatIconModule } from "@angular/material/icon";
+// import { f } from "../../../../node_modules/@angular/material/icon-module.d-COXCrhrh";
 
 @Component({
 	selector: "app-header",
-	imports: [],
+	imports: [MatIconModule],
 	templateUrl: "./header.component.html",
 	styleUrl: "./header.component.css",
 })

@@ -1,0 +1,25 @@
+<div class="search-container">
+    <input class="hidden" type="text" #autoCompleteTrigger="matAutocompleteTrigger" matInput [matAutocomplete]="auto">
+
+
+
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="dataService.displayName">
+        @if(filteredProjectNames().length > 0){
+        <div>Project</div>
+        }
+        @for (name of filteredProjectNames(); track name.name) {
+        <mat-option [value]="name" (onSelectionChange)="selectProject(name.id)">
+            {{ name.name }}
+        </mat-option>
+        }
+
+        @if (filteredWorkNames().length > 0) {
+        <div>Work</div>
+        }
+        @for (name of filteredWorkNames(); track name.name) {
+        <mat-option [value]="name" (onSelectionChange)="selectProject(name.projectId)">
+            {{ name.name }}
+        </mat-option>
+        }
+    </mat-autocomplete>
+</div>

@@ -1,0 +1,14 @@
+.hidden {
+	/* position: absolute; */
+	height: 0;
+	width: 100%;
+
+	opacity: 0;
+}
+.search-container {
+	position: absolute;
+	display: flex;
+	height: 0;
+	flex: 1;
+	transform: translateY(-300%);
+}

@@ -11,8 +11,10 @@ import { DataProcessingService } from "../../service/data-processing.service";
 	styleUrl: "./home-page.component.css",
 })
 export class HomePageComponent {
+	// Inject the necessary services to init start
 	dataService = inject(DataProcessingService);
 	ngOnInit() {
+		// Initialize the data of master priority, state, etc
 		this.dataService.getandSetStartBundle();
 	}
 }

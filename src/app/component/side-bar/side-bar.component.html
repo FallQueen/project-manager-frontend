@@ -1,34 +1,51 @@
-<div class="side-bar">
-    <ul>
-        <li [routerLink]="[{ outlets: { home: ['dashboard'] } }]" routerLinkActive="active" tabindex="0">
-            <mat-icon>dashboard</mat-icon>
-            <span>Dashboard</span>
-
+<div class="side-bar" [class.expanded]="isExpanded()">
+    <ul class="menu-ul">
+        <li (click)="toggleSidebar()" class="menu-toggle">
+            <mat-icon>menu</mat-icon>
         </li>
-        <!-- <li [routerLink]="[{ outlets: { home: ['kanban'] } }]" routerLinkActive="active" tabindex="0">
-            <mat-icon>view_kanban</mat-icon>
-            <span>Kanban</span>
-        </li> -->
-        <li [routerLink]="[{ outlets: { home: ['backlog'] } }]" routerLinkActive="active" tabindex="0">
-            <mat-icon>list_alt</mat-icon>
-            <span>Backlog</span>
-        </li>
-        <li [routerLink]="[{ outlets: { home: ['bug'] } }]" routerLinkActive="active" tabindex="0">
-            <mat-icon>bug_report</mat-icon>
-            <span>Bug</span>
-        </li>
-        <div class="divider-line"></div>
-        <li [routerLink]="[{ outlets: { home: ['project'] } }]" routerLinkActive="active" tabindex="0">
-            <mat-icon>assignment</mat-icon>
-            <span>Project</span>
-        </li>
-        <li class="search-item">
-            <mat-icon>search</mat-icon>
-            <input matInput type="text" placeholder="Search..." [(ngModel)]="searchInput" />
-
-        </li>
-        <app-search-bar [textInput]="searchInput()"></app-search-bar>
-
     </ul>
-    <li (click)="loginService.logOut()"> <mat-icon>account_circle</mat-icon><span>{{username()}}</span></li>
+    <div class="main-side-bar ">
+        <ul>
+
+
+            <li [routerLink]="[{ outlets: { home: ['dashboard'] } }]" routerLinkActive="active" tabindex="0">
+                <mat-icon>dashboard</mat-icon>
+                <span>Dashboard</span>
+            </li>
+
+            <li [routerLink]="[{ outlets: { home: ['backlog'] } }]" routerLinkActive="active" tabindex="0">
+                <mat-icon>list_alt</mat-icon>
+                <span>Backlog</span>
+            </li>
+
+            <li [routerLink]="[{ outlets: { home: ['bug'] } }]" routerLinkActive="active" tabindex="0">
+                <mat-icon>bug_report</mat-icon>
+                <span>Bug</span>
+            </li>
+
+            <div class="divider-line"></div>
+
+
+
+            <li [routerLink]="[{ outlets: { home: ['project'] } }]" routerLinkActive="active" tabindex="0">
+                <mat-icon>assignment</mat-icon>
+                <span>Project</span>
+            </li>
+
+            <li class="search-item">
+                <mat-icon>search</mat-icon>
+                <input matInput type="text" placeholder="Search..."
+                    (input)="searchInput.set($any($event.target).value)" />
+            </li>
+            <app-search-bar-proj-and-work [workNameList]="workList" [projectNameList]="projectList"
+                [textInput]="searchInput" value="searchInput()"></app-search-bar-proj-and-work>
+
+        </ul>
+        <ul>
+            <li class="profile" (click)="loginService.logOut()" routerLinkActive="active">
+                <mat-icon>account_circle</mat-icon>
+                <span>{{ username() }}</span>
+            </li>
+        </ul>
+    </div>
 </div>

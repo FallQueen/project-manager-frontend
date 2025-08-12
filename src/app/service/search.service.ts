@@ -1,5 +1,5 @@
-import { effect, inject, Injectable, signal, Injector } from "@angular/core";
-import type { NameListItem } from "../model/format.type";
+import { effect, Injectable, signal } from "@angular/core";
+import type { NameListItem, workNameListItem } from "../model/format.type";
 
 @Injectable()
 export class SearchService {
@@ -15,7 +15,7 @@ export class SearchService {
 			this.filteredNameList.set(this.removeDuplicates(filteredList));
 		});
 	}
-
+	private readonly enableFilterById = signal<boolean>(false);
 	// Signal for the current search input
 	public readonly nameInput = signal<string>("");
 
@@ -25,19 +25,21 @@ export class SearchService {
 	// Signal for the original list of names
 	public nameList = signal<NameListItem[]>([]);
 
-	//
+	enableIdFilter() {
+		this.enableFilterById.set(true);
+	}
+
 	// Filters the origin list by search string.
 	// If alsoEnableFilterById is true, also matches by id.
 	// @param search The search string to filter by.
 	// @param origin The original list of names.
 	// @param alsoEnableFilterById Whether to also filter by id.
 	// @returns The filtered list of NameListItem.
-	//
 	filter(
 		search: string,
-		origin: NameListItem[],
+		origin: NameListItem[] | workNameListItem[],
 		alsoEnableFilterById = false,
-	): NameListItem[] {
+	): NameListItem[] | workNameListItem[] {
 		if (typeof search !== "string") {
 			// If search is not a string, return the original list
 			return origin;

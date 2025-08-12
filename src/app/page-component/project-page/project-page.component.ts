@@ -17,13 +17,22 @@ import { CardProjectNewComponent } from "../../component/card-project-new/card-p
 	styleUrl: "./project-page.component.css",
 })
 export class ProjectPageComponent {
+	// Inject the necessary service for accessing project-related data
 	projectPageService = inject(ProjectPageService);
+
+	// Signal to hold the current page title, initialized to "My Projects"
 	pageTitle = signal("My Projects");
+
+	// Computed signal to determine if the current user is a webmaster
 	isWebMaster: Signal<boolean> = computed(() => {
+		// Get the user's web role (not used directly here, but used to trigger when changed)
 		const webRole = this.projectPageService.dataService.webRoleSignal();
+		// Check if the user has webmaster privileges
 		return this.projectPageService.dataService.isWebMaster();
 	});
+
 	ngOnInit() {
+		// If the user is a webmaster, update the page title to "All Projects"
 		if (this.isWebMaster()) {
 			this.pageTitle.set("All Projects");
 		}
