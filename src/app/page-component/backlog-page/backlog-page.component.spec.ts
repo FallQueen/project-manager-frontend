@@ -1,23 +1,22 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { BacklogPageComponent } from './backlog-page.component';
+import { subModulePageComponent } from "./subModule-page.component";
 
-describe('BacklogPageComponent', () => {
-  let component: BacklogPageComponent;
-  let fixture: ComponentFixture<BacklogPageComponent>;
+describe("subModulePageComponent", () => {
+	let component: subModulePageComponent;
+	let fixture: ComponentFixture<subModulePageComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [BacklogPageComponent]
-    })
-    .compileComponents();
+	beforeEach(async () => {
+		await TestBed.configureTestingModule({
+			imports: [subModulePageComponent],
+		}).compileComponents();
 
-    fixture = TestBed.createComponent(BacklogPageComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+		fixture = TestBed.createComponent(subModulePageComponent);
+		component = fixture.componentInstance;
+		fixture.detectChanges();
+	});
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+	it("should create", () => {
+		expect(component).toBeTruthy();
+	});
 });

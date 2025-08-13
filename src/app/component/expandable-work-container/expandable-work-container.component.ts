@@ -29,7 +29,7 @@ export class ExpandableWorkContainerComponent {
 	@Input() isExpanded = signal(false);
 	@Input() workList = signal<WorkData[] | BugData[]>([]);
 	@Input() indicatorClass = "";
-	@Input() backlogId = 0;
+	@Input() subModuleId = 0;
 	@Output() newWorkState = new EventEmitter<NameListItem>();
 	@Output() triggerbatteryRefresh = new EventEmitter<void>();
 	workHovered = signal<boolean>(false);
@@ -80,8 +80,8 @@ export class ExpandableWorkContainerComponent {
 		return height;
 	});
 
-	isBacklogPage(): boolean {
-		return this.router.url.includes("/home/(home:backlog)");
+	issubModulePage(): boolean {
+		return this.router.url.includes("/home/(home:subModule)");
 	}
 
 	removeWorkFromArray(workId: number) {

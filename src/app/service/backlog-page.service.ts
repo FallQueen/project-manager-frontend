@@ -1,6 +1,6 @@
 import { effect, inject, Injectable, signal } from "@angular/core";
 import { DataProcessingService } from "./data-processing.service";
-import type { BacklogData } from "../model/format.type";
+import type { SubModuleData } from "../model/format.type";
 
 @Injectable({
 	providedIn: "root",
@@ -12,34 +12,34 @@ export class BacklogPageService {
 	// Signal for the current project ID
 	projectId = this.dataService.projectIdSignal;
 
-	// Signal holding the list of backlogs for the current project
-	public readonly backlogList = signal<BacklogData[]>([]);
+	// Signal holding the list of subModules for the current project
+	public readonly subModuleList = signal<SubModuleData[]>([]);
 
 	constructor() {
-		// Reactively fetch backlogs whenever the project ID changes
+		// Reactively fetch subModules whenever the project ID changes
 		effect(() => {
 			const projectId = this.projectId();
-			this.getProjectBacklogs(projectId);
+			this.getProjectSubModules(projectId);
 		});
 	}
 
-	// Fetches backlogs for a given project ID and updates the backlogList signal
-	getProjectBacklogs(projectId: number = this.projectId()) {
+	// Fetches subModules for a given project ID and updates the subModuleList signal
+	getProjectSubModules(projectId: number = this.projectId()) {
 		if (projectId === 0) {
-			// If project ID is 0, clear the backlog list
-			this.backlogList.set([]);
+			// If project ID is 0, clear the subModule list
+			this.subModuleList.set([]);
 			return;
 		}
-		// Fetch backlogs from the data service and update the signal
-		this.dataService.getProjectBacklogs(projectId).subscribe((result) => {
-			this.backlogList.set(result);
+		// Fetch subModules from the data service and update the signal
+		this.dataService.getProjectSubModules(projectId).subscribe((result) => {
+			this.subModuleList.set(result);
 		});
 	}
 
-	// Removes a backlog item from the backlogList signal by its ID
-	removeBacklogFromArray(backlogId: number) {
-		this.backlogList.update((backlogs) =>
-			backlogs.filter((backlog) => backlog.backlogId !== backlogId),
+	// Removes a subModule item from the subModuleList signal by its ID
+	removeSubModuleFromArray(subModuleId: number) {
+		this.subModuleList.update((subModules) =>
+			subModules.filter((subModule) => subModule.subModuleId !== subModuleId),
 		);
 	}
 }

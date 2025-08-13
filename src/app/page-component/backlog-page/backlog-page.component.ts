@@ -1,18 +1,19 @@
 import { Component, inject, type Signal } from "@angular/core";
 import { BacklogPageService } from "../../service/backlog-page.service";
-import type { BacklogData } from "../../model/format.type";
-import { CardBacklogNewComponent } from "../../component/card-backlog-new/card-backlog-new.component";
-import { CardBacklogComponent } from "../../component/card-backlog/card-backlog.component";
+import type { SubModuleData } from "../../model/format.type";
+
+import { CardSubModuleComponent } from "../../component/card-sub-module/card-sub-module.component";
+import { CardSubModuleNewComponent } from "../../component/card-sub-module-new/card-sub-module-new.component";
 
 @Component({
 	selector: "app-backlog-page",
-	imports: [CardBacklogComponent, CardBacklogNewComponent],
+	imports: [CardSubModuleComponent, CardSubModuleNewComponent],
 	templateUrl: "./backlog-page.component.html",
 	styleUrl: "./backlog-page.component.css",
 })
 export class BacklogPageComponent {
 	backlogPageService = inject(BacklogPageService);
-	backlogList: Signal<BacklogData[]> = this.backlogPageService.backlogList;
+	backlogList: Signal<SubModuleData[]> = this.backlogPageService.subModuleList;
 
 	ngOnInit() {}
 }

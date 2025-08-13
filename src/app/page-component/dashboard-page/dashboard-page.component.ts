@@ -1,6 +1,6 @@
 import { Component, inject } from "@angular/core";
 import { CardTodoComponent } from "../../component/card-todo/card-todo.component";
-import { DashboardService } from "../../service/dashboard.service";
+import { DashboardPageService } from "../../service/dashboard-page.service";
 import { signal } from "@angular/core";
 
 @Component({
@@ -10,6 +10,6 @@ import { signal } from "@angular/core";
 	styleUrl: "./dashboard-page.component.css",
 })
 export class DashboardPageComponent {
-	dashboardService = inject(DashboardService);
+	dashboardService = inject(DashboardPageService);
 	todoList = this.dashboardService.userTodoList;
 }

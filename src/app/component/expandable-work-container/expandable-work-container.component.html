@@ -16,8 +16,8 @@
             <app-card-work [workData]="work" (cardDeleted)="removeWorkFromArray(work.workId)"
                 (triggerbatteryRefresh)="triggerbatteryRefresh.emit()"></app-card-work>
             }
-            @if(isBacklogPage()){
-            <app-card-work-new (newWork)="newWorkState.emit($event)" [backlogId]="backlogId"
+            @if(issubModulePage()){
+            <app-card-work-new (newWork)="newWorkState.emit($event)" [subModuleId]="subModuleId"
                 [class.empty]="!workList().length"></app-card-work-new>
             }
         </div>

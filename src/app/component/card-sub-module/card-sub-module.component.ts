@@ -1,17 +1,13 @@
 import {
 	Component,
-	type ElementRef,
 	inject,
 	Input,
-	type Signal,
 	signal,
-	ViewChild,
-	computed,
 	Output,
 	EventEmitter,
 } from "@angular/core";
 import type {
-	BacklogData,
+	SubModuleData,
 	NameListItem,
 	WorkData,
 } from "../../model/format.type";
@@ -19,18 +15,12 @@ import { CommonModule } from "@angular/common";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatIconModule } from "@angular/material/icon";
 import { DataProcessingService } from "../../service/data-processing.service";
-import { CardWorkComponent } from "../card-work/card-work.component";
-import { CardWorkNewComponent } from "../card-work-new/card-work-new.component";
-import ms from "@angular/common/locales/extra/ms";
-import { MatDialog } from "@angular/material/dialog";
-import { DialogBacklogContainerComponent } from "../dialog-backlog-container/dialog-backlog-container.component";
 import { DialogService } from "../../service/dialog.service";
-import { delay, expand } from "rxjs";
 import { PopUpChangeComponent } from "../pop-up-change/pop-up-change.component";
 import { ExpandableWorkContainerComponent } from "../expandable-work-container/expandable-work-container.component";
 
 @Component({
-	selector: "app-card-backlog",
+	selector: "app-card-sub-module",
 	imports: [
 		CommonModule,
 		MatTooltipModule,
@@ -39,13 +29,13 @@ import { ExpandableWorkContainerComponent } from "../expandable-work-container/e
 		PopUpChangeComponent,
 		ExpandableWorkContainerComponent,
 	],
-	templateUrl: "./card-backlog.component.html",
-	styleUrl: "./card-backlog.component.css",
+	templateUrl: "./card-sub-module.component.html",
+	styleUrl: "./card-sub-module.component.css",
 })
-export class CardBacklogComponent {
+export class CardSubModuleComponent {
 	dataService = inject(DataProcessingService);
 	dialogService = inject(DialogService);
-	@Input() backlogData!: BacklogData;
+	@Input() subModuleData!: SubModuleData;
 	@Output() cardDeleted = new EventEmitter<number>();
 
 	expanded = signal(false);
@@ -59,21 +49,21 @@ export class CardBacklogComponent {
 		this.countPercentage();
 		this.periodPercentage.set(
 			this.dataService.getPeriodDonePercentage(
-				this.backlogData.startDate,
-				this.backlogData.targetDate,
+				this.subModuleData.startDate,
+				this.subModuleData.targetDate,
 			),
 		);
 	}
 
 	countTotalWorkState() {
 		let total = 0;
-		for (const state of this.backlogData.workStateCountList) {
+		for (const state of this.subModuleData.workStateCountList) {
 			total += state.stateCount;
 		}
 		this.totalWork.set(total);
 	}
 	countPercentage() {
-		for (const state of this.backlogData.workStateCountList) {
+		for (const state of this.subModuleData.workStateCountList) {
 			state.percentage = (100 * state.stateCount) / this.totalWork();
 		}
 	}
@@ -100,7 +90,7 @@ export class CardBacklogComponent {
 
 	refreshWorkList() {
 		this.dataService
-			.getBacklogWorks(this.backlogData.backlogId)
+			.getSubModuleWorks(this.subModuleData.subModuleId)
 			.subscribe((result) => {
 				this.workList.set(result);
 				if (!this.expanded()) {
@@ -113,15 +103,15 @@ export class CardBacklogComponent {
 
 	doWhenNewWork(workState: NameListItem) {
 		this.refreshWorkList();
-		const index = this.backlogData.workStateCountList.findIndex(
+		const index = this.subModuleData.workStateCountList.findIndex(
 			(item) => item.stateId === workState.id,
 		);
 
 		if (index !== -1) {
-			this.backlogData.workStateCountList[index].stateCount += 1;
+			this.subModuleData.workStateCountList[index].stateCount += 1;
 		}
 		if (index === -1) {
-			this.backlogData.workStateCountList.push({
+			this.subModuleData.workStateCountList.push({
 				stateId: workState.id,
 				stateName: workState.name,
 				stateCount: 1,
@@ -133,8 +123,8 @@ export class CardBacklogComponent {
 	}
 
 	openForm() {
-		const dialogRef = this.dialogService.openBacklogDialog(
-			this.backlogData,
+		const dialogRef = this.dialogService.openSubModuleDialog(
+			this.subModuleData,
 			false,
 		);
 
@@ -145,16 +135,16 @@ export class CardBacklogComponent {
 		});
 	}
 
-	updateBacklogData(type: "priority", item: NameListItem) {
+	updatesubModuleData(type: "priority", item: NameListItem) {
 		if (type === "priority") {
 			this.dataService
-				.putAlterBacklog({
-					backlogId: this.backlogData.backlogId,
+				.putAlterSubModule({
+					subModuleId: this.subModuleData.subModuleId,
 					priorityId: item.id,
 				})
 				.subscribe(() => {
-					this.backlogData.priorityId = item.id;
-					this.backlogData.priorityName = item.name;
+					this.subModuleData.priorityId = item.id;
+					this.subModuleData.priorityName = item.name;
 				});
 		}
 	}

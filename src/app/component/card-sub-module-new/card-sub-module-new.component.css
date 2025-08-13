@@ -1,5 +1,5 @@
 /* General Card Styling */
-.card.backlog {
+.card.subModule {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -14,14 +14,14 @@
 	/* overflow: hidden; */
 }
 
-.backlog-container {
+.subModule-container {
 	display: flex;
 	align-items: center;
 	width: 100%; /* Ensures it takes full width of its parent */
 	height: 3.2em;
 }
 
-.backlog-inner-container {
+.subModule-inner-container {
 	display: flex;
 	align-items: center;
 	width: 100%; /* Ensures it takes full width of its parent */
@@ -54,7 +54,7 @@ mat-icon {
 	margin-left: 0.4em;
 }
 
-.card.backlog:hover .card-name {
+.card.subModule:hover .card-name {
 	color: var(--primary-blue);
 }
 

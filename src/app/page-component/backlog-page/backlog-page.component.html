@@ -4,10 +4,11 @@
     </div>
 
     <div class="vertical-card-container">
-        @for (backlog of backlogList(); track $index) {
-        <app-card-backlog [backlogData]="backlog"
-            (cardDeleted)="backlogPageService.removeBacklogFromArray(backlog.backlogId)"></app-card-backlog>
+        @for (subModule of backlogList(); track $index) {
+        <app-card-sub-module [subModuleData]="subModule"
+            (cardDeleted)="backlogPageService.removeSubModuleFromArray(subModule.subModuleId)"></app-card-sub-module>
         }
-        <app-card-backlog-new (newBacklog)="backlogPageService.getProjectBacklogs()"></app-card-backlog-new>
+
+        <app-card-sub-module-new (newSubModule)="backlogPageService.getProjectSubModules()"></app-card-sub-module-new>
     </div>
 </div>

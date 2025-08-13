@@ -1,21 +1,21 @@
-<!-- Form bound to backlogForm FormGroup -->
-<div class="dialog-body" [formGroup]="backlogForm">
+<!-- Form bound to subModuleForm FormGroup -->
+<div class="dialog-body" [formGroup]="subModuleForm">
 
     <!-- Project Name Input -->
     <div>
         <div class="form-control">
-            <input matInput type="text" class="form-control-input" formControlName="backlogName">
-            <label class="form-control-label" [class.label-up]="f.backlogName.valid">Backlog Name</label>
+            <input matInput type="text" class="form-control-input" formControlName="subModuleName">
+            <label class="form-control-label" [class.label-up]="f.subModuleName.valid">subModule Name</label>
         </div>
         <!-- Show error if invalid AND touched -->
-        <mat-error *ngIf="f.backlogName.invalid && f.backlogName.touched">
+        <mat-error *ngIf="f.subModuleName.invalid && f.subModuleName.touched">
             Tolong isi nama projek
         </mat-error>
     </div>
-    @if(backlogData) {
+    @if(subModuleData) {
     <div>
         <div class="form-control">
-            <div class="form-control-input">{{backlogData.projectName}}
+            <div class="form-control-input">{{subModuleData.projectName}}
             </div>
             <label class="form-control-label label-up">Project</label>
         </div>

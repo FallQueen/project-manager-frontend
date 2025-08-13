@@ -22,7 +22,8 @@ export class DialogUtilTitleComponent {
 	@Input() new = true;
 	@Input() editable = false;
 	@Input() title = "";
-	@Input() titleNew: "NEW PROJECT" | "NEW BACKLOG" | "NEW WORK" = "NEW PROJECT";
+	@Input() titleNew: "NEW PROJECT" | "NEW subModule" | "NEW WORK" =
+		"NEW PROJECT";
 	@Output() edit = new EventEmitter<void>();
 	@Output() delete = new EventEmitter<void>();
 
@@ -30,8 +31,8 @@ export class DialogUtilTitleComponent {
 		let message = "";
 		if (this.title.toLowerCase().includes("project")) {
 			message = "Are you sure you want to delete this project?";
-		} else if (this.title.toLowerCase().includes("backlog")) {
-			message = "Are you sure you want to delete this backlog?";
+		} else if (this.title.toLowerCase().includes("subModule")) {
+			message = "Are you sure you want to delete this subModule?";
 		} else if (this.title.toLowerCase().includes("work")) {
 			message = "Are you sure you want to delete this work item?";
 		}

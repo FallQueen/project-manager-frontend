@@ -1,33 +1,32 @@
-import { Component, EventEmitter, inject, Input, Output } from "@angular/core";
+import { Component, EventEmitter, inject, Output } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MatIconModule } from "@angular/material/icon";
-import type { NameListItem, Project } from "../../model/format.type";
-import { DialogBacklogContainerComponent } from "../dialog-backlog-container/dialog-backlog-container.component";
+import type { NameListItem } from "../../model/format.type";
 import { DataProcessingService } from "../../service/data-processing.service";
 import { DialogService } from "../../service/dialog.service";
 
 @Component({
-	selector: "app-card-backlog-new",
+	selector: "app-card-sub-module-new",
 	imports: [MatIconModule],
-	templateUrl: "./card-backlog-new.component.html",
-	styleUrl: "./card-backlog-new.component.css",
+	templateUrl: "./card-sub-module-new.component.html",
+	styleUrl: "./card-sub-module-new.component.css",
 })
-export class CardBacklogNewComponent {
+export class CardSubModuleNewComponent {
 	dataService = inject(DataProcessingService);
 	dialogService = inject(DialogService);
 	dialog = inject(MatDialog);
-	@Output() newBacklog = new EventEmitter<NameListItem>();
+	@Output() newsubModule = new EventEmitter<NameListItem>();
 
 	openForm() {
 		// Uses the MatDialog service to open the DialogMoreDetailComponent.
-		const dialogRef = this.dialogService.openBacklogDialog(undefined, true);
+		const dialogRef = this.dialogService.openSubModuleDialog(undefined, true);
 
 		// Subscribes to the `afterClosed` event of the dialog.
 		// This allows the component to react when the dialog is closed.
 		dialogRef.afterClosed().subscribe((result) => {
 			console.log("New work check:", result);
 			if (result) {
-				this.newBacklog.emit(result); // Emits an event to refresh the parent component.
+				this.newsubModule.emit(result); // Emits an event to refresh the parent component.
 				console.log("New work added:", result);
 			}
 		});

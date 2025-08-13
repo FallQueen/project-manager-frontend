@@ -12,7 +12,7 @@ import { DataProcessingService } from "../../service/data-processing.service";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { DialogService } from "../../service/dialog.service";
 import { PopUpChangeComponent } from "../pop-up-change/pop-up-change.component";
-import { DashboardService } from "../../service/dashboard.service";
+import { DashboardPageService } from "../../service/dashboard-page.service";
 
 @Component({
 	selector: "app-card-work",
@@ -22,7 +22,7 @@ import { DashboardService } from "../../service/dashboard.service";
 })
 export class CardWorkComponent {
 	dataService = inject(DataProcessingService);
-	dashboardService = inject(DashboardService);
+	dashboardService = inject(DashboardPageService);
 	dialogService = inject(DialogService);
 	@Input() workData!: WorkData | BugData;
 	@Output() triggerbatteryRefresh = new EventEmitter<void>();

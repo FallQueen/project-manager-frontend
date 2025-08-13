@@ -71,9 +71,9 @@ export type WorkStateCount = {
 	percentage: number;
 };
 
-export type BacklogData = {
-	backlogId: number;
-	backlogName: string;
+export type SubModuleData = {
+	subModuleId: number;
+	subModuleName: string;
 	description: string;
 	priorityId: number;
 	priorityName: string;
@@ -86,9 +86,9 @@ export type BacklogData = {
 	workStateCountList: WorkStateCount[];
 };
 
-export type NewBacklog = {
+export type NewSubModule = {
 	projectId: number;
-	backlogName: string;
+	subModuleName: string;
 	description: string;
 	priorityId: number;
 	createdBy: number;
@@ -97,9 +97,9 @@ export type NewBacklog = {
 	targetDate: Date | null;
 };
 
-export type AlterBacklog = {
-	backlogId: number;
-	backlogName?: string | null;
+export type AlterSubModule = {
+	subModuleId: number;
+	subModuleName?: string | null;
 	description?: string | null;
 	startDate?: Date | null;
 	targetDate?: Date | null;
@@ -132,7 +132,7 @@ export interface WorkData {
 	trackerName: string;
 	activityId: number;
 	activityName: string;
-	backlogName: string;
+	subModuleName: string;
 	projectName: string;
 }
 
@@ -156,7 +156,7 @@ export interface BaseWork {
 	usersAdded: number[];
 }
 export interface NewWork extends BaseWork {
-	backlogId: number;
+	subModuleId: number;
 }
 
 export interface NewBug extends BaseWork {

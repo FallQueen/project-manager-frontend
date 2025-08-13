@@ -1,9 +1,9 @@
-<div class="card backlog">
-    <!-- Main container for the backlog card -->
-    <div class="backlog-container">
+<div class="card subModule">
+    <!-- Main container for the subModule card -->
+    <div class="subModule-container">
         <!-- Priority indicator bar, color changes based on priority -->
-        <div class="indicator priority-{{backlogData.priorityName}}" [class.expanded]="expanded()"></div>
-        <div class="backlog-inner-container">
+        <div class="indicator priority-{{subModuleData.priorityName}}" [class.expanded]="expanded()"></div>
+        <div class="subModule-inner-container">
             <!-- Expand/collapse arrow icon -->
             <span class="arrow-icon-container" (click)="expandWorkInside()">
                 <mat-icon class="arrow-icon">
@@ -11,16 +11,16 @@
                 </mat-icon>
             </span>
 
-            <!-- Backlog name, opens form on click -->
+            <!-- subModule name, opens form on click -->
             <div (click)="openForm()" class="card-name">
-                <span>{{backlogData.backlogName}}</span>
+                <span>{{subModuleData.subModuleName}}</span>
             </div>
 
             <!-- Section: Work state progress bar -->
             <div class="card-section">
                 <span class="section-label">State</span>
                 <div class="progress-bar-battery">
-                    @for (item of backlogData.workStateCountList; track $index) {
+                    @for (item of subModuleData.workStateCountList; track $index) {
                     <!-- Progress bar segment for each work state -->
                     <div class="progress-fill-battery state-{{dataService.formatClassName(item.stateName)}}"
                         [matTooltip]="getTooltip(item.stateName,item.stateCount,item.percentage)"
@@ -33,12 +33,12 @@
             <!-- Section: Priority with pop-up to change priority -->
             <div class="card-section">
                 <span class="section-label">Priority</span>
-                <div class="card-status priority-{{backlogData.priorityName}}">
-                    <span (click)="priorityPop.toggleVisibility()">{{backlogData.priorityName}}</span>
+                <div class="card-status priority-{{subModuleData.priorityName}}">
+                    <span (click)="priorityPop.toggleVisibility()">{{subModuleData.priorityName}}</span>
                 </div>
                 <app-pop-up-change [style.visibility]="" #priorityPop
-                    (dataChange)="updateBacklogData('priority', $event)"
-                    [popUpData]="{class: 'priority', current: { name: backlogData.priorityName, id: backlogData.priorityId} }">
+                    (dataChange)="updatesubModuleData('priority', $event)"
+                    [popUpData]="{class: 'priority', current: { name: subModuleData.priorityName, id: subModuleData.priorityId} }">
                 </app-pop-up-change>
             </div>
 
@@ -47,7 +47,7 @@
                 <span class="section-label">Period</span>
                 <div class="progress-bar" matTooltip="{{ periodPercentage()}}%">
                     <span class="date-label">
-                        {{ backlogData.startDate | date : "shortDate" }} - {{ backlogData.targetDate | date :
+                        {{ subModuleData.startDate | date : "shortDate" }} - {{ subModuleData.targetDate | date :
                         "shortDate" }}
                     </span>
                     <div class="progress-fill" [style.width.%]="periodPercentage()"></div>
@@ -55,10 +55,10 @@
             </div>
         </div>
     </div>
-    <!-- Expandable container for work items related to this backlog -->
+    <!-- Expandable container for work items related to this subModule -->
     <div class="container-work">
         <app-expandable-work-container (newWorkState)="doWhenNewWork($event)" [isExpanded]="expanded"
-            [indicatorClass]="'priority-' + backlogData.priorityName" [workList]="workList"
-            [backlogId]="backlogData.backlogId"></app-expandable-work-container>
+            [indicatorClass]="'priority-' + subModuleData.priorityName" [workList]="workList"
+            [subModuleId]="subModuleData.subModuleId"></app-expandable-work-container>
     </div>
 </div>

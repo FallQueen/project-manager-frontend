@@ -8,12 +8,12 @@ import type {
 	NameListItem,
 	NameListItemByRole,
 	AlterProject,
-	BacklogData,
+	SubModuleData,
 	WorkData,
 	AlterWork,
 	NewWork,
-	NewBacklog,
-	AlterBacklog,
+	NewSubModule,
+	AlterSubModule,
 	userProjectRoles,
 	UserTodoList,
 	ProjectBugList,
@@ -166,7 +166,7 @@ export class DataProcessingService {
 		return [];
 	}
 
-	// Changes the current project context, updates localStorage and navigates to the backlog page.
+	// Changes the current project context, updates localStorage and navigates to the subModule page.
 	// @param projectId The ID of the new project.
 	// @param projectName The name of the new project.
 	changeProject(projectId: number, projectName = "") {
@@ -207,9 +207,9 @@ export class DataProcessingService {
 	}
 
 	// Checks if the current route matches the specified page.
-	// @param page The page to check ('project', 'dashboard', 'backlog', 'bug').
+	// @param page The page to check ('project', 'dashboard', 'subModule', 'bug').
 	// @returns True if the current route matches the page, false otherwise.
-	isPage(page: "project" | "dashboard" | "backlog" | "bug"): boolean {
+	isPage(page: "project" | "dashboard" | "subModule" | "bug"): boolean {
 		const currentUrl = this.router.url;
 		return currentUrl.includes(`(home:${page})`);
 	}
@@ -292,44 +292,44 @@ export class DataProcessingService {
 		return this.http.get<NameListItemByRole[]>(url);
 	}
 
-	// Retrieves all backlogs for a project.
+	// Retrieves all subModules for a project.
 	// @param projectId The project ID.
-	// @returns An Observable of backlog data.
-	getProjectBacklogs(projectId: number) {
-		const url = `${this.host}/getProjectBacklogs?projectId=${projectId}`;
-		return this.http.get<BacklogData[]>(url);
+	// @returns An Observable of subModule data.
+	getProjectSubModules(projectId: number) {
+		const url = `${this.host}/getProjectSubModules?projectId=${projectId}`;
+		return this.http.get<SubModuleData[]>(url);
 	}
 
-	// Creates a new backlog item.
-	// @param newBacklog The new backlog data.
+	// Creates a new subModule item.
+	// @param newSubModule The new subModule data.
 	// @returns An Observable of the server response.
-	postNewBacklog(newBacklog: NewBacklog) {
-		const url = `${this.host}/postNewBacklog`;
-		return this.http.post(url, newBacklog);
+	postNewSubModule(newSubModule: NewSubModule) {
+		const url = `${this.host}/postNewSubModule`;
+		return this.http.post(url, newSubModule);
 	}
 
-	// Deletes a backlog item by its ID.
-	// @param backlogId The ID of the backlog item.
+	// Deletes a subModule item by its ID.
+	// @param subModuleId The ID of the subModule item.
 	// @returns An Observable of the server response.
-	dropBacklog(backlogId: number) {
-		const url = `${this.host}/dropBacklog?backlogId=${backlogId}`;
+	dropSubModule(subModuleId: number) {
+		const url = `${this.host}/dropSubModule?subModuleId=${subModuleId}`;
 		return this.http.delete(url);
 	}
 
-	// Retrieves all works associated with a backlog item.
-	// @param backlogId The backlog ID.
+	// Retrieves all works associated with a subModule item.
+	// @param subModuleId The subModule ID.
 	// @returns An Observable of work data.
-	getBacklogWorks(backlogId: number) {
-		const url = `${this.host}/getBacklogWorks?backlogId=${backlogId}`;
+	getSubModuleWorks(subModuleId: number) {
+		const url = `${this.host}/getSubModuleWorks?subModuleId=${subModuleId}`;
 		return this.http.get<WorkData[]>(url);
 	}
 
-	// Updates an existing backlog item.
-	// @param alterBacklog The altered backlog data.
+	// Updates an existing subModule item.
+	// @param altersubModule The altered subModule data.
 	// @returns An Observable of the server response.
-	putAlterBacklog(alterBacklog: AlterBacklog) {
-		const url = `${this.host}/putAlterBacklog`;
-		return this.http.put(url, alterBacklog);
+	putAlterSubModule(alterSubModule: AlterSubModule) {
+		const url = `${this.host}/putAlterSubModule`;
+		return this.http.put(url, alterSubModule);
 	}
 
 	// Creates a new work item.

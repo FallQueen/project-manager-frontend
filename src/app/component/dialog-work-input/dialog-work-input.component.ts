@@ -18,7 +18,7 @@ import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatError, MatInputModule } from "@angular/material/input";
 import type {
 	AlterWork,
-	BacklogData,
+	SubModuleData,
 	NameListItem,
 	NewWork,
 	WorkData,
@@ -66,7 +66,7 @@ export class DialogWorkInputComponent {
 	dataService = inject(DataProcessingService);
 	dialogService = inject(DialogService);
 	@Input() currentPic = signal<NameListItem>({ name: "", id: 0 });
-	@Input() backlogId!: number;
+	@Input() subModuleId!: number;
 	@Input() workData!: WorkData;
 	@Output() selectActivity = new EventEmitter<NameListItem>();
 
@@ -150,7 +150,7 @@ export class DialogWorkInputComponent {
 
 		// Form is valid, proceed with creating the project
 		const newWork: NewWork = {
-			backlogId: this.backlogId,
+			subModuleId: this.subModuleId,
 			workName: this.workForm.value.workName || "",
 			description: this.workForm.value.description || "",
 			createdBy: this.dataService.userIdSignal(),

@@ -1,10 +1,10 @@
-@if (backlogData){
+@if (subModuleData){
 <div class="dialog-body">
     <div>
         <div class="form-control">
-            <div class="form-control-input">{{backlogData.backlogName}}
+            <div class="form-control-input">{{subModuleData.subModuleName}}
             </div>
-            <label class="form-control-label label-up">Backlog Name</label>
+            <label class="form-control-label label-up">subModule Name</label>
         </div>
 
 
@@ -12,7 +12,7 @@
 
     <div>
         <div class="form-control">
-            <div class="form-control-input">{{backlogData.projectName}}
+            <div class="form-control-input">{{subModuleData.projectName}}
             </div>
             <label class="form-control-label label-up">Project</label>
         </div>
@@ -21,7 +21,7 @@
     <!-- Description -->
     <div>
         <div class="form-control">
-            <div class="form-control-input">{{backlogData.description}}
+            <div class="form-control-input">{{subModuleData.description}}
             </div>
             <label class="form-control-label label-up">Description</label>
         </div>
@@ -33,9 +33,9 @@
     <div>
         <div class="form-control">
             <div class="form-control-input">{{
-                backlogData.startDate| date : "M/d/yyyy"
+                subModuleData.startDate| date : "M/d/yyyy"
                 }} – {{
-                backlogData.targetDate| date : "M/d/yyyy"
+                subModuleData.targetDate| date : "M/d/yyyy"
                 }}
             </div>
             <label class="form-control-label label-up">Target Date</label>
@@ -47,14 +47,14 @@
     <div class="row">
         <div>
             <div class="form-control">
-                <div class="form-control-input">{{backlogData.picName || "\u00a0"}}
+                <div class="form-control-input">{{subModuleData.picName || "\u00a0"}}
                 </div>
                 <label class="form-control-label label-up">PIC</label>
             </div>
         </div>
         <div>
             <div class="form-control">
-                <div class="form-control-input">{{backlogData.priorityName}}
+                <div class="form-control-input">{{subModuleData.priorityName}}
                 </div>
                 <label class="form-control-label label-up">Priority</label>
             </div>

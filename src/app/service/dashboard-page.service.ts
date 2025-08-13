@@ -5,7 +5,7 @@ import type { UserTodoList } from "../model/format.type";
 @Injectable({
 	providedIn: "root",
 })
-export class DashboardService {
+export class DashboardPageService {
 	// Inject the DataProcessingService to access user and todo data
 	private dataService = inject(DataProcessingService);
 

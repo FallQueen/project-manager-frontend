@@ -1,16 +1,16 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed } from "@angular/core/testing";
 
-import { BacklogPageService } from './backlog-page.service';
+import { subModulePageService } from "./subModule-page.service";
 
-describe('BacklogPageService', () => {
-  let service: BacklogPageService;
+describe("subModulePageService", () => {
+	let service: subModulePageService;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(BacklogPageService);
-  });
+	beforeEach(() => {
+		TestBed.configureTestingModule({});
+		service = TestBed.inject(subModulePageService);
+	});
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
+	it("should be created", () => {
+		expect(service).toBeTruthy();
+	});
 });

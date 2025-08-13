@@ -1,5 +1,5 @@
 /* General Card Styling */
-.card.backlog {
+.card.subModule {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -10,7 +10,7 @@
 	border: 1px solid rgba(51, 51, 51, 0.25);
 }
 
-.backlog-container {
+.subModule-container {
 	position: relative;
 	display: flex;
 	align-items: center;
@@ -18,7 +18,7 @@
 	height: 3.2em;
 }
 
-.backlog-inner-container {
+.subModule-inner-container {
 	display: flex;
 	align-items: center;
 	width: 100%;

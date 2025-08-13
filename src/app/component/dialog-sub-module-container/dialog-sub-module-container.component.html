@@ -1,0 +1,24 @@
+<div class="dialog-container">
+    <!-- Dialog Title Section -->
+    <app-dialog-util-title [new]="dialogData?.newsubModule" [editable]="editable()" (edit)="toggleEdit()"
+        (delete)="triggerDeleteSubModule()" title="subModule #{{dialogData?.subModuleData?.subModuleId}}"
+        titleNew="NEW subModule"></app-dialog-util-title>
+
+
+    <!-- Dialog Content Section -->
+    @if (dialogData.newsubModule) {
+    <!-- Input form for new subModule -->
+    <app-dialog-sub-module-input></app-dialog-sub-module-input>
+    } @else if (editable()) {
+    <!-- Editable form for existing subModule -->
+    <app-dialog-sub-module-input [subModuleData]="dialogData.subModuleData"></app-dialog-sub-module-input>
+    } @else if (!editable()) {
+    <!-- Read-only details for existing subModule -->
+    <app-dialog-sub-module-detail [subModuleData]="dialogData.subModuleData"></app-dialog-sub-module-detail>
+    }
+
+
+    <app-dialog-util-button-row [new]="dialogData.newsubModule" [editable]="editable()" (cancelEdit)="toggleEdit()"
+        (save)="triggerEditSubModuleSubmit()" (create)="triggerNewSubModuleSubmit()"></app-dialog-util-button-row>
+
+</div>

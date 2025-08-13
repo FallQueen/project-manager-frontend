@@ -2,7 +2,7 @@ import { Component, EventEmitter, inject, Input, Output } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MatIconModule } from "@angular/material/icon";
 import { DialogWorkContainerComponent } from "../dialog-work-container/dialog-work-container.component";
-import type { BacklogData, NameListItem } from "../../model/format.type";
+import type { SubModuleData, NameListItem } from "../../model/format.type";
 import { DialogService } from "../../service/dialog.service";
 
 @Component({
@@ -15,14 +15,14 @@ export class CardWorkNewComponent {
 	dialog = inject(MatDialog);
 	dialogService = inject(DialogService);
 	@Output() newWork = new EventEmitter<NameListItem>();
-	@Input() backlogId!: number;
+	@Input() subModuleId!: number;
 
 	openForm() {
-		console.log("openForm", this.backlogId);
+		console.log("openForm", this.subModuleId);
 		// Uses the MatDialog service to open the DialogMoreDetailComponent.
 		const dialogRef = this.dialogService.openWorkDialog(
 			undefined,
-			this.backlogId,
+			this.subModuleId,
 			true,
 		);
 

@@ -1,7 +1,7 @@
 import { inject, Injectable } from "@angular/core";
 import { MatDialog, type MatDialogRef } from "@angular/material/dialog";
-import { DialogBacklogContainerComponent } from "../component/dialog-backlog-container/dialog-backlog-container.component";
-import type { BacklogData, Project, WorkData } from "../model/format.type";
+import { DialogSubModuleContainerComponent } from "../component/dialog-sub-module-container/dialog-sub-module-container.component";
+import type { SubModuleData, Project, WorkData } from "../model/format.type";
 import { DialogProjectContainerComponent } from "../component/dialog-project-container/dialog-project-container.component";
 import { DialogWorkContainerComponent } from "../component/dialog-work-container/dialog-work-container.component";
 import { DialogUtilityComponent } from "../component/dialog-utility/dialog-utility.component";
@@ -16,7 +16,7 @@ export class DialogService {
 	// Stores references to the currently opened dialogs for each dialog type.
 	private projectContainerDialogRef: MatDialogRef<DialogProjectContainerComponent> | null =
 		null;
-	private backlogContainerDialogRef: MatDialogRef<DialogBacklogContainerComponent> | null =
+	private subModuleContainerDialogRef: MatDialogRef<DialogSubModuleContainerComponent> | null =
 		null;
 	private workContainerDialogRef: MatDialogRef<DialogWorkContainerComponent> | null =
 		null;
@@ -48,42 +48,42 @@ export class DialogService {
 		return this.projectContainerDialogRef;
 	}
 
-	// Opens the Backlog dialog with the provided backlog data.
-	// @param backlogData The backlog data to be passed to the dialog.
-	// @param newBacklog Indicates if the dialog is for creating a new backlog item.
-	// @returns Reference to the opened Backlog dialog.
+	// Opens the subModule dialog with the provided subModule data.
+	// @param subModuleData The subModule data to be passed to the dialog.
+	// @param newsubModule Indicates if the dialog is for creating a new subModule item.
+	// @returns Reference to the opened subModule dialog.
 
-	openBacklogDialog(
-		backlogData: BacklogData | undefined,
-		newBacklog: boolean,
-	): MatDialogRef<DialogBacklogContainerComponent> {
-		const dialogRef = this.dialog.open(DialogBacklogContainerComponent, {
+	openSubModuleDialog(
+		subModuleData: SubModuleData | undefined,
+		newSubModule: boolean,
+	): MatDialogRef<DialogSubModuleContainerComponent> {
+		const dialogRef = this.dialog.open(DialogSubModuleContainerComponent, {
 			autoFocus: false,
 			width: "850vw",
 			height: "fit-content",
 			maxWidth: "90vw",
 			maxHeight: "90vh",
 			panelClass: "custom-dialog-container",
-			data: { backlogData, newBacklog },
+			data: { subModuleData, newSubModule },
 		});
-		this.backlogContainerDialogRef = dialogRef;
+		this.subModuleContainerDialogRef = dialogRef;
 		return dialogRef;
 	}
 
-	// Returns the reference to the currently opened Backlog dialog, if any.
+	// Returns the reference to the currently opened subModule dialog, if any.
 
-	getBacklogContainerDialogRef() {
-		return this.backlogContainerDialogRef;
+	getSubModuleContainerDialogRef() {
+		return this.subModuleContainerDialogRef;
 	}
 
 	// Opens the Work dialog with the provided work data.
 	// @param workData The work data to be passed to the dialog.
-	// @param backlogId The ID of the associated backlog item.
+	// @param subModuleId The ID of the associated subModule item.
 	// @param newWork Indicates if the dialog is for creating a new work item.
 	// @returns Reference to the opened Work dialog.
 	openWorkDialog(
 		workData: WorkData | undefined,
-		backlogId: number | undefined,
+		subModuleId: number | undefined,
 		newWork: boolean,
 	): MatDialogRef<DialogWorkContainerComponent> {
 		const dialogRef = this.dialog.open(DialogWorkContainerComponent, {
@@ -93,10 +93,10 @@ export class DialogService {
 			maxWidth: "90vw",
 			maxHeight: "90vh",
 			panelClass: "custom-dialog-container",
-			data: { workData, newWork, backlogId },
+			data: { workData, newWork, subModuleId },
 		});
 		this.workContainerDialogRef = dialogRef;
-		console.log("openWorkDialog", workData, backlogId, newWork);
+		console.log("openWorkDialog", workData, subModuleId, newWork);
 		return dialogRef;
 	}
 

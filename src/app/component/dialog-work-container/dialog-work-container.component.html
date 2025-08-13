@@ -6,7 +6,7 @@
 
     @if (dialogData.newWork) {
     <app-dialog-work-input (selectActivity)="selectActivity($event)" [currentPic]="currentPic"
-        [backlogId]="dialogData.backlogId"></app-dialog-work-input>
+        [subModuleId]="dialogData.subModuleId"></app-dialog-work-input>
     } @else if (editable()) {
 
     <app-dialog-work-input [currentPic]="currentPic" (selectActivity)="selectActivity($event)"
