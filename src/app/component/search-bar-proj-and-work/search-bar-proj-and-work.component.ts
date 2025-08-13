@@ -20,6 +20,7 @@ import {
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { SearchService } from "../../service/search.service";
 import { DataProcessingService } from "../../service/data-processing.service";
+import { MatIconModule } from "@angular/material/icon";
 
 @Component({
 	selector: "app-search-bar-proj-and-work",
@@ -28,6 +29,7 @@ import { DataProcessingService } from "../../service/data-processing.service";
 		MatAutocompleteModule,
 		MatFormFieldModule,
 		FormsModule,
+		MatIconModule,
 	],
 	templateUrl: "./search-bar-proj-and-work.component.html",
 	styleUrl: "./search-bar-proj-and-work.component.css",
@@ -41,26 +43,13 @@ export class SearchBarProjAndWorkComponent {
 	projectNames = signal<NameListItem[]>([]);
 
 	// Output: Emits the selected username object
-	@Output() nameItemSelected = new EventEmitter<NameListItem>();
+
 	@Input() projectNameList = signal<NameListItem[]>([]);
 	@Input() workNameList = signal<workNameListItem[]>([]);
-	@Input() textInput = signal("");
+	textInput = signal("");
+	@Output() clicked = new EventEmitter<void>();
 	@ViewChild("autoCompleteTrigger", { read: MatAutocompleteTrigger })
 	autoCompleteTrigger!: MatAutocompleteTrigger;
-
-	constructor() {
-		effect(() => {
-			const input = this.textInput();
-			console.log(input);
-			if (this.autoCompleteTrigger) {
-				if (this.textInput() !== "") {
-					this.autoCompleteTrigger.openPanel();
-				} else {
-					this.autoCompleteTrigger.closePanel();
-				}
-			}
-		});
-	}
 
 	filteredProjectNames: Signal<NameListItem[]> = computed(() => {
 		return this.searchBarService
@@ -80,7 +69,7 @@ export class SearchBarProjAndWorkComponent {
 			.slice(0, 3) as workNameListItem[];
 	});
 
-	selectProject(projectId: number) {
+	selectProject(projectId: number, type: string, projectName: string) {
 		this.dataService.changeProject(projectId);
 	}
 
@@ -91,10 +80,19 @@ export class SearchBarProjAndWorkComponent {
 
 	// When an option is selected from the list
 	onSelection(selectedName: NameListItem) {
-		this.nameItemSelected.emit(selectedName);
+		// this.nameItemSelected.emit(selectedName);
 	}
 
 	isWorkNameList(list: unknown): boolean {
 		return Array.isArray(list) && list.length > 0 && "projectId" in list[0];
+	}
+
+	onOptionSelectedGoToProject(input: NameListItem | workNameListItem) {
+		if (input && "projectId" in input) {
+			this.dataService.changeProject(input.projectId);
+		} else if (input) {
+			this.dataService.changeProject(input.id);
+		}
+		this.textInput.set("");
 	}
 }

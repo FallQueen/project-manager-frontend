@@ -3,7 +3,7 @@
         {{titleNew}}
         } @else {
         {{title}}
-        @if (dataService.isWebMasterOrManager()){
+        @if (dataService.isWebMasterOrManager() && !new){
         <div class="title-icons">
             <span (click)="edit.emit()">
                 <mat-icon [class.active]="editable">edit</mat-icon>

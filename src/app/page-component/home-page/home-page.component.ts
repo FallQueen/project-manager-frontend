@@ -5,6 +5,7 @@ import { SideBarComponent } from "../../component/side-bar/side-bar.component";
 import { DataProcessingService } from "../../service/data-processing.service";
 import { DashboardPageService } from "../../service/dashboard-page.service";
 import { BacklogPageService } from "../../service/backlog-page.service";
+import { ProjectPageService } from "../../service/project-page.service";
 
 @Component({
 	selector: "app-home-page",
@@ -17,6 +18,7 @@ export class HomePageComponent {
 	dataService = inject(DataProcessingService);
 	dashboardService = inject(DashboardPageService);
 	backlogService = inject(BacklogPageService);
+	projectService = inject(ProjectPageService);
 	ngOnInit() {
 		// Initialize the data of master priority, state, etc
 		this.dataService.getandSetStartBundle();

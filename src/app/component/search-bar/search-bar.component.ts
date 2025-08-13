@@ -26,7 +26,7 @@ import { DataProcessingService } from "../../service/data-processing.service";
 	providers: [SearchService],
 })
 export class SearchBarComponent {
-	searchBarService1 = inject(SearchService);
+	searchBarService = inject(SearchService);
 
 	dataService = inject(DataProcessingService);
 	// Input: The full list of userNames to search from
@@ -45,12 +45,12 @@ export class SearchBarComponent {
 
 	// The filtering logic
 	ngOnInit() {
-		this.searchBarService1.nameList = this.nameList;
+		this.searchBarService.nameList = this.nameList;
 	}
 
 	ngOnChanges() {
 		const input = this.textInput;
-		this.searchBarService1.nameInput.set(input);
+		this.searchBarService.nameInput.set(input);
 	}
 	// When an option is selected from the list
 	onSelection(selectedName: NameListItem) {

@@ -175,12 +175,15 @@ export class DataProcessingService {
 			alert("You have no roles in this project.");
 			return;
 		}
+		console.log("Changing project to:", projectId, projectName);
 		let projectN: string;
 		if (projectName === "") {
 			projectN = this.pageService.getProjectNameFromId(projectId) ?? "";
 		} else {
 			projectN = projectName;
 		}
+
+		console.log("Project name:", projectN);
 		localStorage.setItem("projectId", projectId.toString());
 		this.projectIdSignal.set(projectId);
 		localStorage.setItem("projectName", projectN);
@@ -206,10 +209,15 @@ export class DataProcessingService {
 			});
 	}
 
+	getDefectCauseList() {
+		const url = `${this.host}/getDefectCauseList`;
+		return this.http.get<NameListItem[]>(url);
+	}
+
 	// Checks if the current route matches the specified page.
 	// @param page The page to check ('project', 'dashboard', 'subModule', 'bug').
 	// @returns True if the current route matches the page, false otherwise.
-	isPage(page: "project" | "dashboard" | "subModule" | "bug"): boolean {
+	isPage(page: "project" | "dashboard" | "backlog" | "bug"): boolean {
 		const currentUrl = this.router.url;
 		return currentUrl.includes(`(home:${page})`);
 	}
@@ -354,6 +362,11 @@ export class DataProcessingService {
 	dropWork(workId: number) {
 		const url = `${this.host}/dropWork?workId=${workId}`;
 		return this.http.delete(url);
+	}
+
+	getWorkNameListOfProject(projectId: number) {
+		const url = `${this.host}/getWorkNameListOfProject?projectId=${projectId}`;
+		return this.http.get<NameListItem[]>(url);
 	}
 
 	// Retrieves user assignments for a specific work item.

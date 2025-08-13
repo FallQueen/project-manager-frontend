@@ -55,29 +55,30 @@ export class CardSubModuleComponent {
 		);
 	}
 
+	ngOnChanges() {
+		const subModuleData = this.subModuleData;
+		this.workList.set([]);
+	}
+
 	countTotalWorkState() {
 		let total = 0;
 		for (const state of this.subModuleData.workStateCountList) {
-			total += state.stateCount;
+			total += state.count;
 		}
 		this.totalWork.set(total);
 	}
 	countPercentage() {
 		for (const state of this.subModuleData.workStateCountList) {
-			state.percentage = (100 * state.stateCount) / this.totalWork();
+			state.percentage = (100 * state.count) / this.totalWork();
 		}
 	}
 
-	getTooltip(
-		stateName: string,
-		stateCount: number,
-		percentage: number,
-	): string {
+	getTooltip(name: string, count: number, percentage: number): string {
 		// Floor the percentage to one decimal place
 		const formattedPercentage = Math.floor(percentage * 10) / 10;
 
 		// Construct the string using a template literal
-		return `${stateName} ${stateCount}/${this.totalWork()} (${formattedPercentage}%)`;
+		return `${name} ${count}/${this.totalWork()} (${formattedPercentage}%)`;
 	}
 
 	expandWorkInside() {
@@ -104,17 +105,17 @@ export class CardSubModuleComponent {
 	doWhenNewWork(workState: NameListItem) {
 		this.refreshWorkList();
 		const index = this.subModuleData.workStateCountList.findIndex(
-			(item) => item.stateId === workState.id,
+			(item) => item.id === workState.id,
 		);
 
 		if (index !== -1) {
-			this.subModuleData.workStateCountList[index].stateCount += 1;
+			this.subModuleData.workStateCountList[index].count += 1;
 		}
 		if (index === -1) {
 			this.subModuleData.workStateCountList.push({
-				stateId: workState.id,
-				stateName: workState.name,
-				stateCount: 1,
+				id: workState.id,
+				name: workState.name,
+				count: 1,
 				percentage: 0,
 			});
 		}

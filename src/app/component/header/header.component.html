@@ -1,4 +1,8 @@
 <div class="header">
     <div class="app-title">{{dataService.projectnameSignal()}}</div>
     <!-- <div>{{dataService.isWebMasterOrManager()}} and {{dataService.projectIdSignal()}}</div> -->
+    <div class="search-container">
+        <app-search-bar-proj-and-work [workNameList]="workList" [projectNameList]="projectList"
+            value="searchInput()"></app-search-bar-proj-and-work>
+    </div>
 </div>

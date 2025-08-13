@@ -52,7 +52,6 @@ export class DialogService {
 	// @param subModuleData The subModule data to be passed to the dialog.
 	// @param newsubModule Indicates if the dialog is for creating a new subModule item.
 	// @returns Reference to the opened subModule dialog.
-
 	openSubModuleDialog(
 		subModuleData: SubModuleData | undefined,
 		newSubModule: boolean,
@@ -71,7 +70,6 @@ export class DialogService {
 	}
 
 	// Returns the reference to the currently opened subModule dialog, if any.
-
 	getSubModuleContainerDialogRef() {
 		return this.subModuleContainerDialogRef;
 	}
@@ -101,7 +99,6 @@ export class DialogService {
 	}
 
 	// Returns the reference to the currently opened Work dialog, if any.
-
 	getWorkContainerDialogRef() {
 		return this.workContainerDialogRef;
 	}
@@ -110,7 +107,6 @@ export class DialogService {
 	// @param message The message to display in the dialog.
 	// @param type The type of message ('fail', 'success', or 'confirmation').
 	// @returns Reference to the opened Utility dialog.
-
 	openUtilityDialog(
 		message: string,
 		type: "fail" | "success" | "confirmation",

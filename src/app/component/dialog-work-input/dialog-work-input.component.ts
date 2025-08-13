@@ -22,6 +22,7 @@ import type {
 	NameListItem,
 	NewWork,
 	WorkData,
+	BugData,
 } from "../../model/format.type";
 import {
 	FormControl,
@@ -67,7 +68,7 @@ export class DialogWorkInputComponent {
 	dialogService = inject(DialogService);
 	@Input() currentPic = signal<NameListItem>({ name: "", id: 0 });
 	@Input() subModuleId!: number;
-	@Input() workData!: WorkData;
+	@Input() workData!: WorkData | BugData;
 	@Output() selectActivity = new EventEmitter<NameListItem>();
 
 	trackerList = signal<NameListItem[]>([]);

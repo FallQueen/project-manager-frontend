@@ -1,6 +1,6 @@
-import { effect, inject, Injectable, signal } from "@angular/core";
+import { effect, inject, Injectable, type Signal, signal } from "@angular/core";
 import { DataProcessingService } from "./data-processing.service";
-import type { ProjectBugList } from "../model/format.type";
+import type { NameListItem, ProjectBugList } from "../model/format.type";
 
 @Injectable({
 	providedIn: "root",
@@ -14,6 +14,10 @@ export class BugPageService {
 
 	// Signal holding the list of bugs for the current project
 	public readonly bugList = signal<ProjectBugList[]>([]);
+
+	public readonly bugCauseList = signal<NameListItem[]>([]);
+
+	public readonly workNameList = signal<NameListItem[]>([]);
 
 	constructor() {
 		// Reactively fetch bugs whenever the project ID changes
@@ -34,5 +38,29 @@ export class BugPageService {
 		this.dataService.getProjectBugs(projectId).subscribe((result) => {
 			this.bugList.set(result);
 		});
+	}
+
+	// Fetches the list of bug causes for the current project
+	getBugCauses(): Signal<NameListItem[]> {
+		if (this.bugCauseList().length === 0) {
+			// If no bug causes are present, fetch from the data service
+			this.dataService.getDefectCauseList().subscribe((result) => {
+				this.bugCauseList.set(result);
+			});
+		}
+		return this.bugCauseList;
+	}
+
+	// Fetches the list of work names for the current project
+	getWorkNames(): Signal<NameListItem[]> {
+		if (this.workNameList().length === 0) {
+			// If no work names are present, fetch from the data service
+			this.dataService
+				.getWorkNameListOfProject(this.projectId())
+				.subscribe((result) => {
+					this.workNameList.set(result);
+				});
+		}
+		return this.workNameList;
 	}
 }

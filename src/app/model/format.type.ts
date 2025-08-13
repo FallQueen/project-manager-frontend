@@ -1,3 +1,5 @@
+// User model representing individual users in the system
+// Used upon login to receive user's data to be stored
 export type User = {
 	userId: number;
 	username: string;
@@ -6,11 +8,15 @@ export type User = {
 	projectRoles: userProjectRoles[];
 };
 
+// Represents the roles a user has within a specific project
+// Used for project-specific permissions and access control
 export type userProjectRoles = {
 	projectId: number;
 	projectRoles: number[];
 };
 
+// Represents a project within the system
+// Used for project data display and management
 export type Project = {
 	projectId: number;
 	projectName: string;
@@ -22,6 +28,8 @@ export type Project = {
 	doneTask: number;
 };
 
+// Represents the input data for creating a new project
+// Used in project creation
 export type NewProjectInput = {
 	projectName: string;
 	description: string;
@@ -32,6 +40,8 @@ export type NewProjectInput = {
 	userRoles: UserRoleChange[];
 };
 
+// Represents the data for altering an existing project
+// Used in project updates
 export type AlterProject = {
 	projectId: number;
 	projectName: string | null;
@@ -42,35 +52,37 @@ export type AlterProject = {
 	userRoles: UserRoleChange[];
 };
 
+// Represents an item  that consists of an id and a name
+// Used in data storage, user input, search functions, etc
 export interface NameListItem {
 	name: string;
 	id: number;
 }
 
-// Specific use for work names, used in searchbar to search for work items
+// A specific use case for NameListItem with an added projectId
+// Used in project/work search, to go to project when select work
 export interface workNameListItem extends NameListItem {
 	projectId: number;
 }
 
+// Represents the roles a user has within a specific project
+// Used for data display and user assignment
 export type NameListItemByRole = {
 	roleId: number;
 	roleName: string;
 	users: NameListItem[];
 };
 
+// Represents a change in user assignments for a project role
+// Used when updating project roles (add/remove users)
 export type UserRoleChange = {
 	roleId: number;
 	usersAdded: number[];
 	usersRemoved: number[];
 };
 
-export type WorkStateCount = {
-	stateName: string;
-	stateId: number;
-	stateCount: number;
-	percentage: number;
-};
-
+// Represent data of a sub-module
+// Used for data display in cards and dialogs
 export type SubModuleData = {
 	subModuleId: number;
 	subModuleName: string;
@@ -83,9 +95,11 @@ export type SubModuleData = {
 	startDate: Date;
 	targetDate: Date;
 	projectName: string;
-	workStateCountList: WorkStateCount[];
+	workStateCountList: BatteryItem[];
 };
 
+// Represents the input data for creating a new sub-module
+// Used in sub-module creation dialog form
 export type NewSubModule = {
 	projectId: number;
 	subModuleName: string;
@@ -97,6 +111,8 @@ export type NewSubModule = {
 	targetDate: Date | null;
 };
 
+// Represents the data for altering an existing sub-module
+// Used in sub-module edit dialog
 export type AlterSubModule = {
 	subModuleId: number;
 	subModuleName?: string | null;
@@ -107,12 +123,8 @@ export type AlterSubModule = {
 	priorityId?: number | null;
 };
 
-export type UserWorkByState = {
-	workStateId: number;
-	workStateName: string;
-	works: WorkData[];
-};
-
+// Represents a work item
+// used for work card and detail dialog data display
 export interface WorkData {
 	workId: number;
 	workName: string;
@@ -136,12 +148,16 @@ export interface WorkData {
 	projectName: string;
 }
 
+// Represents a bug/defect item, extending WorkData.
+// Used in work card and detail dialog data display
+// (bug is a specific work type with extra data columns)
 export interface BugData extends WorkData {
 	defectCause: string;
 	workAffected: string;
 }
 
-export interface BaseWork {
+// Base interface for new work/bug creation payloads.
+export interface BaseNewWork {
 	workName: string;
 	description: string;
 	startDate: Date | null;
@@ -155,15 +171,23 @@ export interface BaseWork {
 	activityId: number;
 	usersAdded: number[];
 }
-export interface NewWork extends BaseWork {
+
+// Represents a new work item
+// Used in work creation dialog
+export interface NewWork extends BaseNewWork {
 	subModuleId: number;
 }
 
-export interface NewBug extends BaseWork {
+// Represents a new bug item
+// Used in work creation dialog
+export interface NewBug extends BaseNewWork {
 	defect_cause_id_input: number;
 	affected_work_id_input: number;
 }
 
+// Represents a work item update payload
+// Used in work update dialog
+// (for work and bug data)
 export type AlterWork = {
 	workId: number;
 	workName?: string | null;
@@ -180,21 +204,36 @@ export type AlterWork = {
 	usersAdded?: number[];
 };
 
+// Represents work items grouped by state that need to be worked on
+// Used in user dashboard page
 export type UserTodoList = {
 	stateId: number;
 	stateName: string;
 	works: WorkData[];
 };
 
+// Represents bug items grouped by state that need to be worked on
+// Used in user dashboard page
 export type ProjectBugList = {
 	stateId: number;
 	stateName: string;
 	works: BugData[];
 };
 
+// Represents the count and percentages of work items in a specific state within a module/sub-module
+// Used for battery summary on module and sub-module cards
 export type BatteryItem = {
 	name: string;
 	id: number;
 	count: number;
+	percentage: number;
+};
+
+// Represents the count and percentages of work items in a specific state within a module/sub-module
+// Used for battery summary on module and sub-module cards
+export type WorkStateCount = {
+	stateName: string;
+	stateId: number;
+	stateCount: number;
 	percentage: number;
 };

@@ -1,14 +1,63 @@
-.hidden {
-	/* position: absolute; */
-	height: 0;
+.form-control {
+	font-size: 0.95em;
 	width: 100%;
-
-	opacity: 0;
+	max-width: 100%;
+	box-sizing: border-box;
 }
-.search-container {
-	position: absolute;
+
+.form-control-input {
+	background: transparent;
+	color: #e0e0e0;
+	width: 100%;
+	max-width: 100%;
+	box-sizing: border-box;
+	padding-left: 2.5em;
+}
+
+.select-section-label {
+	width: 95%;
+	text-align: left;
+	font-weight: 600;
+	font-size: 0.95em;
+	color: #333;
+
+	border-top: 1px solid #e0e0e0;
+	border-bottom: 1px solid #e0e0e0;
+	padding: 0.3em 0em 0.3em 0.8em;
+	background-color: #dbd9d9;
+}
+
+.search-input-container {
 	display: flex;
-	height: 0;
-	flex: 1;
-	transform: translateY(-300%);
+	align-items: center;
+	width: 100%;
+	max-width: 100%;
+	box-sizing: border-box;
+}
+
+mat-icon {
+	position: absolute;
+	font-size: 1.8em;
+	padding-left: 0.2em;
+	color: #e0e0e0;
+	width: fit-content;
+	height: fit-content;
+}
+
+::ng-deep .mat-mdc-autocomplete-panel,
+.mat-mdc-autocomplete-panel {
+	padding: 0 !important;
+	margin: 0 !important;
+	min-width: 100% !important;
+	width: 100% !important;
+	max-width: 100% !important;
+	overflow-x: hidden;
+}
+
+::ng-deep .mat-mdc-autocomplete-panel .mat-mdc-option,
+.mat-mdc-autocomplete-panel .mat-mdc-option {
+	min-height: 1em;
+	min-width: none;
+	padding: 0.3em 0em 0.3em 0.8em;
+	margin: 0;
 }

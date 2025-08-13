@@ -1,12 +1,12 @@
 <div class="dialog-container">
     <!-- Dialog Title Section -->
-    <app-dialog-util-title [new]="dialogData?.newsubModule" [editable]="editable()" (edit)="toggleEdit()"
-        (delete)="triggerDeleteSubModule()" title="subModule #{{dialogData?.subModuleData?.subModuleId}}"
-        titleNew="NEW subModule"></app-dialog-util-title>
+    <app-dialog-util-title [new]="dialogData?.newSubModule" [editable]="editable()" (edit)="toggleEdit()"
+        (delete)="triggerDeleteSubModule()" title="Sub-Module #{{dialogData?.subModuleData?.subModuleId}}"
+        titleNew="NEW Sub-Module"></app-dialog-util-title>
 
 
     <!-- Dialog Content Section -->
-    @if (dialogData.newsubModule) {
+    @if (dialogData.newSubModule) {
     <!-- Input form for new subModule -->
     <app-dialog-sub-module-input></app-dialog-sub-module-input>
     } @else if (editable()) {

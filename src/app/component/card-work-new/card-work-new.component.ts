@@ -1,9 +1,17 @@
-import { Component, EventEmitter, inject, Input, Output } from "@angular/core";
+import {
+	Component,
+	EventEmitter,
+	inject,
+	Input,
+	Output,
+	signal,
+} from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MatIconModule } from "@angular/material/icon";
 import { DialogWorkContainerComponent } from "../dialog-work-container/dialog-work-container.component";
 import type { SubModuleData, NameListItem } from "../../model/format.type";
 import { DialogService } from "../../service/dialog.service";
+import { DataProcessingService } from "../../service/data-processing.service";
 
 @Component({
 	selector: "app-card-work-new",
@@ -12,10 +20,19 @@ import { DialogService } from "../../service/dialog.service";
 	styleUrl: "./card-work-new.component.css",
 })
 export class CardWorkNewComponent {
+	dataService = inject(DataProcessingService);
 	dialog = inject(MatDialog);
 	dialogService = inject(DialogService);
 	@Output() newWork = new EventEmitter<NameListItem>();
 	@Input() subModuleId!: number;
+
+	newText = signal<string>("Add Work");
+
+	ngOnInit() {
+		if (this.dataService.isPage("bug")) {
+			this.newText.set("Report New Bug");
+		}
+	}
 
 	openForm() {
 		console.log("openForm", this.subModuleId);

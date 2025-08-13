@@ -1,23 +1,30 @@
-<div class="search-container">
-    <input class="hidden" type="text" #autoCompleteTrigger="matAutocompleteTrigger" matInput [matAutocomplete]="auto">
+<div class="form-control">
+    <div>{{textInput()}}</div>
+    <div class="search-input-container">
+        <mat-icon>search</mat-icon>
+        <input matInput type="text" placeholder="Search" class="form-control-input" [value]="textInput()"
+            (input)="textInput.set($any($event.target)?.value)" [matAutocomplete]="auto">
+    </div>
 
 
-
-    <mat-autocomplete #auto="matAutocomplete" [displayWith]="dataService.displayName">
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="dataService.displayName"
+        (optionSelected)="onOptionSelectedGoToProject($event.option.value)">
         @if(filteredProjectNames().length > 0){
-        <div>Project</div>
+        <div class="select-section-label">PROJECT</div>
         }
+
         @for (name of filteredProjectNames(); track name.name) {
-        <mat-option [value]="name" (onSelectionChange)="selectProject(name.id)">
+        <mat-option [value]="name">
             {{ name.name }}
         </mat-option>
         }
 
+
         @if (filteredWorkNames().length > 0) {
-        <div>Work</div>
+        <div class="select-section-label">FUNCTION</div>
         }
         @for (name of filteredWorkNames(); track name.name) {
-        <mat-option [value]="name" (onSelectionChange)="selectProject(name.projectId)">
+        <mat-option [value]="name">
             {{ name.name }}
         </mat-option>
         }

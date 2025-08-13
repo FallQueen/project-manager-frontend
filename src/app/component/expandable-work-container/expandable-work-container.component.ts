@@ -80,8 +80,8 @@ export class ExpandableWorkContainerComponent {
 		return height;
 	});
 
-	issubModulePage(): boolean {
-		return this.router.url.includes("/home/(home:subModule)");
+	isBacklogPage(): boolean {
+		return this.router.url.includes("/home/(home:backlog)");
 	}
 
 	removeWorkFromArray(workId: number) {

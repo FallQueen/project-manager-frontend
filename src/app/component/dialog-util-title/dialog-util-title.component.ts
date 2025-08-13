@@ -19,10 +19,10 @@ import { DialogService } from "../../service/dialog.service";
 export class DialogUtilTitleComponent {
 	dataService = inject(DataProcessingService);
 	dialogService = inject(DialogService);
-	@Input() new = true;
+	@Input() new = false;
 	@Input() editable = false;
 	@Input() title = "";
-	@Input() titleNew: "NEW PROJECT" | "NEW subModule" | "NEW WORK" =
+	@Input() titleNew: "NEW PROJECT" | "NEW Sub-Module" | "NEW WORK" =
 		"NEW PROJECT";
 	@Output() edit = new EventEmitter<void>();
 	@Output() delete = new EventEmitter<void>();
