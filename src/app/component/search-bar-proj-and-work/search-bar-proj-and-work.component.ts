@@ -9,6 +9,7 @@ import {
 	type Signal,
 	signal,
 	ViewChild,
+	type ElementRef,
 } from "@angular/core";
 import type { NameListItem, workNameListItem } from "../../model/format.type";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -48,8 +49,7 @@ export class SearchBarProjAndWorkComponent {
 	@Input() workNameList = signal<workNameListItem[]>([]);
 	textInput = signal("");
 	@Output() clicked = new EventEmitter<void>();
-	@ViewChild("autoCompleteTrigger", { read: MatAutocompleteTrigger })
-	autoCompleteTrigger!: MatAutocompleteTrigger;
+	@ViewChild("searchInput") searchInputRef?: ElementRef<HTMLInputElement>;
 
 	filteredProjectNames: Signal<NameListItem[]> = computed(() => {
 		return this.searchBarService
@@ -93,6 +93,13 @@ export class SearchBarProjAndWorkComponent {
 		} else if (input) {
 			this.dataService.changeProject(input.id);
 		}
+		// Clear model
 		this.textInput.set("");
+		// Also clear the actual input element to prevent display of selected text
+		queueMicrotask(() => {
+			if (this.searchInputRef?.nativeElement) {
+				this.searchInputRef.nativeElement.value = "";
+			}
+		});
 	}
 }

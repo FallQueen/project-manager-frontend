@@ -17,10 +17,10 @@ import { CardProjectNewComponent } from "../../component/card-project-new/card-p
 	styleUrl: "./project-page.component.css",
 })
 export class ProjectPageComponent {
-	// Inject the necessary service for accessing project-related data
+	// Inject the service to manage project data
 	projectPageService = inject(ProjectPageService);
 
-	// Signal to hold the current page title, initialized to "My Projects"
+	// Signal holding the current page title, initialized to "My Projects"
 	pageTitle = signal("My Projects");
 
 	// Computed signal to determine if the current user is a webmaster

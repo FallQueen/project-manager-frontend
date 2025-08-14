@@ -45,7 +45,7 @@ export class ExpandableWorkContainerComponent {
 		if (this.dataService.isBugData(this.workList()[0])) {
 			this.sectionLabel.set([
 				{ label: "DEFECT CAUSE", column: "defectCause" },
-				{ label: "AFFECTED WORK", column: "affectedWork" },
+				{ label: "AFFECTED WORK", column: "workAffected" },
 				{ label: "STATE", column: "stateId" },
 				{ label: "PRIORITY", column: "priorityId" },
 				{ label: "PERIOD" },

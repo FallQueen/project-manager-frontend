@@ -8,7 +8,7 @@ import {
 } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MatIconModule } from "@angular/material/icon";
-import { DialogWorkContainerComponent } from "../dialog-work-container/dialog-work-container.component";
+import { DialogWorkBugContainerComponent } from "../dialog-work-bug-container/dialog-work-bug-container.component";
 import type { SubModuleData, NameListItem } from "../../model/format.type";
 import { DialogService } from "../../service/dialog.service";
 import { DataProcessingService } from "../../service/data-processing.service";

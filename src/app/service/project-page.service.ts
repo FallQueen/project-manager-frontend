@@ -14,10 +14,16 @@ export class ProjectPageService {
 
 	// Signal to hold the current user's ID
 	public readonly userId = this.dataService.userIdSignal;
+	public readonly isWebMaster = this.dataService.isWebMaster;
 
 	constructor() {
 		// Reactively fetch project data when the userId changes
 		effect(() => {
+			console.log(
+				"ProjectPageService: User ID changed, fetching projects...",
+				this.userId(),
+			);
+			const isWebMaster = this.isWebMaster();
 			if (this.userId() === 0) {
 				// If no user is logged in, clear the projects array
 				this.Projects.set([]);
@@ -34,11 +40,13 @@ export class ProjectPageService {
 			// If user is a webmaster, fetch all projects
 			this.dataService.getAllProjects().subscribe((result) => {
 				this.Projects.set(result);
+				console.log("ProjectPageService: Fetched projects:", this.Projects());
 			});
 		} else {
 			// Otherwise, fetch only the projects that are related to the user
 			this.dataService.getUserProjects().subscribe((result) => {
 				this.Projects.set(result);
+				console.log("ProjectPageService: Fetched projects:", this.Projects());
 			});
 		}
 	}

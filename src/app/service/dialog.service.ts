@@ -3,7 +3,7 @@ import { MatDialog, type MatDialogRef } from "@angular/material/dialog";
 import { DialogSubModuleContainerComponent } from "../component/dialog-sub-module-container/dialog-sub-module-container.component";
 import type { SubModuleData, Project, WorkData } from "../model/format.type";
 import { DialogProjectContainerComponent } from "../component/dialog-project-container/dialog-project-container.component";
-import { DialogWorkContainerComponent } from "../component/dialog-work-container/dialog-work-container.component";
+import { DialogWorkBugContainerComponent } from "../component/dialog-work-bug-container/dialog-work-bug-container.component";
 import { DialogUtilityComponent } from "../component/dialog-utility/dialog-utility.component";
 
 @Injectable({
@@ -18,7 +18,7 @@ export class DialogService {
 		null;
 	private subModuleContainerDialogRef: MatDialogRef<DialogSubModuleContainerComponent> | null =
 		null;
-	private workContainerDialogRef: MatDialogRef<DialogWorkContainerComponent> | null =
+	private workContainerDialogRef: MatDialogRef<DialogWorkBugContainerComponent> | null =
 		null;
 
 	// Opens the Project dialog with the provided project data.
@@ -83,8 +83,8 @@ export class DialogService {
 		workData: WorkData | undefined,
 		subModuleId: number | undefined,
 		newWork: boolean,
-	): MatDialogRef<DialogWorkContainerComponent> {
-		const dialogRef = this.dialog.open(DialogWorkContainerComponent, {
+	): MatDialogRef<DialogWorkBugContainerComponent> {
+		const dialogRef = this.dialog.open(DialogWorkBugContainerComponent, {
 			autoFocus: false, // Prevents the dialog from automatically focusing an element.
 			width: "850vw",
 			height: "fit-content",

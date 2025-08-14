@@ -1,8 +1,7 @@
 <div class="form-control">
-    <div>{{textInput()}}</div>
     <div class="search-input-container">
         <mat-icon>search</mat-icon>
-        <input matInput type="text" placeholder="Search" class="form-control-input" [value]="textInput()"
+        <input #searchInput matInput type="text" placeholder="Search" class="form-control-input" [value]="textInput()"
             (input)="textInput.set($any($event.target)?.value)" [matAutocomplete]="auto">
     </div>
 

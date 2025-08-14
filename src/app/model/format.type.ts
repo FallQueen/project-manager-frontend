@@ -167,8 +167,6 @@ export interface BaseNewWork {
 	createdBy: number;
 	priorityId: number;
 	estimatedHours: number;
-	trackerId: number;
-	activityId: number;
 	usersAdded: number[];
 }
 
@@ -176,19 +174,21 @@ export interface BaseNewWork {
 // Used in work creation dialog
 export interface NewWork extends BaseNewWork {
 	subModuleId: number;
+	trackerId: number;
+	activityId: number;
 }
 
 // Represents a new bug item
 // Used in work creation dialog
 export interface NewBug extends BaseNewWork {
-	defect_cause_id_input: number;
-	affected_work_id_input: number;
+	defectCause: number;
+	workAffected: number;
 }
 
 // Represents a work item update payload
 // Used in work update dialog
 // (for work and bug data)
-export type AlterWork = {
+export interface AlterWork {
 	workId: number;
 	workName?: string | null;
 	description?: string | null;
@@ -202,7 +202,12 @@ export type AlterWork = {
 	activityId?: number | null;
 	usersRemoved?: number[];
 	usersAdded?: number[];
-};
+}
+
+export interface AlterBug {
+	defectCause?: number | null;
+	workAffected?: number | null;
+}
 
 // Represents work items grouped by state that need to be worked on
 // Used in user dashboard page

@@ -13,11 +13,11 @@ export class LoginService {
 	router = inject(Router); // enables navigation using the Router
 	// Inject necessary services (to reset for next login)
 	dataService = inject(DataProcessingService);
-	host = "https://project-manager-backend-theta.vercel.app/api";
-	// host = "http://localhost:9090/api";
+	host = this.dataService.getApiUrl();
 
 	// Handles the process of user login
 	login(username: string, password: string): Observable<boolean> {
+		console.log("login attempt");
 		const url = `${this.host}/login`;
 		const body = {
 			// Remove blank spaces after the user's username

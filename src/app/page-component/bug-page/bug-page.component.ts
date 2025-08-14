@@ -9,6 +9,8 @@ import { CardTodoComponent } from "../../component/card-todo/card-todo.component
 	styleUrl: "./bug-page.component.css",
 })
 export class BugPageComponent {
+	// Inject the service to manage bug data
 	bugPageService = inject(BugPageService);
+	// Signal holding the list of bugs
 	bugList = this.bugPageService.bugList;
 }

@@ -54,11 +54,14 @@ export class SelectorUserWorkComponent {
 	currentPic = signal<NameListItem>({ name: "", id: 0 });
 
 	ngOnInit() {
-		if (this.newWork) {
+		if (this.newWork && this.dataService.isPage("bug")) {
+			this.initProjectUsers(0, true);
+		} else if (this.newWork) {
 			return;
 		}
 
-		const roleId = this.checkActivity(this.workActivity);
+		let roleId = this.checkActivity(this.workActivity);
+		if (this.dataService.isPage("bug")) roleId = 2; // Developer
 		forkJoin({
 			assignment: this.dataService.getWorkUserAssignment(this.workId),
 			users: this.dataService.getProjectAssignedUsernames(
@@ -91,9 +94,16 @@ export class SelectorUserWorkComponent {
 
 		return roleId;
 	}
-	initProjectUsers(activity: number) {
+	initProjectUsers(activity = 0, forBugPage = false) {
 		// ActivityId 1 = Development,  2 = Design
-		const roleId = this.checkActivity(activity);
+		let roleId = 0;
+
+		if (forBugPage) {
+			roleId = 2; // For bug page, we assume the activity is Design
+		} else {
+			roleId = this.checkActivity(activity);
+		}
+
 		this.dataService
 			.getProjectAssignedUsernames(this.dataService.projectIdSignal(), roleId)
 			.subscribe((users) => {

@@ -1,5 +1,6 @@
+/* Container for vertical stacking of sub-module cards */
 .vertical-card-container {
-	display: flex;
-	flex-direction: column;
-	gap: 0.8em;
+	display: flex; /* Use flexbox layout */
+	flex-direction: column; /* Stack children vertically */
+	gap: 0.8em; /* Space between cards */
 }

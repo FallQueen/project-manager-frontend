@@ -1,6 +1,6 @@
 <div class="page-container">
     <div class="page-title">
-        <!-- Displays the dynamic page title -->
+        <!-- Displays the dynamic page title ("My Projects" or "All Projects") -->
         <h1>{{pageTitle()}}</h1>
     </div>
     <div class="card-container">
@@ -17,7 +17,6 @@
         @if(isWebMaster()){
         <!-- Refreshes project data when a new project is added -->
         <app-card-project-new (refresh)="projectPageService.getProjectData()"></app-card-project-new>
-
         }
     </div>
 </div>

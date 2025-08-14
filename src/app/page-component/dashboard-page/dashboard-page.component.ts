@@ -10,6 +10,8 @@ import { signal } from "@angular/core";
 	styleUrl: "./dashboard-page.component.css",
 })
 export class DashboardPageComponent {
+	// Inject the service to manage dashboard data
 	dashboardService = inject(DashboardPageService);
+	// Signal holding the user's todo list
 	todoList = this.dashboardService.userTodoList;
 }

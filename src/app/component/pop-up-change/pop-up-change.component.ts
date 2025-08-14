@@ -67,11 +67,12 @@ export class PopUpChangeComponent {
 
 	toggleVisibility(bool = !this.visibility()) {
 		if (
-			this.popUpData.current.name !== "NEW" &&
-			this.dataService.isWebMasterOrManager()
+			this.popUpData.current.name === "NEW" ||
+			!this.dataService.isPage("dashboard")
 		) {
-			this.visibility.set(bool);
+			return;
 		}
+		this.visibility.set(bool);
 	}
 
 	// Add this new handler for the scroll event

@@ -1,7 +1,7 @@
 import { Component, inject, signal, ViewChild } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogClose } from "@angular/material/dialog";
-import { DialogWorkDetailComponent } from "../dialog-work-detail/dialog-work-detail.component";
-import { DialogWorkInputComponent } from "../dialog-work-input/dialog-work-input.component";
+import { DialogWorkBugDetailComponent } from "../dialog-work-bug-detail/dialog-work-bug-detail.component";
+import { DialogWorkBugInputComponent } from "../dialog-work-bug-input/dialog-work-bug-input.component";
 import type { NameListItem } from "../../model/format.type";
 import { MatIconModule } from "@angular/material/icon";
 import { SelectorUserWorkComponent } from "../selector-user-work/selector-user-work.component";
@@ -12,19 +12,19 @@ import { DialogUtilTitleComponent } from "../dialog-util-title/dialog-util-title
 import { DialogService } from "../../service/dialog.service";
 
 @Component({
-	selector: "app-dialog-work-container",
+	selector: "app-dialog-work-bug-container",
 	imports: [
-		DialogWorkDetailComponent,
-		DialogWorkInputComponent,
+		DialogWorkBugDetailComponent,
+		DialogWorkBugInputComponent,
 		SelectorUserWorkComponent,
 		MatButtonModule,
 		DialogUtilButtonRowComponent,
 		DialogUtilTitleComponent,
 	],
-	templateUrl: "./dialog-work-container.component.html",
-	styleUrl: "./dialog-work-container.component.css",
+	templateUrl: "./dialog-work-bug-container.component.html",
+	styleUrl: "./dialog-work-bug-container.component.css",
 })
-export class DialogWorkContainerComponent {
+export class DialogWorkBugContainerComponent {
 	dataService = inject(DataProcessingService);
 	dialogService = inject(DialogService);
 	dialogData = inject(MAT_DIALOG_DATA);
@@ -32,8 +32,8 @@ export class DialogWorkContainerComponent {
 	editable = signal<boolean>(false);
 	@ViewChild(SelectorUserWorkComponent)
 	SelectorUserWorkComponent!: SelectorUserWorkComponent;
-	@ViewChild(DialogWorkInputComponent)
-	DialogWorkInputComponent!: DialogWorkInputComponent;
+	@ViewChild(DialogWorkBugInputComponent)
+	DialogWorkBugInputComponent!: DialogWorkBugInputComponent;
 
 	ngOnInit() {}
 	toggleEdit() {
@@ -45,17 +45,17 @@ export class DialogWorkContainerComponent {
 	}
 
 	selectorEmpty(empty: boolean) {
-		this.DialogWorkInputComponent.changeState(empty);
+		this.DialogWorkBugInputComponent.changeState(empty);
 	}
 
 	triggerNewWorkSubmit() {
-		this.DialogWorkInputComponent.newWorkCreate(
+		this.DialogWorkBugInputComponent.newWorkOrBugCreate(
 			this.SelectorUserWorkComponent.getArrayChanges().usersAdded,
 		);
 	}
 	triggerEditWorkSubmit() {
 		const changes = this.SelectorUserWorkComponent.getArrayChanges();
-		this.DialogWorkInputComponent.workEdit(
+		this.DialogWorkBugInputComponent.editWorkOrBug(
 			changes.usersRemoved,
 			changes.usersAdded,
 		);

@@ -25,14 +25,26 @@ export class BacklogPageService {
 
 	// Fetches subModules for a given project ID and updates the subModuleList signal
 	getProjectSubModules(projectId: number = this.projectId()) {
+		console.log(
+			"BacklogPageService: Fetching subModules for projectId:",
+			projectId,
+		);
 		if (projectId === 0) {
 			// If project ID is 0, clear the subModule list
 			this.subModuleList.set([]);
 			return;
 		}
 		// Fetch subModules from the data service and update the signal
+		console.log(
+			"BacklogPageService: Fetching subModules from data service for projectId:",
+			projectId,
+		);
 		this.dataService.getProjectSubModules(projectId).subscribe((result) => {
 			this.subModuleList.set(result);
+			console.log(
+				"BacklogPageService: Fetched subModules:",
+				this.subModuleList(),
+			);
 		});
 	}
 

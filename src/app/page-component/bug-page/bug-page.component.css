@@ -1,5 +1,6 @@
+/* Container for vertical stacking of bug todo cards */
 .card-container-vertical {
-	display: flex;
-	flex-direction: column;
-	gap: 1em;
+	display: flex; /* Use flexbox layout */
+	flex-direction: column; /* Stack children vertically */
+	gap: 1em; /* Space between cards */
 }

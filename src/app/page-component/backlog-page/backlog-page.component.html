@@ -1,14 +1,20 @@
+<!-- Main container for the backlog page -->
 <div class="page-container">
+    <!-- Page title/header -->
     <div class="page-title">
         <h1>Backlog</h1>
     </div>
 
+    <!-- Container for vertical list of sub-module cards -->
     <div class="vertical-card-container">
+        <!-- Loop through each subModule in the backlog list and render a card -->
         @for (subModule of backlogList(); track $index) {
         <app-card-sub-module [subModuleData]="subModule"
-            (cardDeleted)="backlogPageService.removeSubModuleFromArray(subModule.subModuleId)"></app-card-sub-module>
+            (cardDeleted)="backlogPageService.removeSubModuleFromArray(subModule.subModuleId)">
+        </app-card-sub-module>
         }
 
+        <!-- Card for adding a new sub-module; refreshes list on creation -->
         <app-card-sub-module-new (newSubModule)="backlogPageService.getProjectSubModules()"></app-card-sub-module-new>
     </div>
 </div>

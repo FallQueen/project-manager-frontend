@@ -7,14 +7,14 @@
 
 
     @if (dialogData.newProject) {
-    <div>newProj</div>
+
     <app-dialog-project-input [currentPic]="currentPic"></app-dialog-project-input>
     } @else if (editable()) {
-    <div>editable</div>
+
     <app-dialog-project-input [currentPic]="currentPic"
         [projectData]="dialogData.projectData"></app-dialog-project-input>
     } @else if (!editable()) {
-    <div>not editable</div>
+
     <app-dialog-project-detail [projectData]="dialogData.projectData"></app-dialog-project-detail>
     }
 

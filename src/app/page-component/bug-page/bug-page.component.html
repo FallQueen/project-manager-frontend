@@ -1,20 +1,20 @@
+<!-- Main container for the bug page -->
 <div class="page-container">
 
-
+    <!-- Page title/header -->
     <div class="page-title">
         <h1>Bugs</h1>
     </div>
 
-    @if(bugList().length >0){
+    <!-- Only show bug list if there are bugs -->
+    @if(bugList().length > 0){
     <div class="card-container-vertical">
+        <!-- Loop through each bug item and render a todo card if it has works or is the first item -->
         @for (item of bugList(); track $index) {
-
         @if (item.works.length > 0 || $index === 0) {
         <app-card-todo [todoList]="item"></app-card-todo>
         }
         }
-
-
     </div>
     }
 </div>

@@ -1,17 +1,18 @@
+<!-- Main container for the dashboard page -->
 <div class="page-container">
 
-
+    <!-- Page title/header -->
     <div class="page-title">
         <h1>My Work</h1>
     </div>
 
-    @if(todoList().length >0){
-    <div class="card-container-vertical">
-        @for (item of todoList(); track $index) {
-
-        <app-card-todo [todoList]="item"></app-card-todo>
-        }
-
-    </div>
+    <!-- Only show todo list if there are items -->
+    @if(todoList().length > 0){
+        <div class="card-container-vertical">
+            <!-- Loop through each todo item and render a todo card -->
+            @for (item of todoList(); track $index) {
+                <app-card-todo [todoList]="item"></app-card-todo>
+            }
+        </div>
     }
 </div>

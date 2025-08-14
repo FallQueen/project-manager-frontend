@@ -5,15 +5,15 @@
         (delete)="triggerDeleteWork()"></app-dialog-util-title>
 
     @if (dialogData.newWork) {
-    <app-dialog-work-input (selectActivity)="selectActivity($event)" [currentPic]="currentPic"
-        [subModuleId]="dialogData.subModuleId"></app-dialog-work-input>
+    <app-dialog-work-bug-input (selectActivity)="selectActivity($event)" [currentPic]="currentPic"
+        [subModuleId]="dialogData.subModuleId"></app-dialog-work-bug-input>
     } @else if (editable()) {
 
-    <app-dialog-work-input [currentPic]="currentPic" (selectActivity)="selectActivity($event)"
-        [workData]="dialogData.workData"></app-dialog-work-input>
+    <app-dialog-work-bug-input [currentPic]="currentPic" (selectActivity)="selectActivity($event)"
+        [data]="dialogData.workData"></app-dialog-work-bug-input>
     } @else if (!editable()) {
 
-    <app-dialog-work-detail [workData]="dialogData.workData"></app-dialog-work-detail>
+    <app-dialog-work-bug-detail [workData]="dialogData.workData"></app-dialog-work-bug-detail>
     }
     @if (dialogData.newWork) {
     <div class="selector-con">

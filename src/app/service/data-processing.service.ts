@@ -19,10 +19,13 @@ import type {
 	ProjectBugList,
 	BugData,
 	workNameListItem,
+	NewBug,
+	AlterBug,
 } from "../model/format.type";
 
 import { signal } from "@angular/core";
 import { ProjectPageService } from "./project-page.service";
+import { of, tap } from "rxjs";
 
 @Injectable({
 	providedIn: "root",
@@ -94,7 +97,12 @@ export class DataProcessingService {
 	public readonly activityList = signal<NameListItem[]>([]);
 	public readonly priorityList = signal<NameListItem[]>([]);
 	public readonly stateList = signal<NameListItem[]>([]);
+	public readonly defectCauseList = signal<NameListItem[]>([]);
+	public readonly currentProjectWorkList = signal<NameListItem[]>([]);
 
+	getApiUrl(): string {
+		return this.host;
+	}
 	// Stores user information in localStorage and updates signals after a successful login.
 	// @param u The user object containing user details.
 	storeUserInfo(u: User) {
@@ -210,8 +218,17 @@ export class DataProcessingService {
 	}
 
 	getDefectCauseList() {
+		if (this.defectCauseList().length > 0) {
+			console.log("Returning cached defect cause list");
+			return of(this.defectCauseList());
+		}
 		const url = `${this.host}/getDefectCauseList`;
-		return this.http.get<NameListItem[]>(url);
+		console.log("Fetching defect cause list from:", url);
+		return this.http.get<NameListItem[]>(url).pipe(
+			tap((result) => {
+				this.defectCauseList.set(result);
+			}),
+		);
 	}
 
 	// Checks if the current route matches the specified page.
@@ -364,8 +381,8 @@ export class DataProcessingService {
 		return this.http.delete(url);
 	}
 
-	getWorkNameListOfProject(projectId: number) {
-		const url = `${this.host}/getWorkNameListOfProject?projectId=${projectId}`;
+	getWorkNameListOfProjectDev(projectId: number) {
+		const url = `${this.host}/getWorkNameListOfProjectDev?projectId=${projectId}`;
 		return this.http.get<NameListItem[]>(url);
 	}
 
@@ -406,6 +423,19 @@ export class DataProcessingService {
 	getProjectBugs(projectId: number) {
 		const url = `${this.host}/getProjectBugs?projectId=${projectId}`;
 		return this.http.get<ProjectBugList[]>(url);
+	}
+
+	postNewBug(newBug: NewBug) {
+		const url = `${this.host}/postNewBug`;
+		return this.http.post(url, newBug);
+	}
+
+	// Updates an existing work item.
+	// @param alterWork The altered work data.
+	// @returns An Observable of the server response.
+	putAlterBug(alterBug: AlterBug) {
+		const url = `${this.host}/putAlterBug`;
+		return this.http.put(url, alterBug);
 	}
 
 	// Returns the display name from a NameListItem.
