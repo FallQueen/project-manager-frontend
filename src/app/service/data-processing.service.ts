@@ -21,6 +21,7 @@ import type {
 	workNameListItem,
 	NewBug,
 	AlterBug,
+	GanttChartData,
 } from "../model/format.type";
 
 import { signal } from "@angular/core";
@@ -276,6 +277,11 @@ export class DataProcessingService {
 	dropProject(projectId: number) {
 		const url = `${this.host}/dropProject?projectId=${projectId}`;
 		return this.http.delete(url);
+	}
+
+	getGanttDataOfProject(projectId: number) {
+		const url = `${this.host}/getGanttDataOfProject?projectId=${projectId}`;
+		return this.http.get<GanttChartData[]>(url);
 	}
 
 	// Retrieves all usernames from the backend.

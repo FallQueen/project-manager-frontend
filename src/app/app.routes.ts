@@ -49,6 +49,14 @@ export const routes: Routes = [
 					),
 				outlet: "home",
 			},
+			{
+				path: "gantt",
+				loadComponent: () =>
+					import("./page-component/gantt-page/gantt-page.component").then(
+						(c) => c.GanttPageComponent,
+					),
+				outlet: "home",
+			},
 		],
 	},
 ];

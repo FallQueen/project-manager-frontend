@@ -1,0 +1,31 @@
+<div class="page-container">
+    <!-- Page title/header -->
+    <div class="page-title">
+        <h1>Gantt Chart</h1>
+    </div>
+
+
+    <div class="gantt-container">
+        <div class="work-data-section">
+            <div>Features</div>
+            <div>
+                @for (item of projectData(); track $index) {
+                <div>{{item.moduleName}}</div>
+                <div>
+                    @for (item of item.works; track $index) {
+                    <div>{{item.workName}}</div>
+                    <div>{{getUserListAsString(item.assignedUsers)}}</div>
+                    }
+                </div>
+                }
+            </div>
+        </div>
+        <div class="gantt-section">
+            <div class="month-row"></div>
+            <div class="day-row"></div>
+            <div class="timeline"></div>
+
+        </div>
+
+
+    </div>

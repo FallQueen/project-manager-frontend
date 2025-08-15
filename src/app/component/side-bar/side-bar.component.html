@@ -17,6 +17,10 @@
                 <mat-icon>list_alt</mat-icon>
                 <span>Backlog</span>
             </li>
+            <li [routerLink]="[{ outlets: { home: ['gantt'] } }]" routerLinkActive="active" tabindex="0">
+                <mat-icon>list_alt</mat-icon>
+                <span>Gantt</span>
+            </li>
 
             <li [routerLink]="[{ outlets: { home: ['bug'] } }]" routerLinkActive="active" tabindex="0">
                 <mat-icon>bug_report</mat-icon>

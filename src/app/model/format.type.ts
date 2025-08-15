@@ -257,3 +257,17 @@ export type WorkStateCount = {
 	stateCount: number;
 	percentage: number;
 };
+
+export type GanttItem = {
+	workId: number;
+	workName: string;
+	startDate: string | Date;
+	targetDate: string | Date;
+	assignedUsers: NameListItem[]; // or another appropriate type
+};
+
+export type GanttChartData = {
+	moduleId: number;
+	moduleName: string;
+	works: GanttItem[];
+};
