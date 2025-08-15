@@ -115,6 +115,10 @@ export class DialogSubModuleInputComponent {
 	}
 
 	newSubModuleCreate() {
+		console.log(
+			"Creating new sub-module with form data:",
+			this.subModuleForm.value,
+		);
 		if (this.subModuleForm.valid) {
 			// Form is valid, proceed with creating the project
 			const newSubModule: NewSubModule = {

@@ -60,7 +60,8 @@
     <div class="row">
         <div>
             <app-search-bar (clicked)="f.pic.markAsTouched()" (nameItemSelected)="f.pic.setValue($event)"
-                fieldLabel="PIC" [nameList]="projectUsernameList"></app-search-bar>
+                fieldLabel="PIC" [nameList]="projectUsernameList"
+                [initialText]="f.pic.value?.name || ''"></app-search-bar>
             <mat-error *ngIf="f.pic.invalid && f.pic.touched">
                 Please select a PIC
             </mat-error>

@@ -54,7 +54,7 @@
                 placeholder="Description"></textarea> -->
             <div class="form-control-input">
                 @if (currentPic()) {
-                {{currentPic().name ||''}}}</div>
+                {{currentPic().name ||'&nbsp;'}}}</div>
             <label class="form-control-label" [class.label-up]="currentPic().name !=''">PIC</label>
         </div>
         <!-- Show error if invalid AND touched -->

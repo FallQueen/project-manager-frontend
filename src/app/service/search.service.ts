@@ -3,6 +3,16 @@ import type { NameListItem, workNameListItem } from "../model/format.type";
 
 @Injectable()
 export class SearchService {
+	private readonly enableFilterById = signal<boolean>(false);
+	// Signal for the current search input
+	public readonly nameInput = signal<string>("");
+	public readonly textInputFromExistingData = signal<string>("");
+	// Signal for the filtered list of names
+	public readonly filteredNameList = signal<NameListItem[]>([]);
+
+	// Signal for the original list of names
+	public nameList = signal<NameListItem[]>([]);
+
 	constructor() {
 		// Automatically update filteredNameList when nameInput or nameList changes
 		effect(() => {
@@ -15,15 +25,6 @@ export class SearchService {
 			this.filteredNameList.set(this.removeDuplicates(filteredList));
 		});
 	}
-	private readonly enableFilterById = signal<boolean>(false);
-	// Signal for the current search input
-	public readonly nameInput = signal<string>("");
-
-	// Signal for the filtered list of names
-	public readonly filteredNameList = signal<NameListItem[]>([]);
-
-	// Signal for the original list of names
-	public nameList = signal<NameListItem[]>([]);
 
 	enableIdFilter() {
 		this.enableFilterById.set(true);

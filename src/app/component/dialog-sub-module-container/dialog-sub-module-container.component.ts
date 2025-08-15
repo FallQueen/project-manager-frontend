@@ -38,6 +38,10 @@ export class DialogSubModuleContainerComponent {
 	}
 
 	triggerNewSubModuleSubmit() {
+		console.log(
+			"Creating new sub-module with form data:",
+			this.DialogSubModuleInput.subModuleForm.value,
+		);
 		this.DialogSubModuleInput.newSubModuleCreate();
 	}
 	triggerEditSubModuleSubmit() {

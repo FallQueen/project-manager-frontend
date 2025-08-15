@@ -15,7 +15,7 @@ export class CardSubModuleNewComponent {
 	dataService = inject(DataProcessingService);
 	dialogService = inject(DialogService);
 	dialog = inject(MatDialog);
-	@Output() newsubModule = new EventEmitter<NameListItem>();
+	@Output() newSubModule = new EventEmitter<NameListItem>();
 
 	openForm() {
 		// Uses the MatDialog service to open the DialogMoreDetailComponent.
@@ -26,7 +26,7 @@ export class CardSubModuleNewComponent {
 		dialogRef.afterClosed().subscribe((result) => {
 			console.log("New work check:", result);
 			if (result) {
-				this.newsubModule.emit(result); // Emits an event to refresh the parent component.
+				this.newSubModule.emit(result); // Emits an event to refresh the parent component.
 				console.log("New work added:", result);
 			}
 		});

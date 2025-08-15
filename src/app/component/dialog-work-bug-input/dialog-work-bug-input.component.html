@@ -184,7 +184,7 @@
         <div>
             <app-search-bar (clicked)="f.workAffected.markAsTouched()"
                 (nameItemSelected)="f.workAffected.setValue($event)" fieldLabel="Work Affected"
-                [nameList]="currentProjectWorkList"></app-search-bar>
+                [nameList]="currentProjectWorkList" [initialText]="f.workAffected.value?.name || ''"></app-search-bar>
             <mat-error *ngIf="f.workAffected.invalid && f.workAffected.touched">
                 Please select the work affected
             </mat-error>

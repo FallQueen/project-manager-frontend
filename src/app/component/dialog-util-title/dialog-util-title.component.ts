@@ -22,7 +22,7 @@ export class DialogUtilTitleComponent {
 	@Input() new = false;
 	@Input() editable = false;
 	@Input() title = "";
-	@Input() titleNew: "NEW PROJECT" | "NEW Sub-Module" | "NEW WORK" =
+	@Input() titleNew: "NEW PROJECT" | "NEW SUB-MODULE" | "NEW WORK" =
 		"NEW PROJECT";
 	@Output() edit = new EventEmitter<void>();
 	@Output() delete = new EventEmitter<void>();

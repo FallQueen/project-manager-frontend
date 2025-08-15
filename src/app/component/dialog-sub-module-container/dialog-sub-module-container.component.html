@@ -2,7 +2,7 @@
     <!-- Dialog Title Section -->
     <app-dialog-util-title [new]="dialogData?.newSubModule" [editable]="editable()" (edit)="toggleEdit()"
         (delete)="triggerDeleteSubModule()" title="Sub-Module #{{dialogData?.subModuleData?.subModuleId}}"
-        titleNew="NEW Sub-Module"></app-dialog-util-title>
+        titleNew="NEW SUB-MODULE"></app-dialog-util-title>
 
 
     <!-- Dialog Content Section -->
@@ -18,7 +18,7 @@
     }
 
 
-    <app-dialog-util-button-row [new]="dialogData.newsubModule" [editable]="editable()" (cancelEdit)="toggleEdit()"
+    <app-dialog-util-button-row [new]="dialogData.newSubModule" [editable]="editable()" (cancelEdit)="toggleEdit()"
         (save)="triggerEditSubModuleSubmit()" (create)="triggerNewSubModuleSubmit()"></app-dialog-util-button-row>
 
 </div>

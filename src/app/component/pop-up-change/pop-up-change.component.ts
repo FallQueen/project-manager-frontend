@@ -68,7 +68,7 @@ export class PopUpChangeComponent {
 	toggleVisibility(bool = !this.visibility()) {
 		if (
 			this.popUpData.current.name === "NEW" ||
-			!this.dataService.isPage("dashboard")
+			(this.popUpData.class !== "state" && this.dataService.isPage("dashboard"))
 		) {
 			return;
 		}

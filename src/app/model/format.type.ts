@@ -81,6 +81,21 @@ export type UserRoleChange = {
 	usersRemoved: number[];
 };
 
+export type ModuleData = {
+	moduleId: number;
+	moduleName: string;
+	description: string;
+	priorityId: number;
+	priorityName: string;
+	picId: number;
+	picName: string;
+	createdBy: string;
+	startDate: Date;
+	targetDate: Date;
+	projectName: string;
+	workStateCountList: BatteryItem[];
+};
+
 // Represent data of a sub-module
 // Used for data display in cards and dialogs
 export type SubModuleData = {

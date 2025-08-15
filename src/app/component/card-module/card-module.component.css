@@ -1,25 +1,26 @@
-/* General Card Styling */
-.card.subModule {
+/* General Card Styling for Module Card */
+.card.module {
 	display: flex;
+
 	flex-direction: column;
 	align-items: center;
 	width: 100%;
 	box-shadow: none;
-	border-radius: 6px;
-	padding: 0;
+	border-radius: 0;
+	padding: 0 0 0;
+
 	border: 1px solid rgba(51, 51, 51, 0.25);
-	position: relative;
 }
 
-.subModule-container {
+.module-container {
 	position: relative;
 	display: flex;
 	align-items: center;
 	width: 100%;
-	height: 3.2em;
+	height: 3.7em;
 }
 
-.subModule-inner-container {
+.module-inner-container {
 	display: flex;
 	align-items: center;
 	width: 100%;
@@ -35,17 +36,8 @@
 	height: 100%;
 	filter: saturate(1.4);
 	position: sticky;
-	border-top-left-radius: 5px;
-	border-bottom-left-radius: 5px;
-	z-index: 2;
-}
-.indicator.expanded {
-	border-bottom-left-radius: 0px;
-	transition: border-bottom-left-radius 0.6s step-start 0s;
-}
 
-.indicator:not(.expanded) {
-	transition: border-bottom-left-radius 0.1s step-end 0.44s;
+	z-index: 2;
 }
 
 .arrow-icon {
@@ -161,67 +153,4 @@
 	border-radius: 4px;
 }
 
-.work-header {
-	display: flex;
-	align-items: center; /* This will now correctly center the spans vertically */
-	width: 100%;
-	height: 2em;
-	margin-left: 0px;
-}
-
-.work-header span {
-	flex: 1;
-	text-align: center;
-	box-sizing: border-box;
-	padding: 0 0.4em 0 0em;
-	/* border: solid 1px #333; */
-}
-
-.work-header span.name {
-	flex: 1.27;
-}
-
-app-card-work-new {
-	max-height: 0;
-	transition: all 0.4s ease-in-out;
-}
-app-card-work-new.empty,
-.child-container:hover app-card-work-new {
-	max-height: 6em;
-}
-
-.child-wrapper {
-	width: 100%;
-	max-height: 0em;
-	overflow-x: auto;
-	overflow-y: hidden;
-	transition: max-height 0.6s ease-in-out;
-}
-
-.child-container {
-	display: flex;
-	width: 100%;
-	min-width: 0em;
-	overflow-x: auto;
-	overflow-y: hidden;
-	/* position: relative; */
-	transition: all 1s ease;
-}
-
-.work-list-container {
-	display: flex;
-	flex-direction: column;
-	width: calc(100% - 9px); /* Reserve space for indicator */
-	min-width: calc(55em - 9px); /* Adjust min-width too */
-
-	margin: 0.2em 0em 0em 0em;
-	/* border-radius: 8px; */
-	/* border-top: 1px solid rgba(51, 51, 51, 0.2); */
-	/* overflow: hidden; */
-
-	/* overflow-y: hidden; */
-}
-
-.container-work {
-	width: 100%;
-}
+/* ...other shared styles can be added here as needed... */

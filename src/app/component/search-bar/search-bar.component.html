@@ -1,8 +1,9 @@
 <div class="form-control">
-    <input type="text" class="form-control-input" matInput [(ngModel)]="searchBarService.nameInput"
-        [matAutocomplete]="auto" (blur)="clicked.emit()">
+    <input type="text" class="form-control-input" matInput [value]="initialText" [matAutocomplete]="auto"
+        (blur)="clicked.emit()">
 
-    <label class="form-control-label" [class.label-up]="searchBarService.nameInput() !== ''">{{fieldLabel}}</label>
+    <label class="form-control-label"
+        [class.label-up]="initialText !== '' || searchBarService.nameInput() !== ''">{{fieldLabel}}</label>
 
     <mat-autocomplete #auto="matAutocomplete" [displayWith]="dataService.displayName">
         @for (name of searchBarService.filteredNameList(); track name.name) {

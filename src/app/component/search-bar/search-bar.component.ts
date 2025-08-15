@@ -42,6 +42,7 @@ export class SearchBarComponent {
 	@Input() nameList = signal<NameListItem[] | workNameListItem[]>([]);
 	@Input() nameListSecond = signal<NameListItem[] | workNameListItem[]>([]);
 	@Input() textInput = "";
+	@Input() initialText = "";
 
 	// The filtering logic
 	ngOnInit() {

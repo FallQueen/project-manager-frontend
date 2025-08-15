@@ -1,17 +1,17 @@
-import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { type ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { subModulePageComponent } from "./subModule-page.component";
+import { BacklogPageComponent } from "./backlog-page.component";
 
-describe("subModulePageComponent", () => {
-	let component: subModulePageComponent;
-	let fixture: ComponentFixture<subModulePageComponent>;
+describe("BacklogPageComponent", () => {
+	let component: BacklogPageComponent;
+	let fixture: ComponentFixture<BacklogPageComponent>;
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
-			imports: [subModulePageComponent],
+			imports: [BacklogPageComponent],
 		}).compileComponents();
 
-		fixture = TestBed.createComponent(subModulePageComponent);
+		fixture = TestBed.createComponent(BacklogPageComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();
 	});

@@ -4,10 +4,15 @@ import type { SubModuleData } from "../../model/format.type";
 
 import { CardSubModuleComponent } from "../../component/card-sub-module/card-sub-module.component";
 import { CardSubModuleNewComponent } from "../../component/card-sub-module-new/card-sub-module-new.component";
+import { CardModuleComponent } from "../../component/card-module/card-module.component";
 
 @Component({
 	selector: "app-backlog-page",
-	imports: [CardSubModuleComponent, CardSubModuleNewComponent],
+	imports: [
+		CardSubModuleComponent,
+		CardSubModuleNewComponent,
+		CardModuleComponent,
+	],
 	templateUrl: "./backlog-page.component.html",
 	styleUrl: "./backlog-page.component.css",
 })
