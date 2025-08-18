@@ -100,7 +100,7 @@
 
     <!-- Tracker and Activity Inputs -->
 
-    @if (!isBugPage()){
+    @if (!isBug){
     <div class="row">
         <div>
             <div class="form-control">
@@ -142,7 +142,7 @@
         </div>
     </div>}
 
-    @if (isBugPage() && data){
+    @if (isBug && data){
 
     <div class="row">
         <div class="form-control">
@@ -160,7 +160,7 @@
     </div>
     }
 
-    @if (isBugPage()){
+    @if (isBug){
     <div class="row">
         <div>
             <div class="form-control">

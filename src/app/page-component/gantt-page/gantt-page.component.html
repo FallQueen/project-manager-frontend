@@ -5,27 +5,61 @@
     </div>
 
 
-    <div class="gantt-container">
+    <div class="gantt-container" #ganttScroll>
         <div class="work-data-section">
-            <div>Features</div>
-            <div>
-                @for (item of projectData(); track $index) {
-                <div>{{item.moduleName}}</div>
-                <div>
-                    @for (item of item.works; track $index) {
-                    <div>{{item.workName}}</div>
-                    <div>{{getUserListAsString(item.assignedUsers)}}</div>
-                    }
+            <div class="section-title">Features</div>
+            <div class="module-item">
+                @for (module of ganttData()?.ganttItemData; track $index) {
+                <div class="module-name">{{module.moduleName}}</div>
+                @for (w of module.works; track w.workId) {
+                <div class="work-item">
+                    <div class="work-name">{{w.workName}}</div>
+                    <div class="assigned-users" [class.no-users]="!w.assignedUsers || w.assignedUsers.length === 0">
+                        {{getUserListAsString(w.assignedUsers) || "No Users Assigned"}}
+                    </div>
                 </div>
+                }
                 }
             </div>
         </div>
         <div class="gantt-section">
-            <div class="month-row"></div>
-            <div class="day-row"></div>
-            <div class="timeline"></div>
+            <div class="date-row">
+                @for (item of timeline(); track $index) {
+                <div class="month-cell">
+                    <div class="month-name">{{item.monthName}} {{item.year}}</div>
+                    <div class="day-row">
+                        @for (day of item.days; track $index) {
+                        <div class="day-cell" [class.alternate]="day.globalIndex % 2 === 0" #dayCell [attr.tabindex]="0"
+                            [class.today]="day.globalIndex === todaysIndex()">
+                            {{day.monthDay}}
+                        </div>
+                        }
+                    </div>
+                </div>
+                }
+            </div>
+            <div class="gantt-body">
+                <div class="module-item">
+                    @for (module of ganttData()?.ganttItemData; track $index) {
+                    <div class="module-name border-transparent" [style.background-color]="'transparent'"></div>
+                    @for (w of module.works; track w.workId) {
+                    <div class="work-item">
+                        <div class="gantt-bar"
+                            [matTooltip]="(w.startDate | date:'shortDate') + ' - ' + (w.targetDate | date:'shortDate') + ' (' + (daysBetween(w.startDate, w.targetDate)) + ' days)'"
+                            [style.width]="(daysBetween(w.startDate, w.targetDate)/totalDays() * 100) + '%'"
+                            [style.margin-left]="calculateGanttBarStart(w.startDate)">
+                            <span>{{w.workName}}</span>
+                        </div>
+                    </div>
+                    }
+                    }
 
+                </div>
+                @if (todaysIndex() || 0 < totalDays()) { <div class="today-line"
+                    [style.margin-left]="calculateTodayLineLocation()">
+            </div>
+            }
         </div>
-
-
     </div>
+</div>
+</div>

@@ -261,13 +261,31 @@ export type WorkStateCount = {
 export type GanttItem = {
 	workId: number;
 	workName: string;
-	startDate: string | Date;
-	targetDate: string | Date;
+	startDate: Date;
+	targetDate: Date;
+	trackerId: number;
+	activityId: number;
 	assignedUsers: NameListItem[]; // or another appropriate type
 };
 
-export type GanttChartData = {
+export type GanttItemsBasedOnProject = {
 	moduleId: number;
 	moduleName: string;
 	works: GanttItem[];
+};
+
+export type ProjectDates = {
+	oldestStartDate: Date;
+	newestTargetDate: Date;
+};
+
+export type GanttChartData = {
+	projectDates: ProjectDates;
+	ganttItemData: GanttItemsBasedOnProject[];
+};
+
+export type TimelineMonth = {
+	monthName: string;
+	year: number;
+	days: { monthDay: number; globalIndex: number }[];
 };

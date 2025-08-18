@@ -8,7 +8,7 @@ import type { GanttChartData } from "../model/format.type";
 export class GanttPageService {
 	private dataService = inject(DataProcessingService);
 
-	public readonly ganttData = signal<GanttChartData[]>([]);
+	public readonly ganttData = signal<GanttChartData | null>(null);
 	constructor() {
 		effect(() => {
 			const projectId = this.dataService.projectIdSignal();

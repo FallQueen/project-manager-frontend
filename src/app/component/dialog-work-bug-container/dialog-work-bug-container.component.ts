@@ -34,9 +34,8 @@ export class DialogWorkBugContainerComponent {
 	SelectorUserWorkComponent!: SelectorUserWorkComponent;
 	@ViewChild(DialogWorkBugInputComponent)
 	DialogWorkBugInputComponent!: DialogWorkBugInputComponent;
-	dialogBaseTitle = signal<string>(
-		this.dataService.isPage("bug") ? "BUG" : "WORK",
-	);
+	isBug = this.dataService.isBugData(this.dialogData.workData);
+	dialogBaseTitle = signal<string>(this.isBug ? "BUG" : "WORK");
 
 	ngOnInit() {}
 	toggleEdit() {

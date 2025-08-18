@@ -1,181 +1,341 @@
-:host {
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
-		Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-	font-size: 14px;
-	color: #333;
+.gantt-container {
+	display: grid;
+	grid-template-columns: 14em 1fr;
+	width: 100%;
+	max-width: 100%;
+	max-height: 81vh;
+	border: 0.075em solid #9ca3af; /* more visible border */
+	border-radius: 0.5em;
+	background: #ffffff; /* unify base */
+	font-family: Roboto, Arial, sans-serif;
+	font-size: 0.875em; /* 14px */
+	line-height: 1.3;
+	overflow: auto; /* single scroll container */
+	/* Hide scrollbar by default (Firefox) */
+	scrollbar-width: none;
+	/* Hide scrollbar in IE/Edge legacy */
+	-ms-overflow-style: none;
+	position: relative;
+	cursor: grab;
+	user-select: none;
+}
+
+.gantt-container.dragging {
+	cursor: grabbing;
+}
+
+/* Hide default WebKit scrollbars */
+.gantt-container::-webkit-scrollbar {
+	width: 0;
+	height: 0;
+}
+
+/* On hover: show scrollbars */
+.gantt-container:hover {
+	scrollbar-width: thin; /* Firefox */
+}
+
+.gantt-container:hover::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+}
+
+.gantt-container:hover::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+.gantt-container:hover::-webkit-scrollbar-thumb {
+	background: rgba(100, 116, 139, 0.55);
+	border-radius: 8px;
+}
+
+.gantt-container:hover::-webkit-scrollbar-thumb:hover {
+	background: rgba(71, 85, 105, 0.75);
+}
+
+.work-data-section {
+	display: flex;
+	flex-direction: column;
+	background: #ffffff;
+
+	position: sticky; /* keep visible during horizontal scroll */
+	left: 0;
+	z-index: 6; /* above timeline */
+	position: sticky;
+	left: 0;
+	/* remove border-right to avoid being cut by horizontal scrollbar */
+	position: sticky;
+}
+
+.work-data-section::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	width: 0.075em;
+	background: #d1d5db; /* persistent divider not affected by scrollbar */
+	pointer-events: none;
+}
+
+.section-title {
+	position: sticky;
+	top: 0;
+	height: 43px;
+	background: #f1f3f5;
+	font-weight: 600;
+	padding: 0.9em 1em;
+	border-bottom: 0.0625em solid #dcdfe3;
+	z-index: 2;
+	box-sizing: border-box; /* ensure padding doesn't affect width */
+}
+
+.module-item {
+	position: relative;
+}
+
+.module-name {
+	height: 2.4em;
+	box-sizing: border-box;
+	font-weight: 600;
+	padding: 0.625em 1em 0.25em;
+	background: #fafbfc;
+
+	color: #2f3b48;
+	font-size: 0.965em; /* 13.5px */
+	/* border-top: 1px solid #eef0f2; */
+	border-bottom: 0.0625em solid #d0d0d1;
+}
+.module-name:hover {
+	color: var(--primary-blue);
+}
+
+.work-item {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+
+	height: 2.7em;
+	border-bottom: 0.0625em solid #d0d0d1;
+}
+
+.gantt-bar {
+	background-color: #2f3b48;
+	width: 1.45em;
+	/* margin: 1px 2px; */
+	border-radius: 8px;
+	padding: 0.5em;
+	display: flex;
+	height: 70%;
+	align-items: center;
+	justify-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	z-index: 1;
+}
+
+.gantt-bar span {
+	font-size: 0.75em; /* 12px */
+	color: #ffffff;
+	text-align: center;
+
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.work-name {
+	padding: 0.25em 1em 0 1.25em;
+	font-size: 0.9em; /* 13px */
+	color: #374151;
+	align-items: center;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	cursor: pointer;
 	box-sizing: border-box;
 }
 
-.gantt-container {
-	width: 100%;
-	overflow-x: auto; /* Enables horizontal scrolling */
-	border: 1px solid #e0e0e0;
-	border-radius: 8px;
-	background-color: #f9fafb;
+.work-item:hover .work-name {
+	color: var(--primary-blue);
 }
 
-.gantt-grid {
-	display: grid;
-	/* Two main columns: 
-    - 1st for task names (min 250px, expands)
-    - 2nd for the timeline (takes remaining space, min 600px)
-  */
-	grid-template-columns: minmax(250px, 1.5fr) minmax(600px, 5fr);
-	min-width: 900px; /* Ensures the chart has a minimum reasonable width */
-	position: relative; /* Needed for the overlay */
+.assigned-users {
+	padding: 0 1em 0.375em 1.4em;
+	font-size: 0.82em; /* 11.5px */
+	color: #64748b;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	cursor: pointer;
 }
 
-/* --- HEADER STYLING --- */
-.gantt-header {
-	background-color: #f1f3f5;
-	font-weight: 600;
-	position: sticky; /* Makes headers stick during vertical scroll */
-	top: 0;
-	z-index: 10;
-	border-bottom: 2px solid #dee2e6;
+.assigned-users.no-users {
+	color: #ff3131d8;
 }
 
-.task-header {
-	padding: 16px;
-	position: sticky; /* Makes the task list header stick during horizontal scroll */
+.gantt-section {
+	background: #fff;
+	display: flex;
+	flex-direction: column;
+	min-width: max-content; /* allow horizontal expansion based on days */
+	position: relative; /* needed for grid overlay */
+}
+
+/* Vertical day grid lines (aligned to 20px .day-cell width) */
+.gantt-section::before {
+	content: "";
+	position: absolute;
+	top: 43px; /* below header (.date-row & .section-title height) */
 	left: 0;
-	border-right: 1px solid #e0e0e0;
+	right: 0;
+	bottom: 0;
+	background-image: repeating-linear-gradient(
+			to right,
+			#e7f2ff 0px,
+			#e7f2ff 20px,
+			#ffffff 20px,
+			#ffffff 40px
+		),
+		repeating-linear-gradient(
+			to right,
+			#e2e8f0 0px,
+			#e2e8f0 1px,
+			transparent 1px,
+			transparent 20px
+		);
+
+	z-index: 0;
 }
 
-.timeline-header {
+.date-row {
+	height: 43px;
+	box-sizing: border-box;
+	display: flex;
+	align-items: stretch;
+	background: #f8fafc; /* unified light header */
+	border-bottom: 0.075em solid #d1d5db;
+	position: sticky; /* stays on vertical scroll */
+	top: 0;
+	z-index: 2;
 	overflow: hidden;
 }
 
-.months-grid,
-.days-grid {
-	display: grid;
-	text-align: center;
+.month-cell {
+	display: flex;
+	flex-direction: column;
+	border-right: 0.0625em solid #e2e8f0;
+	background: #f8fafc;
+	box-sizing: border-box;
+}
+.month-cell:last-child {
+	border-right: none;
 }
 
-.month-cell {
-	padding: 8px 0;
-	border-right: 1px solid #e0e0e0;
-	font-size: 13px;
-	color: #495057;
+.month-name {
+	padding: 0.375em 0.5em 0.2em;
+	font-weight: 600;
+	font-size: 1em; /* 12px */
+	text-align: center;
+	color: #475569;
+	white-space: nowrap;
+	line-height: 1.1;
+	box-sizing: border-box;
+}
+
+.day-row {
+	display: flex;
+	background: #ffffff;
+	border-top: 0.0625em solid #e5e7eb;
+	/* border-bottom: 0.0625em solid #e5e7eb; */
+	gap: 0;
 }
 
 .day-cell {
-	padding: 8px 0;
-	border-right: 1px solid #e0e0e0;
-	border-top: 1px solid #e0e0e0;
-	font-size: 12px;
-	color: #868e96;
+	flex: 0 0 20px; /* base day width */
+	height: 1.5em;
+	display: flex;
+	align-items: flex-end;
+	justify-content: center;
+	font-size: 0.85em; /* 11px */
+	font-weight: 600;
+	color: #475569;
+	border-right: 1px solid #e2e8f0;
+	background: #f9fafb;
+	box-sizing: border-box;
 }
 
-.month-cell:last-child,
+.day-cell.alternate {
+	background: #e8eef7;
+}
 .day-cell:last-child {
 	border-right: none;
 }
 
-/* --- ROW STYLING --- */
-.task-cell,
-.timeline-cell {
+.timeline {
+	position: relative;
+	flex: 1;
+	background-image: repeating-linear-gradient(
+		to right,
+		#f1f5f9 0em,
+		#f1f5f9 0.0625em,
+		transparent 0.0625em,
+		transparent 2em
+	);
+	background-size: 2em 100%; /* match day-cell width */
+	min-height: 25em; /* fallback height */
+	width: max-content; /* expand to content width for horizontal scroll */
+	background-color: #ffffff;
+}
+
+.task-bar {
+	position: absolute;
+	height: 1.125em; /* 18px */
+	border-radius: 0.25em;
+	background: #3b82f6;
+	top: 0;
+	left: 0;
+	width: 7.5em; /* 120px */
 	display: flex;
 	align-items: center;
-	min-height: 45px;
-	padding: 0 16px;
-	border-bottom: 1px solid #e9ecef;
-	background-color: #fff;
-}
-
-.task-cell {
-	position: sticky; /* Makes task names stick during horizontal scroll */
-	left: 0;
-	z-index: 5;
-	border-right: 1px solid #e0e0e0;
-}
-
-.timeline-cell {
-	display: grid;
-	padding: 0;
-	background-image: linear-gradient(to right, #f1f3f5 1px, transparent 1px);
-	background-size: calc(100% / var(--total-days, 1)) 100%;
-}
-
-.module-row {
-	font-weight: bold;
-	background-color: #f8f9fa;
-	font-size: 15px;
-}
-
-.work-row .task-cell {
-	padding-left: 32px; /* Indent tasks under modules */
-	color: #495057;
-}
-
-/* --- TASK BAR & TOOLTIP STYLING --- */
-.task-bar {
-	height: 28px;
-	border-radius: 6px;
-	margin: auto 2px;
-	cursor: pointer;
-	position: relative;
-	transition: transform 0.2s ease, box-shadow 0.2s ease;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-	color: white;
-	font-size: 12px;
-	overflow: hidden;
-	white-space: nowrap;
-	z-index: 20; /* Ensure task bars are above the today marker */
-}
-
-.task-bar:hover {
-	transform: translateY(-2px);
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-.tooltip {
-	visibility: hidden;
-	opacity: 0;
-	position: absolute;
-	bottom: 120%;
-	left: 50%;
-	transform: translateX(-50%);
-	background-color: #343a40;
+	justify-content: center;
+	font-size: 0.71em; /* 10px */
 	color: #fff;
-	padding: 8px 12px;
-	border-radius: 6px;
-	z-index: 30;
-	width: max-content;
-	max-width: 250px;
-	font-size: 13px;
-	transition: opacity 0.2s ease, visibility 0.2s ease;
+	box-shadow: 0 0.0625em 0.125em rgba(0, 0, 0, 0.15);
+	cursor: pointer;
+	transition: transform .15s ease, box-shadow .15s ease;
+}
+.task-bar:hover {
+	transform: translateY(-0.125em);
+	box-shadow: 0 0.1875em 0.375em rgba(0, 0, 0, 0.2);
+}
+
+.today-line {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	width: 0.125em; /* 2px */
+	background: #ef4444;
 	pointer-events: none;
+	opacity: 0.85;
+	z-index: 0;
 }
 
-.task-bar:hover .tooltip {
-	visibility: visible;
-	opacity: 1;
-}
+/* @media (max-width: 1024px) {
+	.gantt-container {
+		grid-template-columns: 13.75em 1fr; 
+	}
+	.work-name {
+		padding-left: 1.25em;
+	}
+} */
 
-.tooltip p,
-.tooltip div {
-	margin: 4px 0 0 0;
-}
-
-.tooltip small {
-	color: #ced4da;
-}
-
-/* --- NEW: TODAY MARKER STYLING --- */
-.timeline-overlay {
-	grid-column: 2 / 3; /* Span the second column (the timeline) */
-	grid-row: 1 / -1; /* Span all rows from top to bottom */
-	display: grid;
-	position: absolute; /* Position it on top of the grid content */
-	width: 100%;
-	height: 100%;
-	pointer-events: none; /* Allow clicks to pass through to elements underneath */
-	z-index: 15; /* Sit above grid lines but below task bars/tooltips */
-}
-
-.today-marker {
-	width: 2px;
-	background-color: #e53935; /* A distinct red color */
-	opacity: 0.9;
-}
+/* @media (max-width: 640px) {
+	.gantt-container {
+		grid-template-columns: 11.25em 1fr; 
+		font-size: 0.75em; 
+	}
+	.module-name {
+		font-size: 0.75em; 
+	}
+} */

@@ -74,15 +74,16 @@ export class DialogWorkBugInputComponent {
 	@Input() currentPic = signal<NameListItem>({ name: "", id: 0 });
 	@Input() subModuleId!: number;
 	@Input() data!: WorkData | BugData;
+	@Input() isBug = false;
 	@Output() selectActivity = new EventEmitter<NameListItem>();
 
-	isBugPage = signal(this.dataService.isPage("bug"));
+	// isBugPage = signal(this.dataService.isPage("bug"));
 	trackerList = signal<NameListItem[]>([]);
 	activityList = signal<NameListItem[]>([]);
 	priorityList = signal<NameListItem[]>([]);
 	stateList = signal<NameListItem[]>([]);
 
-	nameTitle = signal(this.isBugPage() ? "Bug Name" : "Work Name");
+	nameTitle = signal(this.isBug ? "Bug Name" : "Work Name");
 	defectCauseList = signal<NameListItem[]>([]);
 	currentProjectWorkList = signal<NameListItem[]>([]);
 
@@ -100,16 +101,16 @@ export class DialogWorkBugInputComponent {
 		priority: new FormControl<NameListItem | null>(null, [Validators.required]),
 		estimatedHours: new FormControl<number | null>(null, [Validators.required]),
 		tracker: new FormControl<NameListItem | null>(null, [
-			!this.isBugPage() ? Validators.required : Validators.nullValidator,
+			!this.isBug ? Validators.required : Validators.nullValidator,
 		]),
 		activity: new FormControl<NameListItem | null>(null, [
-			!this.isBugPage() ? Validators.required : Validators.nullValidator,
+			!this.isBug ? Validators.required : Validators.nullValidator,
 		]),
 		defectCause: new FormControl<NameListItem | null>(null, [
-			this.isBugPage() ? Validators.required : Validators.nullValidator,
+			this.isBug ? Validators.required : Validators.nullValidator,
 		]),
 		workAffected: new FormControl<NameListItem | null>(null, [
-			this.isBugPage() ? Validators.required : Validators.nullValidator,
+			this.isBug ? Validators.required : Validators.nullValidator,
 		]),
 	});
 
@@ -127,7 +128,7 @@ export class DialogWorkBugInputComponent {
 		);
 		this.f.state.setValue(this.stateList()[0]);
 
-		if (this.isBugPage()) {
+		if (this.isBug) {
 			this.dataService.getDefectCauseList().subscribe((result) => {
 				this.defectCauseList.set(result);
 			});
@@ -165,7 +166,7 @@ export class DialogWorkBugInputComponent {
 				},
 			});
 
-			if (this.isBugPage()) {
+			if (this.isBug) {
 				const bugData = this.data as BugData;
 				this.workForm.patchValue({
 					defectCause: {
@@ -192,7 +193,7 @@ export class DialogWorkBugInputComponent {
 			return;
 		}
 
-		if (this.isBugPage()) {
+		if (this.isBug) {
 			this.newBugCreate(usersAdded);
 		} else {
 			this.newWorkCreate(usersAdded);
@@ -315,7 +316,7 @@ export class DialogWorkBugInputComponent {
 		};
 
 		// Add bug-specific fields if editing a bug
-		if (this.isBugPage()) {
+		if (this.isBug) {
 			const alterBug: AlterBug = {
 				...alterWork,
 				defectCause: this.workForm.value.defectCause?.id || null,
