@@ -68,8 +68,9 @@ mat-icon {
 }
 
 .page-title h1 {
-	font-weight: 600;
+	font-weight: 500;
 	margin-bottom: 0.5em;
+	font-size: 1.5em;
 }
 
 .card {
@@ -104,14 +105,12 @@ mat-icon {
 }
 
 .card-container {
-	width: 100%;
+	width: 90%;
 	gap: 2em;
-
 	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(21em, 1fr));
+	grid-template-columns: repeat(auto-fill, minmax(19em, 1fr));
 	transition: all 1s ease;
-	transition: grid-template-columns 0.6s ease-in-out, padding 0.4s ease, gap 0.6
-		ease;
+	transition: grid-template-columns 0.6s ease-in-out, padding 0.4s ease, gap 0.6 ease;
 	box-sizing: border-box;
 }
 

@@ -1,0 +1,10 @@
+<div class="profile-container">
+  <img *ngIf="data.avatarUrl" [src]="data.avatarUrl" alt="Profile Picture" class="avatar">
+  <h2>{{ data.name }}</h2>
+  <p>{{ data.email }}</p>
+  <p *ngIf="data.role"><strong>Role:</strong> {{ data.role }}</p>
+  <p *ngIf="data.bio">{{ data.bio }}</p>
+  <div class="actions">
+    <button mat-button color="primary" (click)="close()">Close</button>
+  </div>
+</div>
