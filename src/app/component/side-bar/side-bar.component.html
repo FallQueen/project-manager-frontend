@@ -1,53 +1,70 @@
-<div class="side-bar" [class.expanded]="isExpanded()">
-    <ul class="menu-ul">
-        <li (click)="toggleSidebar()" class="menu-toggle">
-            <mat-icon>menu</mat-icon>
-        </li>
+<div class="side-bar"
+     [class.expanded]="isExpanded()"
+     (mouseenter)="expandSidebar()"
+     (mouseleave)="collapseSidebar()">
+
+  <ul class="menu-ul">
+    <li (click)="toggleSidebar()" class="menu-toggle">
+      <mat-icon>menu</mat-icon>
+    </li>
+  </ul>
+
+  <div class="main-side-bar">
+    <ul>
+      <li [routerLink]="[{ outlets: { home: ['dashboard'] } }]"
+          routerLinkActive="active"
+          tabindex="0">
+        <mat-icon>dashboard</mat-icon>
+        <span>Dashboard</span>
+      </li>
+
+      <li [routerLink]="[{ outlets: { home: ['backlog'] } }]"
+          routerLinkActive="active"
+          tabindex="0">
+        <mat-icon>list_alt</mat-icon>
+        <span>Backlog</span>
+      </li>
+
+      <li [routerLink]="[{ outlets: { home: ['bug'] } }]"
+          routerLinkActive="active"
+          tabindex="0">
+        <mat-icon>bug_report</mat-icon>
+        <span>Bug</span>
+      </li>
+
+      <div class="divider-line"></div>
+
+      <li [routerLink]="[{ outlets: { home: ['project'] } }]"
+          routerLinkActive="active"
+          tabindex="0">
+        <mat-icon>assignment</mat-icon>
+        <span>Project</span>
+      </li>
+
+      <li class="search-item">
+        <mat-icon>search</mat-icon>
+        <input matInput
+               type="text"
+               placeholder="Search..."
+               (input)="searchInput.set($any($event.target).value)" />
+      </li>
     </ul>
-    <div class="main-side-bar ">
-        <ul>
 
+    <ul>
+      <li class="profile" (click)="toggleProfile()" routerLinkActive="active">
+        <mat-icon>account_circle</mat-icon>
+        <span>{{ username() }}</span>
 
-            <li [routerLink]="[{ outlets: { home: ['dashboard'] } }]" routerLinkActive="active" tabindex="0">
-                <mat-icon>dashboard</mat-icon>
-                <span>Dashboard</span>
-            </li>
-
-            <li [routerLink]="[{ outlets: { home: ['backlog'] } }]" routerLinkActive="active" tabindex="0">
-                <mat-icon>list_alt</mat-icon>
-                <span>Backlog</span>
-            </li>
-            <li [routerLink]="[{ outlets: { home: ['gantt'] } }]" routerLinkActive="active" tabindex="0">
-                <mat-icon>list_alt</mat-icon>
-                <span>Gantt</span>
-            </li>
-
-            <li [routerLink]="[{ outlets: { home: ['bug'] } }]" routerLinkActive="active" tabindex="0">
-                <mat-icon>bug_report</mat-icon>
-                <span>Bug</span>
-            </li>
-
-            <div class="divider-line"></div>
-
-
-
-            <li [routerLink]="[{ outlets: { home: ['project'] } }]" routerLinkActive="active" tabindex="0">
-                <mat-icon>assignment</mat-icon>
-                <span>Project</span>
-            </li>
-
-            <!-- <li class="search-item">
-                <mat-icon>search</mat-icon>
-                <input matInput type="text" placeholder="Search..."
-                    (input)="searchInput.set($any($event.target).value)" />
-            </li> -->
-
-        </ul>
-        <ul>
-            <li class="profile" (click)="loginService.logOut()" routerLinkActive="active">
-                <mat-icon>account_circle</mat-icon>
-                <span>{{ username() }}</span>
-            </li>
-        </ul>
-    </div>
+        <app-profile-info
+          *ngIf="isProfileVisible() && isExpanded()"
+          class="profile-dropdown"
+          [expanded]="isExpanded()"
+          [name]="dataService.usernameSignal()"
+          [email]="dataService.userEmailSignal()"
+          [role]="dataService.isWebMaster() ? 'Web Master' : 'User'"
+          [bio]="'This is my profile.'">
+        </app-profile-info>
+      </li>
+    </ul>
+  </div>
 </div>
