@@ -39,7 +39,7 @@ export class SearchService {
 	filter(
 		search: string,
 		origin: NameListItem[] | workNameListItem[],
-		alsoEnableFilterById = false,
+		alsoEnableFilterById = this.enableFilterById(),
 	): NameListItem[] | workNameListItem[] {
 		if (typeof search !== "string") {
 			// If search is not a string, return the original list

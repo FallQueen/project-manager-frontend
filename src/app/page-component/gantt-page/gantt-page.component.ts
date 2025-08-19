@@ -25,29 +25,31 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 	styleUrl: "./gantt-page.component.css",
 })
 export class GanttPageComponent {
-	ganttPageService = inject(GanttPageService);
-	// Input property to receive project data from a parent component, now using the new types
-	ganttData = this.ganttPageService.ganttData;
+	// data
+	svc = inject(GanttPageService);
+	ganttData = this.svc.ganttData;
 
-	// --- TIMELINE PROPERTIES ---
-	// These properties will be calculated to build the chart's timeline
+	// timeline signals
 	timelineStartDate = signal<Date>(new Date());
 	timelineEndDate = signal<Date>(new Date());
 	totalDays = signal(0);
 	todaysIndex = signal<number | null>(null);
 	timeline = signal<TimelineMonth[]>([]);
 	todayPosition = signal<number | null>(null);
+
+	// view refs
 	@ViewChildren("dayCell") dayCells!: QueryList<ElementRef<HTMLDivElement>>;
 	@ViewChild("ganttScroll") ganttScrollRef!: ElementRef<HTMLDivElement>;
 
+	// flags
 	viewInitialized = false;
 	scrolledToToday = false;
 
-	// --- DRAG TO SCROLL ---
+	// drag scroll state
 	isDragging = false;
 	dragStartX = 0;
-	scrollStartX = 0;
 	dragStartY = 0;
+	scrollStartX = 0;
 	scrollStartY = 0;
 
 	ngAfterViewInit() {
@@ -70,37 +72,27 @@ export class GanttPageComponent {
 	}
 
 	onDragStart = (e: MouseEvent) => {
-		// Only left mouse button
 		if (e.button !== 0) return;
+		const t = e.target as HTMLElement | null;
+		if (t?.closest("input, textarea, button, select, .no-scroll, .gantt-bar"))
+			return;
 		this.isDragging = true;
 		this.dragStartX = e.clientX;
 		this.dragStartY = e.clientY;
-		const container = this.ganttScrollRef
-			?.nativeElement as HTMLDivElement | null;
-		this.scrollStartX = container ? container.scrollLeft : 0;
-		this.scrollStartY = container ? container.scrollTop : 0;
-		if (container) container.classList.add("dragging");
-		// Prevent text selection
+		this.scrollStartX = this.container?.scrollLeft || 0;
+		this.scrollStartY = this.container?.scrollTop || 0;
 		document.body.style.userSelect = "none";
 	};
-
 	onDragMove = (e: MouseEvent) => {
-		if (!this.isDragging) return;
-		const container = this.ganttScrollRef
-			?.nativeElement as HTMLDivElement | null;
-		if (!container) return;
-		const dx = e.clientX - this.dragStartX;
-		const dy = e.clientY - this.dragStartY;
-		container.scrollLeft = this.scrollStartX - dx;
-		container.scrollTop = this.scrollStartY - dy;
+		if (!this.isDragging || !this.container) return;
+		this.container.scrollLeft =
+			this.scrollStartX - (e.clientX - this.dragStartX);
+		this.container.scrollTop =
+			this.scrollStartY - (e.clientY - this.dragStartY);
 	};
-
-	onDragEnd = (_e: MouseEvent) => {
+	onDragEnd = () => {
 		if (!this.isDragging) return;
 		this.isDragging = false;
-		const container = this.ganttScrollRef
-			?.nativeElement as HTMLDivElement | null;
-		if (container) container.classList.remove("dragging");
 		document.body.style.userSelect = "";
 	};
 
@@ -108,60 +100,51 @@ export class GanttPageComponent {
 	constructor() {
 		effect(() => {
 			const data = this.ganttData();
-			console.log("from effect:", this.ganttData()?.ganttItemData);
-			// Expected structure: { projectDates: { oldestStartDate: Date|string; newestTargetDate: Date|string } }
 			if (data && typeof data === "object" && "projectDates" in data) {
-				this.createTimeline();
-				this.calculateTodayMarker();
-			} else {
-				this.resetTimeline();
-			}
+				this.buildTimeline();
+				this.updateTodayMarker();
+			} else this.resetTimeline();
 		});
 	}
 
-	// (removed duplicate ngAfterViewInit)
+	// helpers
+	get container() {
+		return this.ganttScrollRef?.nativeElement || null;
+	}
+	clamp(v: number, min: number, max: number) {
+		return Math.max(min, Math.min(max, v));
+	}
 
 	tryScrollTodayIntoView() {
-		if (this.scrolledToToday || !this.viewInitialized) return;
-		const index = this.todaysIndex();
-		if (index == null) return;
+		if (this.scrolledToToday || !this.viewInitialized || !this.container)
+			return;
+		const idx = this.todaysIndex();
+		if (idx == null) return;
 		const allDays = this.timeline().flatMap((m) => m.days);
-		if (!allDays.length) return;
-		// Find the cell whose globalIndex matches today's index
 		const cellWrapper = this.dayCells.find(
-			(_, i) => allDays[i]?.globalIndex === index,
+			(_, i) => allDays[i]?.globalIndex === idx,
 		);
-		const container = this.ganttScrollRef?.nativeElement;
-		if (!cellWrapper || !container) return;
-		const cellEl = cellWrapper.nativeElement;
-		// If cell hasn't been laid out yet (width 0), try later
-		if (!cellEl.offsetWidth) {
+		if (!cellWrapper) return;
+		const el = cellWrapper.nativeElement;
+		if (!el.offsetWidth) {
 			setTimeout(() => this.tryScrollTodayIntoView(), 50);
 			return;
 		}
-		const cellOffset = cellEl.offsetLeft; // relative to scroll container content
-		const targetCenter = cellOffset + cellEl.offsetWidth / 2;
-		// Width of the left (sticky) panel so we center within the timeline portion, not whole container
-		const leftPanel: HTMLElement | null =
-			container.querySelector(".work-data-section");
-		const leftWidth = leftPanel ? leftPanel.offsetWidth : 0;
-		// Optional tweak to bias a bit more center/right if desired
-		const fudge = -200; // increase (e.g. 40) if you want today slightly right of true center
-		// Current formula centers cell in full container; adjust by half of left panel width so it's centered in timeline area
-		let newScrollLeft =
-			targetCenter - container.clientWidth / 2 - leftWidth / 2 - fudge;
-		newScrollLeft = Math.max(
+		const leftPanel = this.container.querySelector(
+			".work-data-section",
+		) as HTMLElement | null;
+		const targetCenter = el.offsetLeft + el.offsetWidth / 2;
+		const leftWidth = leftPanel?.offsetWidth || 0;
+		const fudge = -200;
+		let desired =
+			targetCenter - this.container.clientWidth / 2 - leftWidth / 2 - fudge;
+		desired = this.clamp(
+			desired,
 			0,
-			Math.min(newScrollLeft, container.scrollWidth - container.clientWidth),
+			this.container.scrollWidth - this.container.clientWidth,
 		);
-		// Use smooth scroll when supported
-		try {
-			container.scrollTo({ left: newScrollLeft, behavior: "instant" });
-		} catch {
-			container.scrollLeft = newScrollLeft;
-		}
-		// Focus the cell for accessibility/keyboard navigation
-		this.scrolledToToday = true; // prevent further automatic scrolling
+		this.container.scrollLeft = desired;
+		this.scrolledToToday = true;
 	}
 
 	resetTimeline() {
@@ -172,83 +155,55 @@ export class GanttPageComponent {
 
 	// Calculates the overall project start and end dates to establish the timeline range.
 
-	createTimeline() {
+	buildTimeline() {
 		const data = this.ganttData() as {
 			projectDates?: {
 				oldestStartDate: Date | string;
 				newestTargetDate: Date | string;
 			};
 		} | null;
-		if (!data || !data.projectDates) {
+		if (!data?.projectDates) {
 			this.resetTimeline();
 			return;
 		}
-		// allow re-scroll when timeline recomputed
 		this.scrolledToToday = false;
-		// Safely coerce incoming values (could be string or Date)
-		const oldestStartDateRaw = data.projectDates.oldestStartDate;
-		const newestTargetDateRaw = data.projectDates.newestTargetDate;
-		const start = new Date(oldestStartDateRaw);
-		const end = new Date(newestTargetDateRaw);
-
+		const rawStart = new Date(data.projectDates.oldestStartDate);
+		const rawEnd = new Date(data.projectDates.newestTargetDate);
+		const start = new Date(rawStart.getFullYear(), rawStart.getMonth(), 1);
+		const end = new Date(rawEnd.getFullYear(), rawEnd.getMonth() + 1, 0);
 		this.timelineStartDate.set(start);
 		this.timelineEndDate.set(end);
-
-		// Normalize to month boundaries (optional: remove if not desired)
-		const normalizedStart = new Date(start.getFullYear(), start.getMonth(), 1);
-		const normalizedEnd = new Date(end.getFullYear(), end.getMonth() + 1, 0);
-		this.timelineStartDate.set(normalizedStart);
-		this.timelineEndDate.set(normalizedEnd);
-
-		// Calculate total days (inclusive)
-		this.totalDays.set(
-			this.daysBetween(this.timelineStartDate(), this.timelineEndDate()) + 1,
+		const daysTotal = this.daysBetween(start, end) + 1;
+		this.totalDays.set(daysTotal);
+		const todayIdx = this.daysBetween(start, new Date());
+		this.todaysIndex.set(
+			todayIdx >= 0 && todayIdx < daysTotal ? todayIdx : null,
 		);
-		// zero-based index of today relative to timeline start
-		const todayIdx = this.daysBetween(this.timelineStartDate(), new Date());
-		if (todayIdx >= 0 && todayIdx < this.totalDays()) {
-			this.todaysIndex.set(todayIdx);
-		} else {
-			this.todaysIndex.set(null);
-		}
-
-		this.generateTimelineHeaders();
-	}
-
-	// Generates the month and day headers for the chart's timeline view.
-	generateTimelineHeaders() {
-		const timelineArr: TimelineMonth[] = [];
-		const currentDate = new Date(this.timelineStartDate());
-		let index = 0;
-		while (currentDate <= this.timelineEndDate()) {
-			const year = currentDate.getFullYear();
-			const monthName = currentDate.toLocaleString("default", {
-				month: "long",
-			});
-			let monthObj = timelineArr.find(
-				(m) => m.monthName === monthName && m.year === year,
-			);
-			if (!monthObj) {
-				monthObj = { monthName, year, days: [] };
-				timelineArr.push(monthObj);
+		const months: TimelineMonth[] = [];
+		const cur = new Date(start);
+		let i = 0;
+		while (cur <= end) {
+			const label = cur.toLocaleString("default", { month: "long" });
+			const yr = cur.getFullYear();
+			let m = months.find((x) => x.monthName === label && x.year === yr);
+			if (!m) {
+				m = { monthName: label, year: yr, days: [] };
+				months.push(m);
 			}
-			monthObj.days.push({
-				monthDay: currentDate.getDate(),
-				globalIndex: index,
-			});
-			currentDate.setDate(currentDate.getDate() + 1);
-			index++;
+			m.days.push({ monthDay: cur.getDate(), globalIndex: i });
+			cur.setDate(cur.getDate() + 1);
+			i++;
 		}
-		this.timeline.set(timelineArr);
+		this.timeline.set(months);
 	}
 
-	calculateTodayMarker() {
+	updateTodayMarker() {
 		const today = new Date();
-		if (today >= this.timelineStartDate() && today <= this.timelineEndDate()) {
-			this.todayPosition.set(this.daysBetween(this.timelineStartDate(), today));
-		} else {
-			this.todayPosition.set(null);
-		}
+		this.todayPosition.set(
+			today >= this.timelineStartDate() && today <= this.timelineEndDate()
+				? this.daysBetween(this.timelineStartDate(), today)
+				: null,
+		);
 	}
 
 	// Helper function to calculate the number of days between two dates.
@@ -256,6 +211,7 @@ export class GanttPageComponent {
 	// @param date2 The second date.
 	// @returns The total number of full days between the two dates.
 	daysBetween(date1: Date, date2: Date): number {
+		// 24 h * 60 min * 60 s * 1000 ms
 		const oneDay = 24 * 60 * 60 * 1000;
 		const d1 = new Date(date1);
 		const d2 = new Date(date2);
@@ -263,21 +219,17 @@ export class GanttPageComponent {
 		d1.setHours(0, 0, 0, 0);
 		d2.setHours(0, 0, 0, 0);
 		const diffTime = d2.getTime() - d1.getTime();
-		return Math.ceil(diffTime / oneDay);
+		return Math.round(diffTime / oneDay);
 	}
 
 	// Calculates the width percentage of a work item in the Gantt chart.
 	// @param w The work item to calculate the width for.
 	// @returns The width percentage as a string (e.g., "50%").
 	calculateGanttBarWidth(startDate: Date, targetDate: Date): string {
-		const width =
-			(this.daysBetween(startDate, targetDate) / this.totalDays()) * 100;
-		return `${width}%`;
+		return `${(this.daysBetween(startDate, targetDate) / this.totalDays()) * 100}%`;
 	}
-
 	calculateGanttBarStart(startDate: Date): string {
-		const start = this.daysBetween(this.timelineStartDate(), startDate);
-		return `${(start / this.totalDays()) * 100}%`;
+		return `${(this.daysBetween(this.timelineStartDate(), startDate) / this.totalDays()) * 100}%`;
 	}
 
 	calculateTodayLineLocation(): string {
@@ -287,6 +239,101 @@ export class GanttPageComponent {
 	}
 
 	getUserListAsString(users: NameListItem[]) {
-		return users.map((user) => user.name).join(", ");
+		return users.map((u) => u.name).join(", ");
+	}
+
+	// --- GANTT BAR DRAG (HORIZONTAL SNAP) ---
+	barDragInfo: {
+		workId: number;
+		origStartPx: number;
+		origStartDayIndex: number;
+		barWidthPx: number;
+		dayWidthPx: number;
+		pointerOffsetInBar: number;
+		bodyLeft: number;
+		lastLeftPx: number;
+	} | null = null;
+
+	onBarPointerDown(e: PointerEvent, work: GanttItem) {
+		// Only primary button
+		if (e.button !== 0) return;
+		const container = this.container;
+		if (!container) return;
+		// Prevent container drag scroll while resizing
+		container.classList.add("bar-drag-active");
+		(e.target as HTMLElement).setPointerCapture(e.pointerId);
+		const bodyEl = container.querySelector(".gantt-body") as HTMLElement | null;
+		const totalWidthPx = bodyEl?.clientWidth || container.clientWidth;
+		const dayWidthPx = totalWidthPx / this.totalDays();
+		// Use actual rendered bar position instead of computed index*dayWidth to avoid rounding jumps
+		const barEl = (e.target as HTMLElement).closest(
+			".gantt-bar",
+		) as HTMLElement | null;
+		if (!barEl || !bodyEl) return;
+		const barRect = barEl.getBoundingClientRect();
+		const bodyRect = bodyEl.getBoundingClientRect();
+		const origStartPx = barRect.left - bodyRect.left;
+		const origStartDayIndex = this.daysBetween(
+			this.timelineStartDate(),
+			work.startDate,
+		);
+		const barWidthPx =
+			this.daysBetween(work.startDate, work.targetDate) * dayWidthPx;
+		const pointerOffsetInBar = e.clientX - barRect.left;
+		this.barDragInfo = {
+			workId: work.workId,
+			origStartPx,
+			origStartDayIndex,
+			barWidthPx,
+			dayWidthPx,
+			pointerOffsetInBar,
+			bodyLeft: bodyRect.left,
+			lastLeftPx: origStartPx,
+		};
+		e.preventDefault();
+	}
+
+	onBarPointerMove(e: PointerEvent, work: GanttItem) {
+		if (!this.barDragInfo || this.barDragInfo.workId !== work.workId) return;
+		const info = this.barDragInfo;
+		// Desired left edge = pointer - bodyLeft - pointerOffsetInBar
+		let newLeftPx = e.clientX - info.bodyLeft - info.pointerOffsetInBar;
+		newLeftPx = this.clamp(
+			newLeftPx,
+			0,
+			this.totalDays() * info.dayWidthPx - info.barWidthPx,
+		);
+		info.lastLeftPx = newLeftPx;
+		const barEl = (e.target as HTMLElement).closest(
+			".gantt-bar",
+		) as HTMLElement | null;
+		if (barEl) {
+			barEl.style.transform = `translateX(${newLeftPx - info.origStartPx}px)`;
+			barEl.style.willChange = "transform";
+		}
+	}
+
+	onBarPointerUp(e: PointerEvent, work: GanttItem) {
+		if (!this.barDragInfo || this.barDragInfo.workId !== work.workId) return;
+		const info = this.barDragInfo;
+		const container = this.container;
+		const finalBar = (e.target as HTMLElement).closest(
+			".gantt-bar",
+		) as HTMLElement | null;
+		const newLeftPx = info.lastLeftPx; // already clamped
+		let snappedIndex = Math.round(newLeftPx / info.dayWidthPx);
+		snappedIndex = this.clamp(snappedIndex, 0, this.totalDays() - 1);
+		const snappedPct = (snappedIndex / this.totalDays()) * 100;
+		if (finalBar) {
+			finalBar.style.transform = "";
+			finalBar.style.willChange = "";
+			finalBar.style.marginLeft = `${snappedPct}%`;
+		}
+		const movedDays = snappedIndex - info.origStartDayIndex;
+		console.log("Bar drag finished:", { workId: work.workId, movedDays });
+		// Cleanup
+		this.barDragInfo = null;
+		if (container) container.classList.remove("bar-drag-active");
+		(e.target as HTMLElement).releasePointerCapture(e.pointerId);
 	}
 }

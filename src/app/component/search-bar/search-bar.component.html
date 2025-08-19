@@ -1,6 +1,8 @@
 <div class="form-control">
-    <input type="text" class="form-control-input" matInput [value]="initialText" [matAutocomplete]="auto"
-        (blur)="clicked.emit()">
+    <input type="text" class="form-control-input" matInput
+        (input)="searchBarService.nameInput.set($any($event.target)?.value)"
+        (click)="searchBarService.nameInput.set($any($event.target)?.value)" [value]="initialText"
+        [matAutocomplete]="auto" (blur)="clicked.emit()">
 
     <label class="form-control-label"
         [class.label-up]="initialText !== '' || searchBarService.nameInput() !== ''">{{fieldLabel}}</label>

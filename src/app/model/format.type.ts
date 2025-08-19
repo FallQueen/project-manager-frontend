@@ -153,7 +153,6 @@ export interface WorkData {
 	startDate: Date;
 	targetDate: Date;
 	createdBy: string;
-	createdByUserName: string;
 	estimatedHours: number;
 	trackerId: number;
 	trackerName: string;

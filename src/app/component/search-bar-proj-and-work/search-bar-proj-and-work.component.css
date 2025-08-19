@@ -44,8 +44,16 @@ mat-icon {
 	height: fit-content;
 }
 
-.mat-mdc-autocomplete-panel,
-.mat-mdc-autocomplete-panel {
+.search-option-id {
+	font-size: 0.85em;
+	width: 2.5em;
+	display: inline-flex;
+	color: #555;
+	align-items: center;
+}
+
+/* Autocomplete overlay panel (panelClass applied) */
+::ng-deep .search-bar-autocomplete-panel.mat-mdc-autocomplete-panel {
 	padding: 0 !important;
 	margin: 0 !important;
 	min-width: 100% !important;
@@ -54,10 +62,14 @@ mat-icon {
 	overflow-x: hidden;
 }
 
-.mat-mdc-autocomplete-panel .mat-mdc-option,
-.mat-mdc-autocomplete-panel .mat-mdc-option {
-	min-height: 1em;
-	min-width: none;
-	padding: 0.3em 0em 0.3em 0.8em;
-	margin: 0;
+::ng-deep .search-bar-autocomplete-panel .search-option-name {
+	flex: 1 1 auto;
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+mat-option {
+	padding: 0.4em;
 }

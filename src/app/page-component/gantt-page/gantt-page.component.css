@@ -2,8 +2,8 @@
 	display: grid;
 	grid-template-columns: 14em 1fr;
 	width: 100%;
-	max-width: 100%;
-	max-height: 81vh;
+	max-width: fit-content;
+	max-height: 78vh;
 	border: 0.075em solid #9ca3af; /* more visible border */
 	border-radius: 0.5em;
 	background: #ffffff; /* unify base */
@@ -16,12 +16,8 @@
 	/* Hide scrollbar in IE/Edge legacy */
 	-ms-overflow-style: none;
 	position: relative;
-	cursor: grab;
-	user-select: none;
-}
 
-.gantt-container.dragging {
-	cursor: grabbing;
+	user-select: none;
 }
 
 /* Hide default WebKit scrollbars */
@@ -176,10 +172,15 @@
 
 .gantt-section {
 	background: #fff;
+	cursor: grab;
 	display: flex;
 	flex-direction: column;
 	min-width: max-content; /* allow horizontal expansion based on days */
 	position: relative; /* needed for grid overlay */
+}
+
+.gantt-section.dragging {
+	cursor: grabbing;
 }
 
 /* Vertical day grid lines (aligned to 20px .day-cell width) */

@@ -6,26 +6,31 @@
     </div>
 
 
-    <mat-autocomplete #auto="matAutocomplete" [displayWith]="dataService.displayName"
-        (optionSelected)="onOptionSelectedGoToProject($event.option.value)">
-        @if(filteredProjectNames().length > 0){
-        <div class="select-section-label">PROJECT</div>
-        }
+    <div class="search-bar-autocomplete-panel">
+        <mat-autocomplete #auto="matAutocomplete" [displayWith]="dataService.displayName"
+            panelClass="search-bar-autocomplete-panel"
+            (optionSelected)="onOptionSelectedGoToProject($event.option.value)">
+            @if(filteredProjectNames().length > 0){
+            <div class="select-section-label">PROJECT</div>
+            }
 
-        @for (name of filteredProjectNames(); track name.name) {
-        <mat-option [value]="name">
-            {{ name.name }}
-        </mat-option>
-        }
+            @for (name of filteredProjectNames(); track name.name) {
+            <mat-option [value]="name" class="search-option">
+                <span class="search-option-id ">#{{ name.id }}</span>
+                <span class="search-option-name">{{ name.name }}</span>
+            </mat-option>
+            }
 
 
-        @if (filteredWorkNames().length > 0) {
-        <div class="select-section-label">FUNCTION</div>
-        }
-        @for (name of filteredWorkNames(); track name.name) {
-        <mat-option [value]="name">
-            {{ name.name }}
-        </mat-option>
-        }
-    </mat-autocomplete>
+            @if (filteredWorkNames().length > 0) {
+            <div class="select-section-label">FUNCTION</div>
+            }
+            @for (name of filteredWorkNames(); track name.name) {
+            <mat-option [value]="name" class="search-option">
+                <span class="search-option-id">#{{ name.id }}</span>
+                <span>{{ name.name }}</span>
+            </mat-option>
+            }
+        </mat-autocomplete>
+    </div>
 </div>
