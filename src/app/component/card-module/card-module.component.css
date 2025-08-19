@@ -48,8 +48,8 @@
 .card-name {
 	display: flex;
 	align-items: center;
-	width: 25%;
-	font-size: 1.1em;
+	width: 15%;
+	font-size: 0.9em;
 	font-weight: 600;
 	padding: 0 0.5em 0 0.2em;
 	transform: translateY(-0.05em);
@@ -82,7 +82,7 @@
 }
 
 .section-label {
-	font-size: 0.85em;
+	font-size: 0.7em;
 	font-weight: 500;
 	color: #555;
 	text-transform: uppercase;
@@ -101,7 +101,7 @@
 	padding: 0.1em 0.7em;
 	border: 1px solid rgba(51, 51, 51, 0.25);
 	border-radius: 4px;
-	font-size: 0.95em;
+	font-size: 0.75em;
 	font-weight: 500;
 	font-family: Roboto, sans-serif;
 	box-sizing: border-box;
@@ -110,7 +110,7 @@
 .date-label {
 	position: relative;
 	z-index: 2;
-	font-size: 0.8em;
+	font-size: 0.5em;
 	font-weight: 500;
 	color: #1f2937;
 }

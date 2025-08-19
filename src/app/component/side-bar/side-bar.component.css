@@ -142,3 +142,22 @@ input::placeholder {
 	margin: 0.5em 0;
 	/* padding: 0 1em; */
 }
+.profile {
+  position: relative; /* penting biar dropdown bisa nempel */
+}
+
+.profile-dropdown {
+  position: absolute;
+  bottom: 50px; /* jarak ke atas dari tombol Alice */
+  left: 0;
+  width: 170px;
+  background: #eaeaea;
+  color: black;
+  padding: 12px;
+  border-radius: 10px;
+  box-shadow: 0px -4px 8px rgba(0,0,0,0.3); /* bayangan ke atas */
+  z-index: 1000;
+}
+.side-bar:not(.expanded) .profile-dropdown {
+  display: none !important;
+}

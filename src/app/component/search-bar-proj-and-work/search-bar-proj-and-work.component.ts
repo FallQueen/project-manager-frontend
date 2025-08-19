@@ -47,7 +47,7 @@ export class SearchBarProjAndWorkComponent {
 
 	@Input() projectNameList = signal<NameListItem[]>([]);
 	@Input() workNameList = signal<workNameListItem[]>([]);
-	textInput = signal("");
+	@Input() textInput = signal<string>(""); 
 	@Output() clicked = new EventEmitter<void>();
 	@ViewChild("searchInput") searchInputRef?: ElementRef<HTMLInputElement>;
 
