@@ -30,6 +30,7 @@ export class DialogWorkBugContainerComponent {
 	dialogData = inject(MAT_DIALOG_DATA);
 	currentPic = signal<NameListItem>({ name: "", id: 0 });
 	editable = signal<boolean>(false);
+	haveBeenEdited = signal<boolean>(false);
 	@ViewChild(SelectorUserWorkComponent)
 	SelectorUserWorkComponent!: SelectorUserWorkComponent;
 	@ViewChild(DialogWorkBugInputComponent)

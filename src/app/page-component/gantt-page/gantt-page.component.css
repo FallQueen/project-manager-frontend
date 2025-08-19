@@ -28,7 +28,7 @@
 
 /* On hover: show scrollbars */
 .gantt-container:hover {
-	scrollbar-width: thin; /* Firefox */
+	scrollbar-width: thin;
 }
 
 .gantt-container:hover::-webkit-scrollbar {
@@ -128,6 +128,7 @@
 	justify-content: center;
 	box-sizing: border-box;
 	z-index: 1;
+	position: relative;
 }
 
 .gantt-bar span {
@@ -138,6 +139,30 @@
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+}
+
+/* Resize handles */
+.resize-handle {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	width: 6px;
+	cursor: ew-resize;
+	background: transparent;
+}
+.resize-handle.left {
+	left: 0;
+	border-top-left-radius: 8px;
+	border-bottom-left-radius: 8px;
+}
+.resize-handle.right {
+	right: 0;
+	border-top-right-radius: 8px;
+	border-bottom-right-radius: 8px;
+}
+
+.gantt-bar.resizing {
+	outline: 2px dashed #1d4ed8;
 }
 
 .work-name {

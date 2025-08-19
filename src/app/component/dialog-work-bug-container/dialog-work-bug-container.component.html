@@ -10,7 +10,7 @@
     } @else if (editable()) {
 
     <app-dialog-work-bug-input [isBug]="isBug" [currentPic]="currentPic" (selectActivity)="selectActivity($event)"
-        [data]="dialogData.workData"></app-dialog-work-bug-input>
+        [data]="dialogData.workData" (edited)="haveBeenEdited.set(true)"></app-dialog-work-bug-input>
     } @else if (!editable()) {
 
     <app-dialog-work-bug-detail [isBug]="isBug" [workData]="dialogData.workData"></app-dialog-work-bug-detail>
@@ -29,6 +29,7 @@
     </div>
     }
 
-    <app-dialog-util-button-row [new]="dialogData.newWork" [editable]="editable()" (cancelEdit)="toggleEdit()"
-        (save)="triggerEditWorkSubmit()" (create)="triggerNewWorkSubmit()"></app-dialog-util-button-row>
+    <app-dialog-util-button-row [haveBeenEdited]="haveBeenEdited()" [new]="dialogData.newWork" [editable]="editable()"
+        (cancelEdit)="toggleEdit()" (save)="triggerEditWorkSubmit()"
+        (create)="triggerNewWorkSubmit()"></app-dialog-util-button-row>
 </div>

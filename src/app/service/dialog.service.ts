@@ -5,11 +5,14 @@ import type { SubModuleData, Project, WorkData } from "../model/format.type";
 import { DialogProjectContainerComponent } from "../component/dialog-project-container/dialog-project-container.component";
 import { DialogWorkBugContainerComponent } from "../component/dialog-work-bug-container/dialog-work-bug-container.component";
 import { DialogUtilityComponent } from "../component/dialog-utility/dialog-utility.component";
+import { DataProcessingService } from "./data-processing.service";
+import { map, type Observable } from "rxjs";
 
 @Injectable({
 	providedIn: "root",
 })
 export class DialogService {
+	private dataService = inject(DataProcessingService);
 	// Injects the Angular Material Dialog service for opening dialogs.
 	private dialog = inject(MatDialog);
 
@@ -96,6 +99,24 @@ export class DialogService {
 		this.workContainerDialogRef = dialogRef;
 		console.log("openWorkDialog", workData, subModuleId, newWork);
 		return dialogRef;
+	}
+
+	openDialogForWorkById(
+		workId: number,
+	): Observable<MatDialogRef<DialogWorkBugContainerComponent>> {
+		return this.dataService.getWorkDetails(workId).pipe(
+			// Use map to transform the workData into a dialog reference
+			map((workData) => this.openWorkDialog(workData, undefined, false)),
+		);
+	}
+
+	openDialogForBugById(
+		bugId: number,
+	): Observable<MatDialogRef<DialogWorkBugContainerComponent>> {
+		return this.dataService.getBugDetails(bugId).pipe(
+			// Use map to transform the bugData into a dialog reference
+			map((bugData) => this.openWorkDialog(bugData, undefined, false)),
+		);
 	}
 
 	// Returns the reference to the currently opened Work dialog, if any.

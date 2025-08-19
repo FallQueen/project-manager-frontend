@@ -262,8 +262,8 @@ export type GanttItem = {
 	workName: string;
 	startDate: Date;
 	targetDate: Date;
-	trackerId: number;
-	activityId: number;
+	trackerName: string;
+	activityName: string;
 	assignedUsers: NameListItem[]; // or another appropriate type
 };
 

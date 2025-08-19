@@ -47,8 +47,8 @@ export class DataProcessingService {
 	private router = inject(Router);
 
 	// The base URL for the backend API.
-	private host = "https://project-manager-backend-theta.vercel.app/api";
-	// private host = "http://localhost:9090/api";
+	// private host = "https://project-manager-backend-theta.vercel.app/api";
+	private host = "http://localhost:9090/api";
 
 	// Computes the current user's roles for the selected project.
 	private currentProjectRoles = computed(() => {
@@ -387,6 +387,11 @@ export class DataProcessingService {
 		return this.http.delete(url);
 	}
 
+	getWorkDetails(workId: number) {
+		const url = `${this.host}/getWorkDetails?workId=${workId}`;
+		return this.http.get<WorkData>(url);
+	}
+
 	getWorkNameListOfProjectDev(projectId: number) {
 		const url = `${this.host}/getWorkNameListOfProjectDev?projectId=${projectId}`;
 		return this.http.get<NameListItem[]>(url);
@@ -429,6 +434,11 @@ export class DataProcessingService {
 	getProjectBugs(projectId: number) {
 		const url = `${this.host}/getProjectBugs?projectId=${projectId}`;
 		return this.http.get<ProjectBugList[]>(url);
+	}
+
+	getBugDetails(bugId: number) {
+		const url = `${this.host}/getBugDetails?bugId=${bugId}`;
+		return this.http.get<BugData>(url);
 	}
 
 	postNewBug(newBug: NewBug) {

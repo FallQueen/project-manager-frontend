@@ -76,6 +76,7 @@ export class DialogWorkBugInputComponent {
 	@Input() data!: WorkData | BugData;
 	@Input() isBug = false;
 	@Output() selectActivity = new EventEmitter<NameListItem>();
+	@Output() edited = new EventEmitter<void>();
 
 	// isBugPage = signal(this.dataService.isPage("bug"));
 	trackerList = signal<NameListItem[]>([]);
@@ -368,5 +369,7 @@ export class DialogWorkBugInputComponent {
 			this.data.defectCause =
 				this.workForm.value.defectCause?.name || this.data.defectCause;
 		}
+
+		this.edited.emit();
 	}
 }
