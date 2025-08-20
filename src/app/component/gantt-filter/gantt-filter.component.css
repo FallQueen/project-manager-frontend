@@ -1,0 +1,200 @@
+/* 1. Root */
+.filter-container {
+	display: inline-flex;
+	align-items: center;
+	gap: .4em;
+	padding: 0;
+	color: #475569;
+	background: transparent;
+	position: relative;
+}
+
+/* 2. & toggle button */
+
+.filter-button {
+	display: inline-flex;
+	align-items: center;
+	gap: .4em;
+	background: #f1f5f9;
+	border: 1px solid #d8dee5;
+	color: #334155;
+	font: inherit;
+	font-weight: 500;
+	padding: .35em .7em .35em .75em;
+	border-radius: .55em;
+	box-sizing: border-box;
+	cursor: pointer;
+	line-height: 1.1;
+	transition: background .15s, border-color .15s, color .15s;
+	font-size: .85em;
+}
+.filter-label {
+	font-size: .8em;
+}
+.filter-button:hover {
+	background: #e2e8f0;
+	border-color: #c7d1dc;
+}
+.filter-button:active {
+	background: #d9e2ec;
+}
+
+/* 3. Popup panel */
+.filter-pop-up {
+	position: absolute;
+	display: flex;
+	top: 100%;
+	left: 0;
+	margin-top: .2em;
+	background: #fff;
+	border: 1px solid #d8dee5;
+	box-shadow: 0 .6em 1.2em -.4em rgba(15, 23, 42, 0.25), 0 .2em .6em
+		rgba(15, 23, 42, 0.15);
+	border-radius: .5em;
+	padding: .5em .7em;
+	z-index: 40;
+	box-sizing: border-box;
+	width: max-content;
+	max-width: 80vw;
+	max-height: 32em;
+	overflow-y: auto;
+	scrollbar-width: thin;
+	display: none;
+}
+.filter-container:focus-within > .filter-pop-up,
+.filter-pop-up:hover {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+/* Scrollbar (webkit) */
+.filter-pop-up::-webkit-scrollbar {
+	width: .55em;
+}
+.filter-pop-up::-webkit-scrollbar-track {
+	background: transparent;
+}
+.filter-pop-up::-webkit-scrollbar-thumb {
+	background: rgba(0, 0, 0, 0.15);
+	border-radius: .4em;
+}
+.filter-pop-up::-webkit-scrollbar-thumb:hover {
+	background: rgba(0, 0, 0, 0.28);
+}
+
+.filter-left {
+	border-right: 1px solid #d8dee5;
+	padding-right: .5em;
+}
+
+.filter-right {
+	padding-left: .5em;
+}
+
+/* 4. Sections */
+.filter-section {
+	margin-bottom: .3em;
+}
+.filter-section:last-child {
+	margin-bottom: 0;
+}
+.filter-name {
+	font-size: .8em;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: .03em;
+	color: #64748b;
+	margin: 0 0 .2em 0;
+}
+
+/* 5. Options container (5 columns) */
+.filter-options-container {
+	display: grid;
+	gap: 0.2em;
+	grid-template-columns: repeat(4, minmax(0, max-content));
+}
+
+/* 6. Option item (generic) */
+.filter-option {
+	padding: .32em .55em;
+	font-size: .78em;
+	line-height: 1; /* tighter so visual center aligns */
+	color: #334155;
+	white-space: nowrap;
+	transition: background .12s, color .12s;
+	border-radius: .35em;
+	border: 1px solid #999;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.3em;
+	cursor: pointer;
+	position: relative;
+}
+/* ensure native radios/checkboxes align perfectly */
+input {
+	margin: 0;
+	position: relative;
+	top: 0;
+	align-self: center;
+}
+.filter-option:hover {
+	background: #f1f5f9;
+}
+.filter-option.active {
+	background: #e0f2fe;
+	color: #0c4a6e;
+	font-weight: 600;
+}
+
+/* 7. Checkbox style option */
+
+.filter-option.checkbox-row input {
+	position: absolute;
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+.filter-option.checkbox-row .checkbox-box {
+	width: 1.05em;
+	height: 1.05em;
+	border: 1px solid #94a3b8;
+	border-radius: .25em;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: #fff;
+	transition: background .15s, border-color .15s;
+	flex-shrink: 0;
+}
+.filter-option.checkbox-row .checkbox-box mat-icon {
+	font-size: .85em;
+	line-height: 1;
+	display: none;
+}
+.filter-option.checkbox-row input:focus-visible + .checkbox-box {
+	outline: 2px solid #2563eb;
+	outline-offset: 2px;
+}
+.filter-option.checkbox-row input:checked + .checkbox-box {
+	background: #0ea5e9;
+	border-color: #0ea5e9;
+}
+.filter-option.checkbox-row input:checked + .checkbox-box mat-icon {
+	display: block;
+	color: #fff;
+}
+
+/* 8. Icons */
+mat-icon {
+	width: fit-content;
+	height: fit-content;
+	line-height: 1em;
+	font-size: 1em;
+	color: #64748b;
+}
+
+/* 9. Utilities */
+.filter-item.empty .filter-button {
+	opacity: 0.4;
+	cursor: default;
+}

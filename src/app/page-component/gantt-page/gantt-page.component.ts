@@ -18,10 +18,16 @@ import type {
 import { GanttPageService } from "../../service/gantt-page.service";
 import { MatGridListModule } from "@angular/material/grid-list";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { GanttFilterComponent } from "../../component/gantt-filter/gantt-filter.component";
 
 @Component({
 	selector: "app-gantt-page",
-	imports: [CommonModule, MatGridListModule, MatTooltipModule],
+	imports: [
+		CommonModule,
+		MatGridListModule,
+		MatTooltipModule,
+		GanttFilterComponent,
+	],
 	templateUrl: "./gantt-page.component.html",
 	styleUrl: "./gantt-page.component.css",
 })

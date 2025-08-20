@@ -39,18 +39,14 @@ export class CardModuleComponent {
 	@Input() moduleData: ModuleData = {
 		moduleId: 1,
 		moduleName: "Sample Module",
-		startDate: new Date(),
-		targetDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-		priorityId: 1,
-		priorityName: "HIGH",
+
 		workStateCountList: [
 			{ id: 1, name: "NEW", count: 3, percentage: 0 },
 			{ id: 2, name: "ASSIGNED", count: 2, percentage: 0 },
 			{ id: 3, name: "IN PROGRESS", count: 5, percentage: 0 },
 		],
 		description: "abc",
-		picId: 1,
-		picName: "Alice",
+
 		createdBy: "Alice",
 		projectName: "Sample Project",
 	};
@@ -65,12 +61,6 @@ export class CardModuleComponent {
 	ngOnInit() {
 		this.countTotalWorkState();
 		this.countPercentage();
-		this.periodPercentage.set(
-			this.dataService.getPeriodDonePercentage(
-				this.moduleData.startDate,
-				this.moduleData.targetDate,
-			),
-		);
 	}
 
 	// ngOnChanges() {
@@ -79,12 +69,18 @@ export class CardModuleComponent {
 
 	countTotalWorkState() {
 		let total = 0;
+		if (!this.moduleData.workStateCountList) {
+			return;
+		}
 		for (const state of this.moduleData.workStateCountList) {
 			total += state.count;
 		}
 		this.totalWork.set(total);
 	}
 	countPercentage() {
+		if (!this.moduleData.workStateCountList) {
+			return;
+		}
 		for (const state of this.moduleData.workStateCountList) {
 			state.percentage = (100 * state.count) / this.totalWork();
 		}

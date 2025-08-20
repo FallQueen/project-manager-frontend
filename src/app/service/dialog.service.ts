@@ -1,7 +1,13 @@
 import { inject, Injectable } from "@angular/core";
 import { MatDialog, type MatDialogRef } from "@angular/material/dialog";
 import { DialogSubModuleContainerComponent } from "../component/dialog-sub-module-container/dialog-sub-module-container.component";
-import type { SubModuleData, Project, WorkData } from "../model/format.type";
+import { DialogModuleContainerComponent } from "../component/dialog-module-container/dialog-module-container.component";
+import type {
+	SubModuleData,
+	Project,
+	WorkData,
+	ModuleData,
+} from "../model/format.type";
 import { DialogProjectContainerComponent } from "../component/dialog-project-container/dialog-project-container.component";
 import { DialogWorkBugContainerComponent } from "../component/dialog-work-bug-container/dialog-work-bug-container.component";
 import { DialogUtilityComponent } from "../component/dialog-utility/dialog-utility.component";
@@ -20,6 +26,8 @@ export class DialogService {
 	private projectContainerDialogRef: MatDialogRef<DialogProjectContainerComponent> | null =
 		null;
 	private subModuleContainerDialogRef: MatDialogRef<DialogSubModuleContainerComponent> | null =
+		null;
+	private moduleContainerDialogRef: MatDialogRef<DialogModuleContainerComponent> | null =
 		null;
 	private workContainerDialogRef: MatDialogRef<DialogWorkBugContainerComponent> | null =
 		null;
@@ -75,6 +83,32 @@ export class DialogService {
 	// Returns the reference to the currently opened subModule dialog, if any.
 	getSubModuleContainerDialogRef() {
 		return this.subModuleContainerDialogRef;
+	}
+
+	// Opens the module dialog with the provided module data.
+	// @param moduleData The module data to be passed to the dialog.
+	// @param newModule Indicates if the dialog is for creating a new module.
+	// @returns Reference to the opened module dialog.
+	openModuleDialog(
+		moduleData: ModuleData | undefined,
+		newModule: boolean,
+	): MatDialogRef<DialogModuleContainerComponent> {
+		const dialogRef = this.dialog.open(DialogModuleContainerComponent, {
+			autoFocus: false,
+			width: "850vw",
+			height: "fit-content",
+			maxWidth: "90vw",
+			maxHeight: "90vh",
+			panelClass: "custom-dialog-container",
+			data: { moduleData, newModule },
+		});
+		this.moduleContainerDialogRef = dialogRef;
+		return dialogRef;
+	}
+
+	// Returns the reference to the currently opened module dialog, if any.
+	getModuleContainerDialogRef() {
+		return this.moduleContainerDialogRef;
 	}
 
 	// Opens the Work dialog with the provided work data.

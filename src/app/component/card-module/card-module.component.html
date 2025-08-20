@@ -2,7 +2,7 @@
     <!-- Main container for the module card -->
     <div class="module-container">
         <!-- Priority indicator bar, color changes based on priority -->
-        <div class="indicator priority-{{moduleData.priorityName}}" [class.expanded]="expanded()"></div>
+        <div class="indicator" [class.expanded]="expanded()"></div>
         <div class="module-inner-container">
             <!-- Expand/collapse arrow icon -->
             <span class="arrow-icon-container" (click)="expandWorkInside()">
@@ -43,7 +43,7 @@
             </div> -->
 
             <!-- Section: Period progress bar -->
-            <div class="card-section">
+            <!-- <div class="card-section">
                 <span class="section-label">Period</span>
                 <div class="progress-bar" matTooltip="{{ periodPercentage()}}%">
                     <span class="date-label">
@@ -52,7 +52,7 @@
                     </span>
                     <div class="progress-fill" [style.width.%]="periodPercentage()"></div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
     <!-- Expandable container for work items related to this module -->

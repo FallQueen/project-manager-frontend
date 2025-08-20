@@ -20,6 +20,21 @@
 	user-select: none;
 }
 
+.page-title {
+	display: flex;
+	align-items: center;
+	gap: 16px; /* space between title and filter */
+	padding: 4px 4px 8px;
+	margin-bottom: 6px;
+	border-bottom: 1px solid #e2e8f0;
+}
+
+.page-title h1 {
+	font-size: 1.4rem;
+	margin: 0;
+	font-weight: 600;
+	color: #1e293b; /* slate-800 */
+}
 /* Hide default WebKit scrollbars */
 .gantt-container::-webkit-scrollbar {
 	width: 0;

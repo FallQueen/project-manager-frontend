@@ -6,7 +6,7 @@ import { LoginService } from "../../service/login.service";
 import { SearchBarProjAndWorkComponent } from "../search-bar-proj-and-work/search-bar-proj-and-work.component";
 import { FormsModule } from "@angular/forms";
 import type { NameListItem, workNameListItem } from "../../model/format.type";
-import { ProfileInfoComponent } from "../profile-info/profile-info.component";
+import { PopUpProfileInfoComponent } from "../pop-up-profile-info/pop-up-profile-info.component";
 import { CommonModule } from "@angular/common";
 
 @Component({
@@ -18,7 +18,7 @@ import { CommonModule } from "@angular/common";
     RouterLinkActive,
     SearchBarProjAndWorkComponent,
     FormsModule,
-    ProfileInfoComponent,
+    PopUpProfileInfoComponent,
     CommonModule,
   ],
   templateUrl: "./side-bar.component.html",
@@ -66,7 +66,7 @@ export class SideBarComponent {
   // 👇 tambahan buat auto-close kalau klik di luar profile / dropdown
   handleClickOutside = (event: MouseEvent) => {
     const profileTrigger = document.querySelector(".profile");
-    const dropdown = document.querySelector("app-profile-info");
+    const dropdown = document.querySelector("app-pop-up-profile-info");
 
     if (
       profileTrigger &&

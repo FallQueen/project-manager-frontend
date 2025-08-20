@@ -85,15 +85,25 @@ export type ModuleData = {
 	moduleId: number;
 	moduleName: string;
 	description: string;
-	priorityId: number;
-	priorityName: string;
-	picId: number;
-	picName: string;
 	createdBy: string;
-	startDate: Date;
-	targetDate: Date;
 	projectName: string;
-	workStateCountList: BatteryItem[];
+	workStateCountList?: BatteryItem[];
+};
+
+// Represent data of a sub-module
+// Used for data display in cards and dialogs
+export type NewModule = {
+	projectId: number;
+	ModuleName: string;
+	description: string;
+	priorityId: number;
+	createdBy: number;
+};
+
+export type AlterModule = {
+	ModuleId: number;
+	ModuleName?: string | null;
+	description?: string | null;
 };
 
 // Represent data of a sub-module
@@ -110,7 +120,7 @@ export type SubModuleData = {
 	startDate: Date;
 	targetDate: Date;
 	projectName: string;
-	workStateCountList: BatteryItem[];
+	workStateCountList?: BatteryItem[];
 };
 
 // Represents the input data for creating a new sub-module
@@ -263,8 +273,9 @@ export type GanttItem = {
 	startDate: Date;
 	targetDate: Date;
 	trackerName: string;
+	stateName: string;
 	activityName: string;
-	assignedUsers: NameListItem[]; // or another appropriate type
+	assignedUsers: NameListItem[];
 };
 
 export type GanttItemsBasedOnProject = {

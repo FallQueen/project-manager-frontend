@@ -2,6 +2,7 @@
     <!-- Page title/header -->
     <div class="page-title">
         <h1>Gantt Chart</h1>
+        <app-gantt-filter></app-gantt-filter>
     </div>
 
 
@@ -10,7 +11,7 @@
         <div class="work-data-section no-scroll">
             <div class="section-title">Features</div>
             <div class="module-item">
-                @for (module of ganttData()?.ganttItemData; track $index) {
+                @for (module of ganttPageService.filteredGanttData(); track $index) {
                 <div class="module-name">{{module.moduleName}}</div>
                 @for (w of module.works; track w.workId) {
                 <div class="work-item" (click)="ganttPageService.openWorkForm(w.workId, w.trackerName)">
@@ -41,7 +42,7 @@
             </div>
             <div class="gantt-body">
                 <div class="module-item">
-                    @for (module of ganttData()?.ganttItemData; track $index) {
+                    @for (module of ganttPageService.filteredGanttData(); track $index) {
                     <div class="module-name border-transparent" [style.background-color]="'transparent'"></div>
                     @for (w of module.works; track w.workId) {
                     <div class="work-item">

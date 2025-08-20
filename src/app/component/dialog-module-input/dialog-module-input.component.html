@@ -1,0 +1,29 @@
+<form class="module-form" [formGroup]="moduleForm" (ngSubmit)="newModuleCreate()">
+    <div class="form-row">
+        <mat-form-field appearance="outline">
+            <mat-label>Module Name</mat-label>
+            <input matInput formControlName="moduleName" required />
+            <mat-error *ngIf="f.moduleName.touched && f.moduleName.invalid">Required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Priority</mat-label>
+            <input type="text" matInput [matAutocomplete]="autoPriority" formControlName="priority"
+                [value]="f.priority.value?.name || ''" />
+            <mat-autocomplete #autoPriority="matAutocomplete" [displayWith]="dataService.displayName">
+                <mat-option *ngFor="let p of priorityList()" [value]="p">{{ p.name }}</mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="f.priority.touched && f.priority.invalid">Required</mat-error>
+        </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="description-field">
+        <mat-label>Description</mat-label>
+        <textarea matInput formControlName="description" rows="4"></textarea>
+        <mat-error *ngIf="f.description.touched && f.description.invalid">Required</mat-error>
+    </mat-form-field>
+
+    <div class="actions">
+        <button mat-raised-button color="primary" type="submit">Create Module</button>
+    </div>
+</form>

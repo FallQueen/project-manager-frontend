@@ -11,6 +11,7 @@ import { DialogSubModuleDetailComponent } from "../dialog-sub-module-detail/dial
 
 @Component({
 	selector: "app-dialog-sub-module-container",
+	standalone: true,
 	imports: [
 		MatIconModule,
 		DialogSubModuleDetailComponent,
@@ -20,7 +21,7 @@ import { DialogSubModuleDetailComponent } from "../dialog-sub-module-detail/dial
 		DialogUtilTitleComponent,
 	],
 	templateUrl: "./dialog-sub-module-container.component.html",
-	styleUrl: "./dialog-sub-module-container.component.css",
+	styleUrls: ["./dialog-sub-module-container.component.css"],
 })
 export class DialogSubModuleContainerComponent {
 	dataService = inject(DataProcessingService);
