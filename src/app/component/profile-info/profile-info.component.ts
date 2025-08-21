@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from "@angular/core";
+import { Component, Input, OnChanges, SimpleChanges, Output, EventEmitter } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
@@ -20,14 +20,20 @@ export class ProfileInfoComponent implements OnChanges {
   @Input() expanded: boolean = true;  
   @Input() visible: boolean = false;
 
+  @Output() logout = new EventEmitter<void>();
+
   isOpen = false;
 
   ngOnChanges(changes: SimpleChanges) {
     // kalau sidebar collapse → auto tutup
-    if (changes['expanded'] && !this.expanded) {
+    if (changes["expanded"] && !this.expanded) {
       this.isOpen = false;
     } else {
       this.isOpen = this.visible;
     }
+  }
+
+  onLogout() {
+    this.logout.emit(); // kirim event ke parent (sidebar)
   }
 }
