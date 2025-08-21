@@ -1,6 +1,40 @@
-<div class="module-detail" *ngIf="moduleData">
-    <div class="row"><span class="label">Module Name:</span><span class="value">{{ moduleData.moduleName }}</span></div>
-    <div class="row"><span class="label">Project:</span><span class="value">{{ moduleData.projectName }}</span></div>
-    <div class="row description"><span class="label">Description:</span><span class="value">{{ moduleData.description
-            }}</span></div>
+@if (moduleData){
+<div class="dialog-body">
+    <div>
+        <div class="form-control">
+            <div class="form-control-input">{{moduleData.moduleName}}
+            </div>
+            <label class="form-control-label label-up">Module Name</label>
+        </div>
+
+
+    </div>
+
+    <div>
+        <div class="form-control">
+            <div class="form-control-input">{{moduleData.projectName}}
+            </div>
+            <label class="form-control-label label-up">Project</label>
+        </div>
+    </div>
+
+    <!-- Description -->
+    <div>
+        <div class="form-control">
+            <div class="form-control-input">{{moduleData.description}}
+            </div>
+            <label class="form-control-label label-up">Description</label>
+        </div>
+    </div>
+
+    <div>
+        <div class="form-control">
+            <div class="form-control-input">{{moduleData.createdBy}}
+            </div>
+            <label class="form-control-label label-up">Created By</label>
+        </div>
+    </div>
+
+
 </div>
+}

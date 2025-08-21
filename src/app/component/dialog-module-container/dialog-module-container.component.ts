@@ -2,13 +2,13 @@ import { Component, inject, signal, ViewChild } from "@angular/core";
 import { MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { MatIconModule } from "@angular/material/icon";
 // Importing sibling standalone components
-import { DialogModuleInputComponent } from "../dialog-module-input";
 import { MatButtonModule } from "@angular/material/button";
 import { DataProcessingService } from "../../service/data-processing.service";
 import { DialogUtilButtonRowComponent } from "../dialog-util-button-row/dialog-util-button-row.component";
 import { DialogUtilTitleComponent } from "../dialog-util-title/dialog-util-title.component";
 import { DialogService } from "../../service/dialog.service";
-import { DialogModuleDetailComponent } from "../dialog-module-detail";
+import { DialogModuleDetailComponent } from "../dialog-module-detail/dialog-module-detail.component";
+import { DialogModuleInputComponent } from "../dialog-module-input/dialog-module-input.component";
 
 @Component({
 	selector: "app-dialog-module-container",

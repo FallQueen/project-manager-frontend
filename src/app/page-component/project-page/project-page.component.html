@@ -5,9 +5,9 @@
     </div>
     <div class="card-container">
         <!-- Check if there are any projects to display -->
-        @if (projectPageService.Projects() !== []) {
+        @if (projectPageService.Projects().ongoing) {
         <!-- Loop through each project and render a project card -->
-        @for (project of projectPageService.Projects(); track $index) {
+        @for (project of projectPageService.Projects().ongoing; track $index) {
         <app-card-project [project]="project"
             (cardDeleted)="projectPageService.removeProjectFromArray(project.projectId)"></app-card-project>
         <!-- Passes project data to the card and handles deletion -->
@@ -18,5 +18,22 @@
         <!-- Refreshes project data when a new project is added -->
         <app-card-project-new (refresh)="projectPageService.getProjectData()"></app-card-project-new>
         }
+    </div>
+    <div class="page-title done">
+        <!-- Displays the dynamic page title ("My Projects" or "All Projects") -->
+        <h1>Done Projects</h1>
+    </div>
+    <div class="card-container">
+        <!-- Check if there are any projects to display -->
+        @if (projectPageService.Projects().done) {
+        <!-- Loop through each project and render a project card -->
+        @for (project of projectPageService.Projects().done; track $index) {
+        <app-card-project [project]="project"
+            (cardDeleted)="projectPageService.removeProjectFromArray(project.projectId)"></app-card-project>
+        <!-- Passes project data to the card and handles deletion -->
+        }
+        }
+        <!-- If the user is a webmaster, show the 'new project' card for new project creation -->
+
     </div>
 </div>

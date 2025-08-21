@@ -53,10 +53,55 @@ export class DialogService {
 		return dialogRef;
 	}
 
-	// Returns the reference to the currently opened Project dialog, if any.
+	//
+	openProjectDialogById(
+		projectId: number,
+	): Observable<MatDialogRef<DialogProjectContainerComponent>> {
+		return this.dataService.getProjectDetails(projectId).pipe(
+			// Use map to transform the bugData into a dialog reference
+			map((projectData) => this.openProjectDialog(projectData, false)),
+		);
+	}
 
+	// Returns the reference to the currently opened Project dialog, if any.
 	getProjectContainerDialogRef() {
 		return this.projectContainerDialogRef;
+	}
+
+	// Opens the module dialog with the provided module data.
+	// @param moduleData The module data to be passed to the dialog.
+	// @param newModule Indicates if the dialog is for creating a new module.
+	// @returns Reference to the opened module dialog.
+	openModuleDialog(
+		moduleData: ModuleData | undefined,
+		newModule: boolean,
+	): MatDialogRef<DialogModuleContainerComponent> {
+		const dialogRef = this.dialog.open(DialogModuleContainerComponent, {
+			autoFocus: false, // Prevents the dialog from automatically focusing an element.
+			width: "40vw",
+			minWidth: "20em",
+			height: "fit-content",
+			maxWidth: "40vw",
+			maxHeight: "90vh",
+			panelClass: "custom-dialog-container",
+			data: { moduleData, newModule },
+		});
+		this.moduleContainerDialogRef = dialogRef;
+		return dialogRef;
+	}
+
+	openModuleDialogById(
+		moduleId: number,
+	): Observable<MatDialogRef<DialogModuleContainerComponent>> {
+		return this.dataService.getModuleDetails(moduleId).pipe(
+			// Use map to transform the moduleData into a dialog reference
+			map((moduleData) => this.openModuleDialog(moduleData, false)),
+		);
+	}
+
+	// Returns the reference to the currently opened module dialog, if any.
+	getModuleContainerDialogRef() {
+		return this.moduleContainerDialogRef;
 	}
 
 	// Opens the subModule dialog with the provided subModule data.
@@ -83,32 +128,6 @@ export class DialogService {
 	// Returns the reference to the currently opened subModule dialog, if any.
 	getSubModuleContainerDialogRef() {
 		return this.subModuleContainerDialogRef;
-	}
-
-	// Opens the module dialog with the provided module data.
-	// @param moduleData The module data to be passed to the dialog.
-	// @param newModule Indicates if the dialog is for creating a new module.
-	// @returns Reference to the opened module dialog.
-	openModuleDialog(
-		moduleData: ModuleData | undefined,
-		newModule: boolean,
-	): MatDialogRef<DialogModuleContainerComponent> {
-		const dialogRef = this.dialog.open(DialogModuleContainerComponent, {
-			autoFocus: false,
-			width: "850vw",
-			height: "fit-content",
-			maxWidth: "90vw",
-			maxHeight: "90vh",
-			panelClass: "custom-dialog-container",
-			data: { moduleData, newModule },
-		});
-		this.moduleContainerDialogRef = dialogRef;
-		return dialogRef;
-	}
-
-	// Returns the reference to the currently opened module dialog, if any.
-	getModuleContainerDialogRef() {
-		return this.moduleContainerDialogRef;
 	}
 
 	// Opens the Work dialog with the provided work data.

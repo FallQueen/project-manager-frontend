@@ -26,6 +26,12 @@ export type Project = {
 	targetDate: Date;
 	totalTask: number;
 	doneTask: number;
+	projectDone: boolean;
+};
+
+export type ProjectListByCompletion = {
+	ongoing: Project[];
+	done: Project[];
 };
 
 // Represents the input data for creating a new project
@@ -50,6 +56,7 @@ export type AlterProject = {
 	targetDate: Date | null;
 	picId: number | null;
 	userRoles: UserRoleChange[];
+	projectDone: boolean | null;
 };
 
 // Represents an item  that consists of an id and a name
@@ -62,6 +69,7 @@ export interface NameListItem {
 // A specific use case for NameListItem with an added projectId
 // Used in project/work search, to go to project when select work
 export interface workNameListItem extends NameListItem {
+	trackerName: string;
 	projectId: number;
 }
 
@@ -96,7 +104,6 @@ export type NewModule = {
 	projectId: number;
 	ModuleName: string;
 	description: string;
-	priorityId: number;
 	createdBy: number;
 };
 

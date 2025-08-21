@@ -25,6 +25,7 @@ import type {
 	NewBug,
 	AlterBug,
 	GanttChartData,
+	ProjectListByCompletion,
 } from "../model/format.type";
 
 import { signal } from "@angular/core";
@@ -50,8 +51,8 @@ export class DataProcessingService {
 	private router = inject(Router);
 
 	// The base URL for the backend API.
-	// private host = "https://project-manager-backend-theta.vercel.app/api";
-	private host = "http://localhost:9090/api";
+	private host = "https://project-manager-backend-theta.vercel.app/api";
+	// private host = "http://localhost:9090/api";
 
 	// Computes the current user's roles for the selected project.
 	private currentProjectRoles = computed(() => {
@@ -247,14 +248,19 @@ export class DataProcessingService {
 	// @returns An Observable of the list of all projects.
 	getAllProjects() {
 		const url = `${this.host}/getAllProjects`;
-		return this.http.get<Project[]>(url);
+		return this.http.get<ProjectListByCompletion>(url);
 	}
 
 	// Retrieves projects assigned to the current user.
 	// @returns An Observable of the user's projects.
 	getUserProjects() {
 		const url = `${this.host}/getUserProjects?userId=${this.userIdSignal()}`;
-		return this.http.get<Project[]>(url);
+		return this.http.get<ProjectListByCompletion>(url);
+	}
+
+	getProjectDetails(projectId: number) {
+		const url = `${this.host}/getProjectDetails?projectId=${projectId}`;
+		return this.http.get<Project>(url);
 	}
 
 	// Creates a new project.
@@ -342,6 +348,19 @@ export class DataProcessingService {
 		return this.http.get<ModuleData[]>(url);
 	}
 
+	getModuleDetails(moduleId: number) {
+		const url = `${this.host}/getModuleDetails?moduleId=${moduleId}`;
+		return this.http.get<ModuleData>(url);
+	}
+
+	// Updates an existing module.
+	// @param alterModule The altered module data.
+	// @returns An Observable of the server response.
+	putAlterModule(alterModule: AlterModule) {
+		const url = `${this.host}/putAlterModule`;
+		return this.http.put(url, alterModule);
+	}
+
 	// Creates a new subModule item.
 	// @param newSubModule The new subModule data.
 	// @returns An Observable of the server response.
@@ -380,14 +399,6 @@ export class DataProcessingService {
 	putAlterSubModule(alterSubModule: AlterSubModule) {
 		const url = `${this.host}/putAlterSubModule`;
 		return this.http.put(url, alterSubModule);
-	}
-
-	// Updates an existing module.
-	// @param alterModule The altered module data.
-	// @returns An Observable of the server response.
-	putAlterModule(alterModule: AlterModule) {
-		const url = `${this.host}/putAlterModule`;
-		return this.http.put(url, alterModule);
 	}
 
 	// Creates a new work item.

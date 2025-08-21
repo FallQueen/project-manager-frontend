@@ -85,11 +85,24 @@ export class SearchBarProjAndWorkComponent {
 		return Array.isArray(list) && list.length > 0 && "projectId" in list[0];
 	}
 
+	isWorkNameListItem(
+		item: NameListItem | workNameListItem,
+	): item is workNameListItem {
+		return (item as workNameListItem).projectId !== undefined;
+	}
+
 	onOptionSelectedGoToProject(input: NameListItem | workNameListItem) {
-		if (input && "projectId" in input) {
+		if (input && this.isWorkNameListItem(input)) {
 			this.dataService.changeProject(input.projectId);
+			// openDialogForWorkById / openDialogForBugById are cold Observables; must subscribe
+			if (input.trackerName === "BUG") {
+				this.dialogService.openDialogForBugById(input.id).subscribe();
+			} else if (input.trackerName) {
+				this.dialogService.openDialogForWorkById(input.id).subscribe();
+			}
 		} else if (input) {
 			this.dataService.changeProject(input.id);
+			this.dialogService.openProjectDialogById(input.id).subscribe();
 		}
 		// Clear model
 		this.textInput.set("");

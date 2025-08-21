@@ -67,6 +67,7 @@
 
     <!-- Priority and State Inputs -->
     <div class="row">
+        @if(isBug){
         <div>
             <div class="form-control">
                 <input matInput type="text" readonly (click)="priorityTrigger.openPanel()"
@@ -85,6 +86,7 @@
                 Please select the priority
             </mat-error>
         </div>
+        }
 
         <div>
             <div class="form-control">

@@ -99,7 +99,9 @@ export class DialogWorkBugInputComponent {
 		// A control to hold the ID from the search bar
 		state: new FormControl<NameListItem | null>(null, [Validators.required]),
 		pic: new FormControl<string | null>(null),
-		priority: new FormControl<NameListItem | null>(null, [Validators.required]),
+		priority: new FormControl<NameListItem | null>(null, [
+			this.isBug ? Validators.required : Validators.nullValidator,
+		]),
 		estimatedHours: new FormControl<number | null>(null, [Validators.required]),
 		tracker: new FormControl<NameListItem | null>(null, [
 			!this.isBug ? Validators.required : Validators.nullValidator,

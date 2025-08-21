@@ -190,7 +190,7 @@ export class GanttPageService {
 	}
 
 	// Finds and returns a single GanttItem by its workId, or null if not found
-	public getGanttItemById(workId: number): GanttItem | null {
+	getGanttItemById(workId: number): GanttItem | null {
 		for (const item of this.ganttData()?.ganttItemData || []) {
 			const found = item.works.find((w) => w.workId === workId);
 			if (found) return found;
@@ -199,7 +199,7 @@ export class GanttPageService {
 	}
 
 	// Sends an update for a work item to the backend (does not auto-refresh the whole Gantt data)
-	public alterDataOnWork(workId: number, alterData: AlterWork) {
+	alterDataOnWork(workId: number, alterData: AlterWork) {
 		this.dataService.putAlterWork(alterData).subscribe((result) => {
 			console.log("Work data updated:", result);
 		});
@@ -207,7 +207,7 @@ export class GanttPageService {
 
 	// Opens the appropriate dialog for a work item (bug or task/feature)
 	// If the dialog reports changes, refreshes the Gantt data
-	public openWorkForm(workId: number, trackerName: string) {
+	openWorkForm(workId: number, trackerName: string) {
 		if (trackerName === "BUG") {
 			this.dialogService.openDialogForBugById(workId).subscribe((dialogRef) => {
 				dialogRef.afterClosed().subscribe((result) => {
@@ -223,5 +223,14 @@ export class GanttPageService {
 					});
 				});
 		}
+	}
+
+	openModuleForm(moduleId: number) {
+		console.log("Opening module form for ID:", moduleId);
+		this.dialogService.openModuleDialogById(moduleId).subscribe((dialogRef) => {
+			dialogRef.afterClosed().subscribe((result) => {
+				if (result) this.refreshGanttData();
+			});
+		});
 	}
 }

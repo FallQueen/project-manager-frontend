@@ -1,29 +1,46 @@
-<form class="module-form" [formGroup]="moduleForm" (ngSubmit)="newModuleCreate()">
-    <div class="form-row">
-        <mat-form-field appearance="outline">
-            <mat-label>Module Name</mat-label>
-            <input matInput formControlName="moduleName" required />
-            <mat-error *ngIf="f.moduleName.touched && f.moduleName.invalid">Required</mat-error>
-        </mat-form-field>
+<!-- Form bound to moduleForm FormGroup -->
+<div class="dialog-body" [formGroup]="moduleForm">
 
-        <mat-form-field appearance="outline">
-            <mat-label>Priority</mat-label>
-            <input type="text" matInput [matAutocomplete]="autoPriority" formControlName="priority"
-                [value]="f.priority.value?.name || ''" />
-            <mat-autocomplete #autoPriority="matAutocomplete" [displayWith]="dataService.displayName">
-                <mat-option *ngFor="let p of priorityList()" [value]="p">{{ p.name }}</mat-option>
-            </mat-autocomplete>
-            <mat-error *ngIf="f.priority.touched && f.priority.invalid">Required</mat-error>
-        </mat-form-field>
+    <!-- Project Name Input -->
+    <div>
+        <div class="form-control">
+            <input matInput type="text" class="form-control-input" formControlName="moduleName">
+            <label class="form-control-label" [class.label-up]="f.moduleName.valid">Sub-Module Name</label>
+        </div>
+        <!-- Show error if invalid AND touched -->
+        <mat-error *ngIf="f.moduleName.invalid && f.moduleName.touched">
+            Tolong isi nama projek
+        </mat-error>
+    </div>
+    @if(moduleData) {
+    <div>
+        <div class="form-control">
+            <div class="form-control-input">{{moduleData.projectName}}
+            </div>
+            <label class="form-control-label label-up">Project</label>
+        </div>
+    </div>
+    }
+
+    <!-- Description Input -->
+    <div>
+        <div class="form-control">
+            <textarea matInput type="text" class="form-control-input" formControlName="description"></textarea>
+            <label class="form-control-label" [class.label-up]="f.description.valid">Description</label>
+        </div>
+        <!-- Error if description is invalid and touched -->
+        <mat-error *ngIf="f.description.invalid && f.description.touched">
+            Please enter the description
+        </mat-error>
     </div>
 
-    <mat-form-field appearance="outline" class="description-field">
-        <mat-label>Description</mat-label>
-        <textarea matInput formControlName="description" rows="4"></textarea>
-        <mat-error *ngIf="f.description.touched && f.description.invalid">Required</mat-error>
-    </mat-form-field>
-
-    <div class="actions">
-        <button mat-raised-button color="primary" type="submit">Create Module</button>
+    @if(moduleData) {
+    <div>
+        <div class="form-control">
+            <div class="form-control-input">{{moduleData.createdBy}}
+            </div>
+            <label class="form-control-label label-up">Created By</label>
+        </div>
     </div>
-</form>
+    }
+</div>

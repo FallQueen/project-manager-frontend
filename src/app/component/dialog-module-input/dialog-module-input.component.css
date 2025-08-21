@@ -1,20 +1,5 @@
-.module-form {
+.dialog-body {
 	display: flex;
+	gap: 1em;
 	flex-direction: column;
-	gap: 1rem;
-	width: 100%;
-}
-.form-row {
-	display: flex;
-	gap: 1rem;
-}
-.form-row mat-form-field {
-	flex: 1;
-}
-.description-field {
-	width: 100%;
-}
-.actions {
-	display: flex;
-	justify-content: flex-end;
 }

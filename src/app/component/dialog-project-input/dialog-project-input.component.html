@@ -47,20 +47,32 @@
         </mat-error>
     </div>
 
-
-    <div>
-        <div class="form-control">
-            <!-- <textarea type="text" class="form-control-input" formControlName="description" rows="3"
+    <div class="row">
+        <div>
+            <div class="form-control">
+                <!-- <textarea type="text" class="form-control-input" formControlName="description" rows="3"
                 placeholder="Description"></textarea> -->
-            <div class="form-control-input">
-                @if (currentPic()) {
-                {{currentPic().name ||'&nbsp;'}}}</div>
-            <label class="form-control-label" [class.label-up]="currentPic().name !=''">PIC</label>
+                <div class="form-control-input">
+                    @if (currentPic()) {
+                    {{currentPic().name ||'&nbsp;'}}}</div>
+                <label class="form-control-label" [class.label-up]="currentPic().name !=''">PIC</label>
+            </div>
+            <!-- Show error if invalid AND touched -->
+            <mat-error *ngIf="currentPic().id ===0 && f.description.touched">
+                Tolong isi PIC
+            </mat-error>
         </div>
-        <!-- Show error if invalid AND touched -->
-        <mat-error *ngIf="currentPic().id ===0 && f.description.touched">
-            Tolong isi PIC
-        </mat-error>
+        @if(projectData) {
+        <div>
+            <div class="form-control">
+                <!-- <textarea type="text" class="form-control-input" formControlName="description" rows="3"
+                placeholder="Description"></textarea> -->
+                <div class="form-control-input">
+                    {{f.projectDone.value ? 'DONE' : 'NOT DONE'}}</div>
+                <label class="form-control-label label-up">Project Done</label>
+            </div>
+        </div>
+        }
     </div>
 
 </div>

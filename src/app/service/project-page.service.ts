@@ -1,5 +1,5 @@
 import { effect, inject, Injectable, signal } from "@angular/core";
-import type { Project } from "../model/format.type";
+import type { Project, ProjectListByCompletion } from "../model/format.type";
 import { DataProcessingService } from "./data-processing.service";
 
 @Injectable({
@@ -10,7 +10,10 @@ export class ProjectPageService {
 	public dataService = inject(DataProcessingService);
 
 	// Signal to hold the list of projects
-	public readonly Projects = signal<Project[]>([]);
+	public readonly Projects = signal<ProjectListByCompletion>({
+		ongoing: [],
+		done: [],
+	});
 
 	// Signal to hold the current user's ID
 	public readonly userId = this.dataService.userIdSignal;
@@ -26,7 +29,10 @@ export class ProjectPageService {
 			const isWebMaster = this.isWebMaster();
 			if (this.userId() === 0) {
 				// If no user is logged in, clear the projects array
-				this.Projects.set([]);
+				this.Projects.set({
+					ongoing: [],
+					done: [],
+				});
 				return;
 			}
 			// Fetch project data for the current user
@@ -53,13 +59,19 @@ export class ProjectPageService {
 
 	// Remove a project from the Projects array by its ID
 	removeProjectFromArray(projectId: number) {
-		this.Projects.update((projects) =>
-			projects.filter((project) => project.projectId !== projectId),
-		);
+		this.Projects.update((project) => ({
+			ongoing: project.ongoing.filter((p) => p.projectId !== projectId),
+			done: project.done.filter((p) => p.projectId !== projectId),
+		}));
 	}
 
 	getProjectNameFromId(projectId: number): string | null {
-		const project = this.Projects().find((p) => p.projectId === projectId);
+		let project = this.Projects().ongoing.find(
+			(p) => p.projectId === projectId,
+		);
+		if (!project) {
+			project = this.Projects().done.find((p) => p.projectId === projectId);
+		}
 		return project ? project.projectName : null;
 	}
 }

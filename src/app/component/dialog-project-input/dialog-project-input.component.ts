@@ -76,6 +76,9 @@ export class DialogProjectInputComponent {
 		}),
 		// A control to hold the ID from the search bar
 		picId: new FormControl<number | null>(null, [Validators.required]),
+		projectDone: new FormControl<boolean | null>(null, [
+			Validators.nullValidator,
+		]),
 	});
 
 	get f() {
@@ -106,6 +109,7 @@ export class DialogProjectInputComponent {
 						: null,
 				},
 				picId: 0,
+				projectDone: this.projectData.projectDone,
 			});
 			this.currentPic().name = this.projectData.picName;
 		}
@@ -168,6 +172,9 @@ export class DialogProjectInputComponent {
 						: this.projectForm.value.dateRange?.end || null,
 				userRoles,
 				picId: this.currentPic().id === 0 ? null : this.currentPic().id,
+				projectDone: this.projectData.projectDone
+					? null
+					: this.projectForm.value.projectDone || null,
 			};
 
 			// Update the local project object with either the same or new values
@@ -191,5 +198,7 @@ export class DialogProjectInputComponent {
 			this.projectForm.value.dateRange?.end || this.projectData.targetDate;
 		this.projectData.picName =
 			this.currentPic().name || this.projectData.picName;
+		this.projectData.projectDone =
+			this.projectForm.value.projectDone || this.projectData.projectDone;
 	}
 }

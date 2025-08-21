@@ -18,7 +18,6 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatButtonModule } from "@angular/material/button";
 import { DataProcessingService } from "../../service/data-processing.service";
 import { TextFieldModule } from "@angular/cdk/text-field";
-import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { DialogService } from "../../service/dialog.service";
 
 @Component({
@@ -31,8 +30,6 @@ import { DialogService } from "../../service/dialog.service";
 		ReactiveFormsModule,
 		MatButtonModule,
 		TextFieldModule,
-		MatOptionModule,
-		MatAutocompleteModule,
 	],
 	templateUrl: "./dialog-module-input.component.html",
 	styleUrls: ["./dialog-module-input.component.css"],
@@ -46,7 +43,6 @@ export class DialogModuleInputComponent {
 	moduleForm = new FormGroup({
 		moduleName: new FormControl("", [Validators.required]),
 		description: new FormControl("", [Validators.required]),
-		priority: new FormControl<NameListItem | null>(null, [Validators.required]),
 	});
 
 	priorityList = signal<NameListItem[]>([]);
@@ -61,10 +57,6 @@ export class DialogModuleInputComponent {
 			this.moduleForm.patchValue({
 				moduleName: this.moduleData.moduleName,
 				description: this.moduleData.description,
-				priority:
-					this.priorityList().find(
-						(p) => p.name === this.moduleData.projectName,
-					) || null,
 			});
 		}
 	}
@@ -76,7 +68,6 @@ export class DialogModuleInputComponent {
 				ModuleName: this.moduleForm.value.moduleName || "",
 				description: this.moduleForm.value.description || "",
 				createdBy: this.dataService.userIdSignal(),
-				priorityId: this.moduleForm.value.priority?.id || 0,
 			};
 			this.dataService.postNewModule(newModule).subscribe(() => {
 				this.dialogService.getModuleContainerDialogRef()?.close(true);
@@ -102,11 +93,15 @@ export class DialogModuleInputComponent {
 					? null
 					: this.moduleForm.value.description || null,
 		};
-		this.dataService.putAlterModule(alter).subscribe(() => {
-			this.moduleData.moduleName =
-				this.moduleForm.value.moduleName || this.moduleData.moduleName;
-			this.moduleData.description =
-				this.moduleForm.value.description || this.moduleData.description;
-		});
+		console.log("Updating module:", alter);
+		this.dataService.putAlterModule(alter).subscribe();
+		this.updateExistingSubModule();
+	}
+
+	updateExistingSubModule() {
+		this.moduleData.moduleName =
+			this.moduleForm.value.moduleName || this.moduleData.moduleName;
+		this.moduleData.description =
+			this.moduleForm.value.description || this.moduleData.description;
 	}
 }

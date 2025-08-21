@@ -1,20 +1,5 @@
-.module-detail {
+.dialog-body {
 	display: flex;
+	gap: 1em;
 	flex-direction: column;
-	gap: .5rem;
-}
-.row {
-	display: flex;
-	gap: .5rem;
-}
-.label {
-	font-weight: 600;
-	min-width: 110px;
-}
-.description {
-	align-items: flex-start;
-}
-.value {
-	flex: 1;
-	white-space: pre-line;
 }

@@ -12,7 +12,8 @@
             <div class="section-title">Features</div>
             <div class="module-item">
                 @for (module of ganttPageService.filteredGanttData(); track $index) {
-                <div class="module-name">{{module.moduleName}}</div>
+                <div class="module-name" (click)="ganttPageService.openModuleForm(module.moduleId)">
+                    {{module.moduleName}}</div>
                 @for (w of module.works; track w.workId) {
                 <div class="work-item" (click)="ganttPageService.openWorkForm(w.workId, w.trackerName)">
                     <div class="work-name">{{w.workName}}</div>
