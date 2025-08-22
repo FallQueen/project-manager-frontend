@@ -47,8 +47,8 @@ export class DataProcessingService {
 	private router = inject(Router);
 
 	// The base URL for the backend API.
-	private host = "https://project-manager-backend-theta.vercel.app/api";
-	// private host = "http://localhost:9090/api";
+	// private host = "https://project-manager-backend-theta.vercel.app/api";
+	private host = "http://localhost:9090/api";
 
 	// Computes the current user's roles for the selected project.
 	private currentProjectRoles = computed(() => {
@@ -334,6 +334,11 @@ export class DataProcessingService {
 	// Creates a new subModule item.
 	// @param newSubModule The new subModule data.
 	// @returns An Observable of the server response.
+
+	getProjectSubModulesByModule(moduleId: number) {
+		const url = `${this.host}/getProjectSubModulesByModule?moduleId=${moduleId}`;
+		return this.http.get<SubModuleData[]>(url);
+	}
 	postNewSubModule(newSubModule: NewSubModule) {
 		const url = `${this.host}/postNewSubModule`;
 		return this.http.post(url, newSubModule);

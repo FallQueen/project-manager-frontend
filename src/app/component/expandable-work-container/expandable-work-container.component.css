@@ -7,6 +7,15 @@
 	transition: max-height 0.6s ease-in-out;
 }
 
+.child-wrapper.tes {
+
+	max-height: 10em
+
+
+
+
+}
+
 .child-container {
 	display: flex;
 	width: 100%;

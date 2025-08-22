@@ -8,7 +8,7 @@
     <!-- Container for vertical list of sub-module cards -->
     <div class="vertical-card-container">
         <app-card-module></app-card-module>
-        <!-- Loop through each subModule in the backlog list and render a card -->
+        <!-- Loop through each subModule in the backlog list and render a card -->  
         @for (subModule of backlogList(); track $index) {
         <app-card-sub-module [subModuleData]="subModule"
             (cardDeleted)="backlogPageService.removeSubModuleFromArray(subModule.subModuleId)">

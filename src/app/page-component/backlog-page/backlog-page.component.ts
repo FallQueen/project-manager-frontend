@@ -20,6 +20,6 @@ export class BacklogPageComponent {
 	backlogPageService = inject(BacklogPageService);
 	// Signal holding the list of sub-modules for the backlog
 	backlogList: Signal<SubModuleData[]> = this.backlogPageService.subModuleList;
-
+	
 	ngOnInit() {}
 }

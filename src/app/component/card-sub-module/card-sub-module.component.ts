@@ -21,6 +21,7 @@ import { ExpandableWorkContainerComponent } from "../expandable-work-container/e
 
 @Component({
 	selector: "app-card-sub-module",
+	standalone: true,
 	imports: [
 		CommonModule,
 		MatTooltipModule,
@@ -45,6 +46,7 @@ export class CardSubModuleComponent {
 	workList = signal<WorkData[]>([]);
 
 	ngOnInit() {
+		console.log("SubModule diterima:", this.subModuleData);
 		this.countTotalWorkState();
 		this.countPercentage();
 		this.periodPercentage.set(
@@ -143,7 +145,7 @@ export class CardSubModuleComponent {
 					subModuleId: this.subModuleData.subModuleId,
 					priorityId: item.id,
 				})
-				.subscribe(() => {
+				.subscribe(() => {	
 					this.subModuleData.priorityId = item.id;
 					this.subModuleData.priorityName = item.name;
 				});
