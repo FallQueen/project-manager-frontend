@@ -11,8 +11,7 @@
     <div class="vertical-card-container">
         <!-- Card displaying the main module (project/module summary) -->
         <app-card-module></app-card-module>
-
-        <!-- Render a card for each sub-module in the backlog list -->
+        <!-- Loop through each subModule in the backlog list and render a card -->
         @for (subModule of backlogList(); track $index) {
         <!-- Card for a single sub-module; receives data and handles delete event -->
         <app-card-sub-module [subModuleData]="subModule"

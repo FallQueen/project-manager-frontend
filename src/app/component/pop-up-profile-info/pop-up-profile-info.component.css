@@ -57,11 +57,20 @@ button[mat-button] {
   border-radius: 20px;
   padding: 6px 20px;
   font-weight: 500;
-  background: #1976d2;
+  background: #ff6b6b;
   color: #fff;
   transition: all 0.2s ease-in-out;
 }
 
 button[mat-button]:hover {
-  background: #1259a5;
+  background: #111827;  
 }
+
+
+
+
+
+
+
+
+
