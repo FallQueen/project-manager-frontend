@@ -102,8 +102,9 @@
 
     <!-- Tracker and Activity Inputs -->
 
-    @if (!isBug){
+
     <div class="row">
+        @if (!isBug){
         <div>
             <div class="form-control">
                 <input matInput type="text" (click)="trackerTrigger.openPanel()"
@@ -122,7 +123,16 @@
                 Please select the tracker
             </mat-error>
         </div>
-
+        }
+        @if (isBug && data){
+        <div>
+            <div class="form-control">
+                <div class="form-control-input">{{data.trackerName}}
+                </div>
+                <label class="form-control-label label-up">Tracker</label>
+            </div>
+        </div>
+        }
         <div>
             <div class="form-control">
                 <input matInput type="text" readonly (click)="nameItemTrigger.openPanel()"
@@ -142,9 +152,9 @@
                 Please select the activity
             </mat-error>
         </div>
-    </div>}
+    </div>
 
-    @if (isBug && data){
+    <!-- @if (isBug && data){
 
     <div class="row">
         <div class="form-control">
@@ -160,7 +170,7 @@
         </div>
 
     </div>
-    }
+    } -->
 
     @if (isBug){
     <div class="row">

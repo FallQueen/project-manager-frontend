@@ -265,9 +265,13 @@ mat-icon {
 
 .form-control textarea {
 	field-sizing: content;
-	/* Optionally, add min/max height for better control */
+	min-height: 6em;
 }
 
+.form-control .text-area {
+	field-sizing: content;
+	min-height: 6em;
+}
 .form-control-label.label-up,
 .form-control-input:focus ~ .form-control-label,
 /* .form-control-input:not(:placeholder-shown) ~ .form-control-label, */

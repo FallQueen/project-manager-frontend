@@ -92,6 +92,7 @@ export class GanttPageService {
 		this.dataService.getGanttDataOfProject(projectId).subscribe((data) => {
 			this.ganttData.set(data); // store the raw data
 			this.filteredGanttData.set(data?.ganttItemData || []); // show all by default
+			console.log("Gantt Data refreshed for project",data);
 		});
 	}
 
@@ -124,6 +125,7 @@ export class GanttPageService {
 		const out: GanttItemsBasedOnProject[] = [];
 		// For each module in the project...
 		for (const mod of base.ganttItemData) {
+			console.log("Processing module:", mod.moduleName);
 			const works: GanttItem[] = [];
 			// For each work item in the module...
 			for (const w of mod.works) {
@@ -149,7 +151,7 @@ export class GanttPageService {
 				works.push(w);
 			}
 			// Only keep modules that have at least one work after filtering
-			if (works.length) out.push({ ...mod, works });
+			out.push({ ...mod, works });
 		}
 		console.log("Filtered Gantt Data:", out);
 		return out;

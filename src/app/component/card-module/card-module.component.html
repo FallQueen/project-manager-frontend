@@ -45,8 +45,17 @@
 
         </div>
         <!-- Expandable container for work items related to this module -->
-        <div class="container-work">
-            <!-- Placeholder: implement expandable work container for module if needed -->
-            <!-- <app-expandable-work-container ...></app-expandable-work-container> -->
+
+        <!-- Expandable container untuk SubModules -->
+        <div class="container-submodules" [style.maxHeight.px]="expanded() ? subModules().length * 200 : 0"
+            [class.expanded]="expanded()">
+            @if (loadingSubModules()) {
+            <div class="loading">Loading submodules...</div>
+            }
+
+
+            @for (sub of subModules(); track $index) {
+            <app-card-sub-module [subModuleData]="sub"></app-card-sub-module>
+            }
+
         </div>
-    </div>

@@ -144,6 +144,10 @@
 	position: relative;
 }
 
+.gantt-bar.warning-work-overdue{
+background-color: red;
+}
+
 .gantt-bar span {
 	font-size: 0.75em; /* 12px */
 	color: #ffffff;

@@ -516,6 +516,9 @@ export class DataProcessingService {
 	// @param name The string to format.
 	// @returns The formatted class name.
 	formatClassName(name: string): string {
+		if (!name){
+			return "";
+		}
 		return name.toUpperCase().replace(/\s+/g, "-");
 	}
 

@@ -5,7 +5,7 @@
     <div>
         <div class="form-control">
             <input matInput type="text" class="form-control-input" formControlName="moduleName">
-            <label class="form-control-label" [class.label-up]="f.moduleName.valid">Sub-Module Name</label>
+            <label class="form-control-label" [class.label-up]="f.moduleName.valid">Module Name</label>
         </div>
         <!-- Show error if invalid AND touched -->
         <mat-error *ngIf="f.moduleName.invalid && f.moduleName.touched">
