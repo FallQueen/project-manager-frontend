@@ -1,5 +1,6 @@
 import {
 	Component,
+	inject,
 	Input,
 	type OnChanges,
 	type SimpleChanges,
@@ -7,6 +8,7 @@ import {
 import { CommonModule } from "@angular/common";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
+import { LoginService } from "../../service/login.service";
 
 @Component({
 	selector: "app-pop-up-profile-info",
@@ -15,7 +17,8 @@ import { MatButtonModule } from "@angular/material/button";
 	templateUrl: "./pop-up-profile-info.component.html",
 	styleUrls: ["./pop-up-profile-info.component.css"],
 })
-export class PopUpProfileInfoComponent implements OnChanges {
+export class PopUpProfileInfoComponent {
+	loginService = inject(LoginService);
 	@Input() name!: string;
 	@Input() email!: string;
 	@Input() role!: string;
@@ -35,5 +38,8 @@ export class PopUpProfileInfoComponent implements OnChanges {
 		} else {
 			this.isOpen = this.visible;
 		}
+	}
+	onLogout() {
+		this.loginService.logOut();
 	}
 }

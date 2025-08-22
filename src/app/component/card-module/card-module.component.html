@@ -2,7 +2,7 @@
     <!-- Main container for the module card -->
     <div class="module-container">
         <!-- Priority indicator bar, color changes based on priority -->
-        <div class="indicator priority-{{moduleData.priorityName}}" [class.expanded]="expanded()"></div>
+        <div class="indicator " [class.expanded]="expanded()"></div>
         <div class="module-inner-container">
             <!-- Expand/collapse arrow icon -->
             <span class="arrow-icon-container" (click)="expandWorkInside()">
@@ -11,24 +11,22 @@
                 </mat-icon>
             </span>
 
-      <!-- Nama module -->
-      <div (click)="openForm()" class="card-name">
-        <span>{{ moduleData.moduleName }}</span>
-      </div>
+            <!-- Nama module -->
+            <div (click)="openForm()" class="card-name">
+                <span>{{ moduleData.moduleName }}</span>
+            </div>
 
-      <!-- State -->
-      <div class="card-section">
-        <span class="section-label">State</span>
-        <div class="progress-bar-battery">
-          @for (item of moduleData.workStateCountList; track $index) {
-            <div
-              class="progress-fill-battery state-{{ dataService.formatClassName(item.name) }}"
-              [matTooltip]="getTooltip(item.name, item.count, item.percentage)"
-              [style.width.%]="item.percentage"
-            ></div>
-          }
-        </div>
-      </div>
+            <!-- State -->
+            <div class="card-section">
+                <span class="section-label">State</span>
+                <div class="progress-bar-battery">
+                    @for (item of moduleData.workStateCountList; track $index) {
+                    <div class="progress-fill-battery state-{{ dataService.formatClassName(item.name) }}"
+                        [matTooltip]="getTooltip(item.name, item.count, item.percentage)"
+                        [style.width.%]="item.percentage"></div>
+                    }
+                </div>
+            </div>
 
             <!-- Section: Priority with pop-up to change priority -->
             <!-- <div class="card-section">
@@ -43,21 +41,12 @@
             </div> -->
 
             <!-- Section: Period progress bar -->
-            <div class="card-section">
-                <span class="section-label">Period</span>
-                <div class="progress-bar" matTooltip="{{ periodPercentage()}}%">
-                    <span class="date-label">
-                        {{ moduleData.startDate | date : "shortDate" }} - {{ moduleData.targetDate | date :
-                        "shortDate" }}
-                    </span>
-                    <div class="progress-fill" [style.width.%]="periodPercentage()"></div>
-                </div>
-            </div>
+
+
+        </div>
+        <!-- Expandable container for work items related to this module -->
+        <div class="container-work">
+            <!-- Placeholder: implement expandable work container for module if needed -->
+            <!-- <app-expandable-work-container ...></app-expandable-work-container> -->
         </div>
     </div>
-    <!-- Expandable container for work items related to this module -->
-    <div class="container-work">
-        <!-- Placeholder: implement expandable work container for module if needed -->
-        <!-- <app-expandable-work-container ...></app-expandable-work-container> -->
-    </div>
-</div>

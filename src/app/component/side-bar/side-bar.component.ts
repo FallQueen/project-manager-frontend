@@ -5,8 +5,8 @@ import { DataProcessingService } from "../../service/data-processing.service";
 import { LoginService } from "../../service/login.service";
 import { FormsModule } from "@angular/forms";
 import type { NameListItem, workNameListItem } from "../../model/format.type";
-import { PopUpProfileInfoComponent } from "../pop-up-profile-info/pop-up-profile-info.component";
 import { CommonModule } from "@angular/common";
+import { PopUpProfileInfoComponent } from "../pop-up-profile-info/pop-up-profile-info.component";
 
 @Component({
 	selector: "app-side-bar",

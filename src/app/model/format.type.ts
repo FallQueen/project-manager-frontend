@@ -98,8 +98,19 @@ export type ModuleData = {
 	workStateCountList: BatteryItem[];
 };
 
-// Represent data of a sub-module
-// Used for data display in cards and dialogs
+export type NewModule = {
+	projectId: number;
+	ModuleName: string;
+	description: string;
+	createdBy: number;
+};
+
+export type AlterModule = {
+	ModuleId: number;
+	ModuleName?: string | null;
+	description?: string | null;
+};
+
 export type SubModuleData = {
 	subModuleId: number;
 	subModuleName: string;
@@ -112,9 +123,8 @@ export type SubModuleData = {
 	startDate: Date;
 	targetDate: Date;
 	projectName: string;
-	workStateCountList: BatteryItem[];
+	workStateCountList?: BatteryItem[];
 };
-
 // Represents the input data for creating a new sub-module
 // Used in sub-module creation dialog form
 export type NewSubModule = {
