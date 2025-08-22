@@ -76,6 +76,7 @@ export class DialogWorkBugInputComponent {
 	@Input() data!: WorkData | BugData;
 	@Input() isBug = false;
 	@Output() selectActivity = new EventEmitter<NameListItem>();
+	@Output() edited = new EventEmitter<void>();
 
 	// isBugPage = signal(this.dataService.isPage("bug"));
 	trackerList = signal<NameListItem[]>([]);
@@ -98,7 +99,9 @@ export class DialogWorkBugInputComponent {
 		// A control to hold the ID from the search bar
 		state: new FormControl<NameListItem | null>(null, [Validators.required]),
 		pic: new FormControl<string | null>(null),
-		priority: new FormControl<NameListItem | null>(null, [Validators.required]),
+		priority: new FormControl<NameListItem | null>(null, [
+			this.isBug ? Validators.required : Validators.nullValidator,
+		]),
 		estimatedHours: new FormControl<number | null>(null, [Validators.required]),
 		tracker: new FormControl<NameListItem | null>(null, [
 			!this.isBug ? Validators.required : Validators.nullValidator,
@@ -368,5 +371,7 @@ export class DialogWorkBugInputComponent {
 			this.data.defectCause =
 				this.workForm.value.defectCause?.name || this.data.defectCause;
 		}
+
+		this.edited.emit();
 	}
 }

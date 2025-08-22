@@ -53,11 +53,12 @@
     </div>
 
     <div class="row">
+        @if(dataService.isBugData(workData)){
         <div class="form-control">
             <div class="form-control-input">{{workData.priorityName}}</div>
             <label class="form-control-label label-up">Priority</label>
         </div>
-
+        }
 
         <div class="form-control">
             <div class="form-control-input">{{workData.stateName}}

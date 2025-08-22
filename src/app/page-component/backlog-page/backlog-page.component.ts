@@ -17,9 +17,11 @@ import { CardModuleComponent } from "../../component/card-module/card-module.com
 	styleUrl: "./backlog-page.component.css",
 })
 export class BacklogPageComponent {
+	// Injects the BacklogPageService, which provides business/data logic for the backlog page
 	backlogPageService = inject(BacklogPageService);
-	// Signal holding the list of sub-modules for the backlog
+
+	// Signal holding the list of sub-modules for the backlog; updates reactively when the service changes
 	backlogList: Signal<SubModuleData[]> = this.backlogPageService.subModuleList;
-	
+
 	ngOnInit() {}
 }

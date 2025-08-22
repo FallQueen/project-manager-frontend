@@ -1,0 +1,14 @@
+<div class="dialog-container">
+    <app-dialog-util-title [new]="dialogData?.newModule" [editable]="editable()" (edit)="toggleEdit()"
+        (delete)="triggerDeleteModule()" title="Module #{{dialogData?.moduleData?.moduleId}}"
+        titleNew="NEW MODULE"></app-dialog-util-title>
+    @if (dialogData.newModule) {
+    <app-dialog-module-input></app-dialog-module-input>
+    } @else if (editable()) {
+    <app-dialog-module-input [moduleData]="dialogData.moduleData"></app-dialog-module-input>
+    } @else if (!editable()) {
+    <app-dialog-module-detail [moduleData]="dialogData.moduleData"></app-dialog-module-detail>
+    }
+    <app-dialog-util-button-row [new]="dialogData.newModule" [editable]="editable()" (cancelEdit)="toggleEdit()"
+        (save)="triggerEditModuleSubmit()" (create)="triggerNewModuleSubmit()"></app-dialog-util-button-row>
+</div>

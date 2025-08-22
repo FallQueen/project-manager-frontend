@@ -2,17 +2,20 @@
     <!-- Page title/header -->
     <div class="page-title">
         <h1>Gantt Chart</h1>
+        <app-gantt-filter></app-gantt-filter>
     </div>
 
 
-    <div class="gantt-container" #ganttScroll>
+    <div class="gantt-container" #ganttScroll (pointerdown)="onDragStart($event)" (pointermove)="onDragMove($event)"
+        (pointerup)="onDragEnd()" (pointerleave)="onDragEnd()">
         <div class="work-data-section no-scroll">
             <div class="section-title">Features</div>
             <div class="module-item">
-                @for (module of ganttData()?.ganttItemData; track $index) {
-                <div class="module-name">{{module.moduleName}}</div>
+                @for (module of ganttPageService.filteredGanttData(); track $index) {
+                <div class="module-name" (click)="ganttPageService.openModuleForm(module.moduleId)">
+                    {{module.moduleName}}</div>
                 @for (w of module.works; track w.workId) {
-                <div class="work-item">
+                <div class="work-item" (click)="ganttPageService.openWorkForm(w.workId, w.trackerName)">
                     <div class="work-name">{{w.workName}}</div>
                     <div class="assigned-users" [class.no-users]="!w.assignedUsers || w.assignedUsers.length === 0">
                         {{getUserListAsString(w.assignedUsers) || "No Users Assigned"}}
@@ -40,17 +43,21 @@
             </div>
             <div class="gantt-body">
                 <div class="module-item">
-                    @for (module of ganttData()?.ganttItemData; track $index) {
+                    @for (module of ganttPageService.filteredGanttData(); track $index) {
                     <div class="module-name border-transparent" [style.background-color]="'transparent'"></div>
                     @for (w of module.works; track w.workId) {
                     <div class="work-item">
-                        <div class="gantt-bar" (pointerdown)="onBarPointerDown($event, w)"
-                            (pointermove)="onBarPointerMove($event, w)" (pointerup)="onBarPointerUp($event, w)"
-                            (pointercancel)="onBarPointerUp($event, w)"
+                        <div class="gantt-bar" (pointerdown)="dragPointerDown($event, w)"
+                            (pointermove)="dragPointerMove($event, w)" (pointerup)="dragPointerUp($event, w)"
+                            (pointercancel)="dragPointerUp($event, w)"
                             [matTooltip]="(w.startDate | date:'shortDate') + ' - ' + (w.targetDate | date:'shortDate') + ' (' + (daysBetween(w.startDate, w.targetDate)) + ' days)'"
                             [style.width]="(daysBetween(w.startDate, w.targetDate)/totalDays() * 100) + '%'"
                             [style.margin-left]="calculateGanttBarStart(w.startDate)">
+                            <div class="resize-handle left" (pointerdown)="resizePointerDown($event, w, 'left')">
+                            </div>
                             <span>{{w.workName}}</span>
+                            <div class="resize-handle right" (pointerdown)="resizePointerDown($event, w, 'right')">
+                            </div>
                         </div>
                     </div>
                     }

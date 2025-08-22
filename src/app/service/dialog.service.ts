@@ -1,15 +1,24 @@
 import { inject, Injectable } from "@angular/core";
 import { MatDialog, type MatDialogRef } from "@angular/material/dialog";
 import { DialogSubModuleContainerComponent } from "../component/dialog-sub-module-container/dialog-sub-module-container.component";
-import type { SubModuleData, Project, WorkData } from "../model/format.type";
+import { DialogModuleContainerComponent } from "../component/dialog-module-container/dialog-module-container.component";
+import type {
+	SubModuleData,
+	Project,
+	WorkData,
+	ModuleData,
+} from "../model/format.type";
 import { DialogProjectContainerComponent } from "../component/dialog-project-container/dialog-project-container.component";
 import { DialogWorkBugContainerComponent } from "../component/dialog-work-bug-container/dialog-work-bug-container.component";
 import { DialogUtilityComponent } from "../component/dialog-utility/dialog-utility.component";
+import { DataProcessingService } from "./data-processing.service";
+import { map, type Observable } from "rxjs";
 
 @Injectable({
 	providedIn: "root",
 })
 export class DialogService {
+	private dataService = inject(DataProcessingService);
 	// Injects the Angular Material Dialog service for opening dialogs.
 	private dialog = inject(MatDialog);
 
@@ -17,6 +26,8 @@ export class DialogService {
 	private projectContainerDialogRef: MatDialogRef<DialogProjectContainerComponent> | null =
 		null;
 	private subModuleContainerDialogRef: MatDialogRef<DialogSubModuleContainerComponent> | null =
+		null;
+	private moduleContainerDialogRef: MatDialogRef<DialogModuleContainerComponent> | null =
 		null;
 	private workContainerDialogRef: MatDialogRef<DialogWorkBugContainerComponent> | null =
 		null;
@@ -42,10 +53,55 @@ export class DialogService {
 		return dialogRef;
 	}
 
-	// Returns the reference to the currently opened Project dialog, if any.
+	//
+	openProjectDialogById(
+		projectId: number,
+	): Observable<MatDialogRef<DialogProjectContainerComponent>> {
+		return this.dataService.getProjectDetails(projectId).pipe(
+			// Use map to transform the bugData into a dialog reference
+			map((projectData) => this.openProjectDialog(projectData, false)),
+		);
+	}
 
+	// Returns the reference to the currently opened Project dialog, if any.
 	getProjectContainerDialogRef() {
 		return this.projectContainerDialogRef;
+	}
+
+	// Opens the module dialog with the provided module data.
+	// @param moduleData The module data to be passed to the dialog.
+	// @param newModule Indicates if the dialog is for creating a new module.
+	// @returns Reference to the opened module dialog.
+	openModuleDialog(
+		moduleData: ModuleData | undefined,
+		newModule: boolean,
+	): MatDialogRef<DialogModuleContainerComponent> {
+		const dialogRef = this.dialog.open(DialogModuleContainerComponent, {
+			autoFocus: false, // Prevents the dialog from automatically focusing an element.
+			width: "40vw",
+			minWidth: "20em",
+			height: "fit-content",
+			maxWidth: "40vw",
+			maxHeight: "90vh",
+			panelClass: "custom-dialog-container",
+			data: { moduleData, newModule },
+		});
+		this.moduleContainerDialogRef = dialogRef;
+		return dialogRef;
+	}
+
+	openModuleDialogById(
+		moduleId: number,
+	): Observable<MatDialogRef<DialogModuleContainerComponent>> {
+		return this.dataService.getModuleDetails(moduleId).pipe(
+			// Use map to transform the moduleData into a dialog reference
+			map((moduleData) => this.openModuleDialog(moduleData, false)),
+		);
+	}
+
+	// Returns the reference to the currently opened module dialog, if any.
+	getModuleContainerDialogRef() {
+		return this.moduleContainerDialogRef;
 	}
 
 	// Opens the subModule dialog with the provided subModule data.
@@ -96,6 +152,24 @@ export class DialogService {
 		this.workContainerDialogRef = dialogRef;
 		console.log("openWorkDialog", workData, subModuleId, newWork);
 		return dialogRef;
+	}
+
+	openDialogForWorkById(
+		workId: number,
+	): Observable<MatDialogRef<DialogWorkBugContainerComponent>> {
+		return this.dataService.getWorkDetails(workId).pipe(
+			// Use map to transform the workData into a dialog reference
+			map((workData) => this.openWorkDialog(workData, undefined, false)),
+		);
+	}
+
+	openDialogForBugById(
+		bugId: number,
+	): Observable<MatDialogRef<DialogWorkBugContainerComponent>> {
+		return this.dataService.getBugDetails(bugId).pipe(
+			// Use map to transform the bugData into a dialog reference
+			map((bugData) => this.openWorkDialog(bugData, undefined, false)),
+		);
 	}
 
 	// Returns the reference to the currently opened Work dialog, if any.

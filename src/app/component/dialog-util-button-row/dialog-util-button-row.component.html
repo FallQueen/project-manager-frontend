@@ -1,9 +1,9 @@
 <div class="row-right-aligned">
     @if (new) {
-    <button mat-stroked-button color="warn" [mat-dialog-close]="true">Cancel</button>
+    <button mat-stroked-button color="warn" [mat-dialog-close]="haveBeenEdited">Cancel</button>
     <button mat-stroked-button (click)="create.emit()">Create</button>
     } @else if (!new && !editable) {
-    <button mat-stroked-button [mat-dialog-close]="true">Ok</button>
+    <button mat-stroked-button [mat-dialog-close]="haveBeenEdited">Ok</button>
     } @else {
     <button mat-stroked-button color="warn" (click)="cancelEdit.emit()">Cancel</button>
     <button mat-stroked-button (click)="save.emit()">Save</button>

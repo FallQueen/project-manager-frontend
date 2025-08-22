@@ -26,6 +26,12 @@ export type Project = {
 	targetDate: Date;
 	totalTask: number;
 	doneTask: number;
+	projectDone: boolean;
+};
+
+export type ProjectListByCompletion = {
+	ongoing: Project[];
+	done: Project[];
 };
 
 // Represents the input data for creating a new project
@@ -50,6 +56,7 @@ export type AlterProject = {
 	targetDate: Date | null;
 	picId: number | null;
 	userRoles: UserRoleChange[];
+	projectDone: boolean | null;
 };
 
 // Represents an item  that consists of an id and a name
@@ -62,6 +69,7 @@ export interface NameListItem {
 // A specific use case for NameListItem with an added projectId
 // Used in project/work search, to go to project when select work
 export interface workNameListItem extends NameListItem {
+	trackerName: string;
 	projectId: number;
 }
 
@@ -85,16 +93,9 @@ export type ModuleData = {
 	moduleId: number;
 	moduleName: string;
 	description: string;
-	priorityId: number;
-	priorityName: string;
-	picId: number;
-	picName: string;
 	createdBy: string;
-	startDate: Date;
-	targetDate: Date;
 	projectName: string;
 	workStateCountList: BatteryItem[];
-	subModuleList: SubModuleData[];
 };
 
 // Represent data of a sub-module
@@ -112,7 +113,6 @@ export type SubModuleData = {
 	targetDate: Date;
 	projectName: string;
 	workStateCountList: BatteryItem[];
-	moduleId: number;
 };
 
 // Represents the input data for creating a new sub-module
@@ -264,9 +264,10 @@ export type GanttItem = {
 	workName: string;
 	startDate: Date;
 	targetDate: Date;
-	trackerId: number;
-	activityId: number;
-	assignedUsers: NameListItem[]; // or another appropriate type
+	trackerName: string;
+	stateName: string;
+	activityName: string;
+	assignedUsers: NameListItem[];
 };
 
 export type GanttItemsBasedOnProject = {

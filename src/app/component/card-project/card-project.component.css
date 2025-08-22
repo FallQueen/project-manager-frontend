@@ -1,5 +1,6 @@
 .card {
-	width: 23em;
+	width: 19em;
+	box-sizing: border-box;
 	height: 9.4em;
 }
 
@@ -31,7 +32,12 @@
 
 .minor-label {
 	color: #333;
-	font-size: 0.9em;
+	font-size: 0.8em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	max-width: 100%;
+	display: block;
 }
 
 .mid-label {
@@ -93,7 +99,7 @@
 
 .progress-bar.date {
 	height: 1.25em;
-	width: 9em;
+	width: 7.5em;
 	margin: 0;
 }
 

@@ -1,0 +1,46 @@
+<!-- Form bound to moduleForm FormGroup -->
+<div class="dialog-body" [formGroup]="moduleForm">
+
+    <!-- Project Name Input -->
+    <div>
+        <div class="form-control">
+            <input matInput type="text" class="form-control-input" formControlName="moduleName">
+            <label class="form-control-label" [class.label-up]="f.moduleName.valid">Sub-Module Name</label>
+        </div>
+        <!-- Show error if invalid AND touched -->
+        <mat-error *ngIf="f.moduleName.invalid && f.moduleName.touched">
+            Tolong isi nama projek
+        </mat-error>
+    </div>
+    @if(moduleData) {
+    <div>
+        <div class="form-control">
+            <div class="form-control-input">{{moduleData.projectName}}
+            </div>
+            <label class="form-control-label label-up">Project</label>
+        </div>
+    </div>
+    }
+
+    <!-- Description Input -->
+    <div>
+        <div class="form-control">
+            <textarea matInput type="text" class="form-control-input" formControlName="description"></textarea>
+            <label class="form-control-label" [class.label-up]="f.description.valid">Description</label>
+        </div>
+        <!-- Error if description is invalid and touched -->
+        <mat-error *ngIf="f.description.invalid && f.description.touched">
+            Please enter the description
+        </mat-error>
+    </div>
+
+    @if(moduleData) {
+    <div>
+        <div class="form-control">
+            <div class="form-control-input">{{moduleData.createdBy}}
+            </div>
+            <label class="form-control-label label-up">Created By</label>
+        </div>
+    </div>
+    }
+</div>

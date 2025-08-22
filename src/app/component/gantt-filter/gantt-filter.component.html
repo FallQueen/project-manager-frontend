@@ -1,0 +1,93 @@
+<div class="filter-container">
+
+    <button class="filter-button" type="button">
+        <mat-icon aria-hidden="true">filter_list</mat-icon>
+        <span class="filter-label">FILTERS</span>
+        <mat-icon class="chevron" aria-hidden="true">keyboard_arrow_down</mat-icon>
+    </button>
+    <div class="filter-pop-up">
+        <div class="filter-left">
+            <div class="filter-section">
+                <div class="filter-name">Tracker</div>
+                <div class="filter-options-container">
+                    @for (item of ganttPageService.trackerList(); track item.id) {
+                    <label class="filter-option checkbox-row"
+                        (mouseenter)="mouseDown() && ganttPageService.setGanttFilter(item,'tracker')">
+                        <input type="checkbox" [checked]="ganttPageService.checkFilterHas(item,'tracker')"
+                            (mousedown)="ganttPageService.setGanttFilter(item,'tracker')"
+                            (change)="ganttPageService.setGanttFilter(item,'tracker')" />
+                        <span class="checkbox-box" aria-hidden="true"><mat-icon>check</mat-icon></span>
+                        <span class="label-text">{{ item.name }}</span>
+                    </label>
+                    }
+                </div>
+            </div>
+            <div class="filter-section">
+                <div class="filter-name">Activity</div>
+                <div class="filter-options-container">
+                    @for (item of ganttPageService.activityList(); track item.id) {
+                    <label class="filter-option checkbox-row">
+                        <input type="checkbox" [checked]="ganttPageService.checkFilterHas(item,'activity')"
+                            (change)="ganttPageService.setGanttFilter(item,'activity')" />
+                        <span class="checkbox-box" aria-hidden="true"><mat-icon>check</mat-icon></span>
+                        <span class="label-text">{{ item.name }}</span>
+                    </label>
+                    }
+                </div>
+            </div>
+            <div class="filter-section">
+                <div class="filter-name">State</div>
+                <div class="filter-options-container">
+                    @for (item of ganttPageService.stateList(); track item.id) {
+                    <label class="filter-option checkbox-row">
+                        <input type="checkbox" [checked]="ganttPageService.checkFilterHas(item,'state')"
+                            (change)="ganttPageService.setGanttFilter(item,'state')" />
+                        <span class="checkbox-box" aria-hidden="true"><mat-icon>check</mat-icon></span>
+                        <span class="label-text">{{ item.name }}</span>
+                    </label>
+                    }
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <div class="filter-name">Assigned</div>
+                <div class="filter-options-container assigned-binary">
+                    <label class="filter-option ">
+                        <input type="radio" name="assignedFilter"
+                            [checked]="ganttPageService.ganttFilter.assigned() === true"
+                            (change)="ganttPageService.setGanttFilterForAssigned(true)" />
+                        <span class="label-text">Assigned</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="radio" name="assignedFilter"
+                            [checked]="ganttPageService.ganttFilter.assigned() === false"
+                            (change)="ganttPageService.setGanttFilterForAssigned(false)" />
+                        <span class="label-text">Unassigned</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="radio" name="assignedFilter"
+                            [checked]="ganttPageService.ganttFilter.assigned() === null"
+                            (change)="ganttPageService.setGanttFilterForAssigned(null)" />
+                        <span class="label-text">Any</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="filter-right">
+            <div class="filter-section">
+                <div class="filter-name">Users</div>
+                <div class="filter-options-container">
+                    @for (item of ganttPageService.usersList(); track item.id) {
+                    <label class="filter-option checkbox-row">
+                        <input type="checkbox" [checked]="ganttPageService.checkFilterHas(item,'users')"
+                            (change)="ganttPageService.setGanttFilter(item,'users')" />
+                        <span class="checkbox-box" aria-hidden="true"><mat-icon>check</mat-icon></span>
+                        <span class="label-text">{{ item.name }}</span>
+                    </label>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

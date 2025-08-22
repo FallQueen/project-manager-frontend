@@ -9,11 +9,14 @@ import type {
 	NameListItemByRole,
 	AlterProject,
 	SubModuleData,
+	ModuleData,
 	WorkData,
 	AlterWork,
 	NewWork,
 	NewSubModule,
+	NewModule,
 	AlterSubModule,
+	AlterModule,
 	userProjectRoles,
 	UserTodoList,
 	ProjectBugList,
@@ -22,6 +25,7 @@ import type {
 	NewBug,
 	AlterBug,
 	GanttChartData,
+	ProjectListByCompletion,
 } from "../model/format.type";
 
 import { signal } from "@angular/core";
@@ -244,14 +248,19 @@ export class DataProcessingService {
 	// @returns An Observable of the list of all projects.
 	getAllProjects() {
 		const url = `${this.host}/getAllProjects`;
-		return this.http.get<Project[]>(url);
+		return this.http.get<ProjectListByCompletion>(url);
 	}
 
 	// Retrieves projects assigned to the current user.
 	// @returns An Observable of the user's projects.
 	getUserProjects() {
 		const url = `${this.host}/getUserProjects?userId=${this.userIdSignal()}`;
-		return this.http.get<Project[]>(url);
+		return this.http.get<ProjectListByCompletion>(url);
+	}
+
+	getProjectDetails(projectId: number) {
+		const url = `${this.host}/getProjectDetails?projectId=${projectId}`;
+		return this.http.get<Project>(url);
 	}
 
 	// Creates a new project.
@@ -331,6 +340,27 @@ export class DataProcessingService {
 		return this.http.get<SubModuleData[]>(url);
 	}
 
+	// Retrieves all modules for a project.
+	// @param projectId The project ID.
+	// @returns An Observable of module data.
+	getProjectModules(projectId: number) {
+		const url = `${this.host}/getProjectModules?projectId=${projectId}`;
+		return this.http.get<ModuleData[]>(url);
+	}
+
+	getModuleDetails(moduleId: number) {
+		const url = `${this.host}/getModuleDetails?moduleId=${moduleId}`;
+		return this.http.get<ModuleData>(url);
+	}
+
+	// Updates an existing module.
+	// @param alterModule The altered module data.
+	// @returns An Observable of the server response.
+	putAlterModule(alterModule: AlterModule) {
+		const url = `${this.host}/putAlterModule`;
+		return this.http.put(url, alterModule);
+	}
+
 	// Creates a new subModule item.
 	// @param newSubModule The new subModule data.
 	// @returns An Observable of the server response.
@@ -342,6 +372,14 @@ export class DataProcessingService {
 	postNewSubModule(newSubModule: NewSubModule) {
 		const url = `${this.host}/postNewSubModule`;
 		return this.http.post(url, newSubModule);
+	}
+
+	// Creates a new module.
+	// @param newModule The new module data.
+	// @returns An Observable of the server response.
+	postNewModule(newModule: NewModule) {
+		const url = `${this.host}/postNewModule`;
+		return this.http.post(url, newModule);
 	}
 
 	// Deletes a subModule item by its ID.
@@ -392,6 +430,19 @@ export class DataProcessingService {
 		return this.http.delete(url);
 	}
 
+	// Deletes a module by its ID.
+	// @param moduleId The ID of the module item.
+	// @returns An Observable of the server response.
+	dropModule(moduleId: number) {
+		const url = `${this.host}/dropModule?moduleId=${moduleId}`;
+		return this.http.delete(url);
+	}
+
+	getWorkDetails(workId: number) {
+		const url = `${this.host}/getWorkDetails?workId=${workId}`;
+		return this.http.get<WorkData>(url);
+	}
+
 	getWorkNameListOfProjectDev(projectId: number) {
 		const url = `${this.host}/getWorkNameListOfProjectDev?projectId=${projectId}`;
 		return this.http.get<NameListItem[]>(url);
@@ -434,6 +485,11 @@ export class DataProcessingService {
 	getProjectBugs(projectId: number) {
 		const url = `${this.host}/getProjectBugs?projectId=${projectId}`;
 		return this.http.get<ProjectBugList[]>(url);
+	}
+
+	getBugDetails(bugId: number) {
+		const url = `${this.host}/getBugDetails?bugId=${bugId}`;
+		return this.http.get<BugData>(url);
 	}
 
 	postNewBug(newBug: NewBug) {

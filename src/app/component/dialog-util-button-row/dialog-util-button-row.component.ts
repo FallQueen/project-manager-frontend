@@ -1,3 +1,4 @@
+import { I } from "@angular/cdk/keycodes";
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatDialogClose } from "@angular/material/dialog";
@@ -11,6 +12,7 @@ import { MatDialogClose } from "@angular/material/dialog";
 export class DialogUtilButtonRowComponent {
 	@Input() new = true;
 	@Input() editable = false;
+	@Input() haveBeenEdited = false;
 	@Output() cancelEdit = new EventEmitter<void>();
 	@Output() save = new EventEmitter<void>();
 	@Output() create = new EventEmitter<void>();

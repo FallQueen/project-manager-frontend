@@ -36,30 +36,27 @@ import { CardSubModuleComponent } from "../card-sub-module/card-sub-module.compo
   styleUrl: "./card-module.component.css",
 })
 export class CardModuleComponent {
-  dataService = inject(DataProcessingService);
-  dialogService = inject(DialogService);
-
-  @Input() moduleData: ModuleData = {
-    moduleId: 1,
-    moduleName: "Sample Module",
-    startDate: new Date(),
-    targetDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-    priorityId: 1,
-    priorityName: "HIGH",
-    workStateCountList: [
-      { id: 1, name: "NEW", count: 3, percentage: 0 },
-      { id: 2, name: "ASSIGNED", count: 2, percentage: 0 },
-      { id: 3, name: "IN PROGRESS", count: 5, percentage: 0 },
-    ],
-    description: "abc",
-    picId: 1,
-    picName: "Alice",
-    createdBy: "Alice",
-    projectName: "Sample Project",
-    subModuleList: [],
-  };
-
-  @Output() cardDeleted = new EventEmitter<number>();
+	dataService = inject(DataProcessingService);
+	dialogService = inject(DialogService);
+	@Input() moduleData: ModuleData = {
+		moduleId: 1,
+		moduleName: "Sample Module",
+		startDate: new Date(),
+		targetDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+		priorityId: 1,
+		priorityName: "HIGH",
+		workStateCountList: [
+			{ id: 1, name: "NEW", count: 3, percentage: 0 },
+			{ id: 2, name: "ASSIGNED", count: 2, percentage: 0 },
+			{ id: 3, name: "IN PROGRESS", count: 5, percentage: 0 },
+		],
+		description: "abc",
+		picId: 1,
+		picName: "Alice",
+		createdBy: "Alice",
+		projectName: "Sample Project",
+	};
+	@Output() cardDeleted = new EventEmitter<number>();
 
   expanded = signal(false);
   periodPercentage = signal<number>(0);
@@ -71,30 +68,33 @@ export class CardModuleComponent {
   subModules = signal<SubModuleData[]>([]);
   loadingSubModules = signal(false);
 
-  ngOnInit() {
-    this.countTotalWorkState();
-    this.countPercentage();
-    this.periodPercentage.set(
-      this.dataService.getPeriodDonePercentage(
-        this.moduleData.startDate,
-        this.moduleData.targetDate,
-      ),
-    );
-  }
+	ngOnInit() {
+		this.countTotalWorkState();
+		this.countPercentage();
+		this.periodPercentage.set(
+			this.dataService.getPeriodDonePercentage(
+				this.moduleData.startDate,
+				this.moduleData.targetDate,
+			),
+		);
+	}
 
-  countTotalWorkState() {
-    let total = 0;
-    for (const state of this.moduleData.workStateCountList) {
-      total += state.count;
-    }
-    this.totalWork.set(total);
-  }
+	// ngOnChanges() {
+	// 	this.workList.set([]);
+	// }
 
-  countPercentage() {
-    for (const state of this.moduleData.workStateCountList) {
-      state.percentage = (100 * state.count) / this.totalWork();
-    }
-  }
+	countTotalWorkState() {
+		let total = 0;
+		for (const state of this.moduleData.workStateCountList) {
+			total += state.count;
+		}
+		this.totalWork.set(total);
+	}
+	countPercentage() {
+		for (const state of this.moduleData.workStateCountList) {
+			state.percentage = (100 * state.count) / this.totalWork();
+		}
+	}
 
   getTooltip(name: string, count: number, percentage: number): string {
     const formattedPercentage = Math.floor(percentage * 10) / 10;

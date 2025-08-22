@@ -22,6 +22,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { SearchService } from "../../service/search.service";
 import { DataProcessingService } from "../../service/data-processing.service";
 import { MatIconModule } from "@angular/material/icon";
+import { DialogService } from "../../service/dialog.service";
 
 @Component({
 	selector: "app-search-bar-proj-and-work",
@@ -38,6 +39,7 @@ import { MatIconModule } from "@angular/material/icon";
 })
 export class SearchBarProjAndWorkComponent {
 	searchBarService = inject(SearchService);
+	dialogService = inject(DialogService);
 
 	dataService = inject(DataProcessingService);
 	// Input: The full list of userNames to search from
@@ -47,7 +49,7 @@ export class SearchBarProjAndWorkComponent {
 
 	@Input() projectNameList = signal<NameListItem[]>([]);
 	@Input() workNameList = signal<workNameListItem[]>([]);
-	@Input() textInput = signal<string>(""); 
+	@Input() textInput = signal<string>("");
 	@Output() clicked = new EventEmitter<void>();
 	@ViewChild("searchInput") searchInputRef?: ElementRef<HTMLInputElement>;
 
@@ -69,10 +71,6 @@ export class SearchBarProjAndWorkComponent {
 			.slice(0, 3) as workNameListItem[];
 	});
 
-	selectProject(projectId: number, type: string, projectName: string) {
-		this.dataService.changeProject(projectId);
-	}
-
 	// The filtering logic
 	ngOnInit() {
 		this.searchBarService.enableIdFilter();
@@ -87,11 +85,24 @@ export class SearchBarProjAndWorkComponent {
 		return Array.isArray(list) && list.length > 0 && "projectId" in list[0];
 	}
 
+	isWorkNameListItem(
+		item: NameListItem | workNameListItem,
+	): item is workNameListItem {
+		return (item as workNameListItem).projectId !== undefined;
+	}
+
 	onOptionSelectedGoToProject(input: NameListItem | workNameListItem) {
-		if (input && "projectId" in input) {
+		if (input && this.isWorkNameListItem(input)) {
 			this.dataService.changeProject(input.projectId);
+			// openDialogForWorkById / openDialogForBugById are cold Observables; must subscribe
+			if (input.trackerName === "BUG") {
+				this.dialogService.openDialogForBugById(input.id).subscribe();
+			} else if (input.trackerName) {
+				this.dialogService.openDialogForWorkById(input.id).subscribe();
+			}
 		} else if (input) {
 			this.dataService.changeProject(input.id);
+			this.dialogService.openProjectDialogById(input.id).subscribe();
 		}
 		// Clear model
 		this.textInput.set("");

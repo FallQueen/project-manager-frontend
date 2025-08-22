@@ -1,6 +1,6 @@
 .gantt-container {
 	display: grid;
-	grid-template-columns: 14em 1fr;
+	grid-template-columns: 12em 1fr;
 	width: 100%;
 	max-width: fit-content;
 	max-height: 78vh;
@@ -8,7 +8,7 @@
 	border-radius: 0.5em;
 	background: #ffffff; /* unify base */
 	font-family: Roboto, Arial, sans-serif;
-	font-size: 0.875em; /* 14px */
+	/* font-size: 0.875em; */
 	line-height: 1.3;
 	overflow: auto; /* single scroll container */
 	/* Hide scrollbar by default (Firefox) */
@@ -20,6 +20,21 @@
 	user-select: none;
 }
 
+.page-title {
+	display: flex;
+	align-items: flex-end; /* baselines align cleaner */
+	gap: .75rem;
+	padding: .25rem .5rem .55rem;
+	margin: 0 0 .6rem;
+	border-bottom: 1px solid #e2e8f0;
+}
+
+.page-title h1 {
+	margin: 0;
+	font-weight: 500; /* match global heading weight */
+	color: #1e293b; /* slate-800 */
+	line-height: 1.15;
+}
 /* Hide default WebKit scrollbars */
 .gantt-container::-webkit-scrollbar {
 	width: 0;
@@ -28,7 +43,7 @@
 
 /* On hover: show scrollbars */
 .gantt-container:hover {
-	scrollbar-width: thin; /* Firefox */
+	scrollbar-width: thin;
 }
 
 .gantt-container:hover::-webkit-scrollbar {
@@ -53,14 +68,9 @@
 	display: flex;
 	flex-direction: column;
 	background: #ffffff;
-
 	position: sticky; /* keep visible during horizontal scroll */
 	left: 0;
 	z-index: 6; /* above timeline */
-	position: sticky;
-	left: 0;
-	/* remove border-right to avoid being cut by horizontal scrollbar */
-	position: sticky;
 }
 
 .work-data-section::after {
@@ -75,15 +85,18 @@
 }
 
 .section-title {
+	height: 2.7rem;
+	font-size: 0.9em;
 	position: sticky;
 	top: 0;
-	height: 43px;
 	background: #f1f3f5;
 	font-weight: 600;
-	padding: 0.9em 1em;
+	padding: 0.3em .8em 0em;
+	display: flex;
+	align-items: center;
 	border-bottom: 0.0625em solid #dcdfe3;
 	z-index: 2;
-	box-sizing: border-box; /* ensure padding doesn't affect width */
+	box-sizing: border-box;
 }
 
 .module-item {
@@ -91,15 +104,16 @@
 }
 
 .module-name {
-	height: 2.4em;
+	display: flex;
+	align-items: center;
+	min-height: 2.2em;
 	box-sizing: border-box;
 	font-weight: 600;
-	padding: 0.625em 1em 0.25em;
+	padding: .45em 0.9em;
 	background: #fafbfc;
-
 	color: #2f3b48;
-	font-size: 0.965em; /* 13.5px */
-	/* border-top: 1px solid #eef0f2; */
+	font-size: .85em;
+	line-height: 1.15;
 	border-bottom: 0.0625em solid #d0d0d1;
 }
 .module-name:hover {
@@ -110,8 +124,7 @@
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-
-	height: 2.7em;
+	min-height: 2.5em; /* consistent row height */
 	border-bottom: 0.0625em solid #d0d0d1;
 }
 
@@ -128,6 +141,7 @@
 	justify-content: center;
 	box-sizing: border-box;
 	z-index: 1;
+	position: relative;
 }
 
 .gantt-bar span {
@@ -140,9 +154,34 @@
 	text-overflow: ellipsis;
 }
 
+/* Resize handles */
+.resize-handle {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	width: 6px;
+	cursor: ew-resize;
+	background: transparent;
+}
+.resize-handle.left {
+	left: 0;
+	border-top-left-radius: 8px;
+	border-bottom-left-radius: 8px;
+}
+.resize-handle.right {
+	right: 0;
+	border-top-right-radius: 8px;
+	border-bottom-right-radius: 8px;
+}
+
+.gantt-bar.resizing {
+	outline: 2px dashed #1d4ed8;
+}
+
 .work-name {
-	padding: 0.25em 1em 0 1.25em;
-	font-size: 0.9em; /* 13px */
+	/* padding: .3em 1em 0 .9em; */
+	padding-left: 1.1em;
+	font-size: .79em;
 	color: #374151;
 	align-items: center;
 	overflow: hidden;
@@ -157,8 +196,9 @@
 }
 
 .assigned-users {
-	padding: 0 1em 0.375em 1.4em;
-	font-size: 0.82em; /* 11.5px */
+	/* padding: 0 1em .4em .9em; */
+	padding-left: 1.3em;
+	font-size: .7em;
 	color: #64748b;
 	overflow: hidden;
 	white-space: nowrap;
@@ -210,7 +250,7 @@
 }
 
 .date-row {
-	height: 43px;
+	height: 2.7rem;
 	box-sizing: border-box;
 	display: flex;
 	align-items: stretch;
@@ -236,7 +276,7 @@
 .month-name {
 	padding: 0.375em 0.5em 0.2em;
 	font-weight: 600;
-	font-size: 1em; /* 12px */
+	font-size: 0.9em;
 	text-align: center;
 	color: #475569;
 	white-space: nowrap;
@@ -258,7 +298,7 @@
 	display: flex;
 	align-items: flex-end;
 	justify-content: center;
-	font-size: 0.85em; /* 11px */
+	font-size: 0.7em; /* 11px */
 	font-weight: 600;
 	color: #475569;
 	border-right: 1px solid #e2e8f0;
@@ -323,20 +363,20 @@
 }
 
 /* @media (max-width: 1024px) {
-	.gantt-container {
-		grid-template-columns: 13.75em 1fr; 
-	}
-	.work-name {
-		padding-left: 1.25em;
-	}
+    .gantt-container {
+        grid-template-columns: 13.75em 1fr; 
+    }
+    .work-name {
+        padding-left: 1.25em;
+    }
 } */
 
 /* @media (max-width: 640px) {
-	.gantt-container {
-		grid-template-columns: 11.25em 1fr; 
-		font-size: 0.75em; 
-	}
-	.module-name {
-		font-size: 0.75em; 
-	}
+    .gantt-container {
+        grid-template-columns: 11.25em 1fr; 
+        font-size: 0.75em; 
+    }
+    .module-name {
+        font-size: 0.75em; 
+    }
 } */

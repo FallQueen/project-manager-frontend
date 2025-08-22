@@ -13,21 +13,28 @@ import type {
 	NameListItem,
 	GanttItem,
 	TimelineMonth,
+	AlterWork,
 } from "../../model/format.type";
 import { GanttPageService } from "../../service/gantt-page.service";
 import { MatGridListModule } from "@angular/material/grid-list";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { GanttFilterComponent } from "../../component/gantt-filter/gantt-filter.component";
 
 @Component({
 	selector: "app-gantt-page",
-	imports: [CommonModule, MatGridListModule, MatTooltipModule],
+	imports: [
+		CommonModule,
+		MatGridListModule,
+		MatTooltipModule,
+		GanttFilterComponent,
+	],
 	templateUrl: "./gantt-page.component.html",
 	styleUrl: "./gantt-page.component.css",
 })
 export class GanttPageComponent {
 	// data
-	svc = inject(GanttPageService);
-	ganttData = this.svc.ganttData;
+	ganttPageService = inject(GanttPageService);
+	ganttData = this.ganttPageService.ganttData;
 
 	// timeline signals
 	timelineStartDate = signal<Date>(new Date());
@@ -35,41 +42,58 @@ export class GanttPageComponent {
 	totalDays = signal(0);
 	todaysIndex = signal<number | null>(null);
 	timeline = signal<TimelineMonth[]>([]);
-	todayPosition = signal<number | null>(null);
 
 	// view refs
 	@ViewChildren("dayCell") dayCells!: QueryList<ElementRef<HTMLDivElement>>;
 	@ViewChild("ganttScroll") ganttScrollRef!: ElementRef<HTMLDivElement>;
 
-	// flags
-	viewInitialized = false;
-	scrolledToToday = false;
-
 	// drag scroll state
+	scrolledToToday = false;
 	isDragging = false;
 	dragStartX = 0;
 	dragStartY = 0;
 	scrollStartX = 0;
 	scrollStartY = 0;
 
+	barDragInfo: {
+		workId: number;
+		origStartPx: number; // px offset of bar start from body left
+		origStartDayIndex: number; // starting day index (for computing moved days)
+		barWidthPx: number; // cached to avoid recalculation
+		dayWidthPx: number;
+		pointerOffsetInBar: number; // pointer x inside bar when drag began
+		bodyLeft: number; // left of body rect (for quick pointer -> px calc)
+		lastLeftPx: number; // most recent unsnapped left during live drag
+	} | null = null;
+
+	resizeInfo: {
+		workId: number;
+		side: "left" | "right";
+		origStartPx: number;
+		origWidthPx: number;
+		dayWidthPx: number;
+		bodyLeft: number;
+		pointerStartX: number;
+		minWidthPx: number; // min = 1 day
+		lastLeftPx: number;
+		lastWidthPx: number;
+	} | null = null;
+
+	constructor() {
+		effect(() => {
+			const data = this.ganttData();
+			if (data && typeof data === "object" && "projectDates" in data) {
+				this.buildTimeline();
+				this.updateTodayMarker();
+			} else this.resetTimeline();
+		});
+	}
 	ngAfterViewInit() {
-		this.viewInitialized = true;
-		// Drag-to-scroll listeners
-		const container = this.ganttScrollRef
-			?.nativeElement as HTMLDivElement | null;
-		if (container) {
-			container.addEventListener("mousedown", this.onDragStart);
-			container.addEventListener("mousemove", this.onDragMove);
-			container.addEventListener("mouseup", this.onDragEnd);
-			container.addEventListener("mouseleave", this.onDragEnd);
-			// Prevent text selection while dragging
-			container.addEventListener("dragstart", (e) => e.preventDefault());
-		}
-		// React when the query list of day cells changes (e.g., after timeline render)
 		this.dayCells.changes.subscribe(() => this.tryScrollTodayIntoView());
-		// Initial attempt (next macro/micro task to ensure DOM painted)
 		setTimeout(() => this.tryScrollTodayIntoView());
 	}
+
+	// --- GANTT BAR DRAG (HORIZONTAL SNAP) ---
 
 	onDragStart = (e: MouseEvent) => {
 		if (e.button !== 0) return;
@@ -96,64 +120,129 @@ export class GanttPageComponent {
 		document.body.style.userSelect = "";
 	};
 
-	// react to data changes
-	constructor() {
-		effect(() => {
-			const data = this.ganttData();
-			if (data && typeof data === "object" && "projectDates" in data) {
-				this.buildTimeline();
-				this.updateTodayMarker();
-			} else this.resetTimeline();
-		});
-	}
-
-	// helpers
-	get container() {
-		return this.ganttScrollRef?.nativeElement || null;
-	}
-	clamp(v: number, min: number, max: number) {
-		return Math.max(min, Math.min(max, v));
-	}
-
-	tryScrollTodayIntoView() {
-		if (this.scrolledToToday || !this.viewInitialized || !this.container)
-			return;
-		const idx = this.todaysIndex();
-		if (idx == null) return;
-		const allDays = this.timeline().flatMap((m) => m.days);
-		const cellWrapper = this.dayCells.find(
-			(_, i) => allDays[i]?.globalIndex === idx,
+	dragPointerDown(e: PointerEvent, work: GanttItem) {
+		if ((e.target as HTMLElement).closest(".resize-handle")) return;
+		if (e.button !== 0) return;
+		const container = this.container;
+		if (!container) return;
+		container.classList.add("bar-drag-active");
+		(e.target as HTMLElement).setPointerCapture(e.pointerId);
+		const bodyEl = container.querySelector(".gantt-body") as HTMLElement | null;
+		const totalWidthPx = bodyEl?.clientWidth || container.clientWidth;
+		const dayWidthPx = totalWidthPx / this.totalDays();
+		const barEl = (e.target as HTMLElement).closest(
+			".gantt-bar",
+		) as HTMLElement | null;
+		if (!barEl || !bodyEl) return;
+		const barRect = barEl.getBoundingClientRect();
+		const bodyRect = bodyEl.getBoundingClientRect();
+		const origStartPx = barRect.left - bodyRect.left;
+		const origStartDayIndex = this.daysBetween(
+			this.timelineStartDate(),
+			work.startDate,
 		);
-		if (!cellWrapper) return;
-		const el = cellWrapper.nativeElement;
-		if (!el.offsetWidth) {
-			setTimeout(() => this.tryScrollTodayIntoView(), 50);
+		const barWidthPx =
+			this.daysBetween(work.startDate, work.targetDate) * dayWidthPx;
+		const pointerOffsetInBar = e.clientX - barRect.left;
+		this.barDragInfo = {
+			workId: work.workId,
+			origStartPx,
+			origStartDayIndex,
+			barWidthPx,
+			dayWidthPx,
+			pointerOffsetInBar,
+			bodyLeft: bodyRect.left,
+			lastLeftPx: origStartPx,
+		};
+		e.preventDefault();
+	}
+
+	dragPointerMove(e: PointerEvent, work: GanttItem) {
+		if (this.resizeInfo && this.resizeInfo.workId === work.workId) {
+			this.handleResizeMove(e, work);
 			return;
 		}
-		const leftPanel = this.container.querySelector(
-			".work-data-section",
-		) as HTMLElement | null;
-		const targetCenter = el.offsetLeft + el.offsetWidth / 2;
-		const leftWidth = leftPanel?.offsetWidth || 0;
-		const fudge = -200;
-		let desired =
-			targetCenter - this.container.clientWidth / 2 - leftWidth / 2 - fudge;
-		desired = this.clamp(
-			desired,
+		if (!this.barDragInfo || this.barDragInfo.workId !== work.workId) return;
+		const info = this.barDragInfo;
+		let newLeftPx = e.clientX - info.bodyLeft - info.pointerOffsetInBar;
+		newLeftPx = this.clamp(
+			newLeftPx,
 			0,
-			this.container.scrollWidth - this.container.clientWidth,
+			this.totalDays() * info.dayWidthPx - info.barWidthPx,
 		);
-		this.container.scrollLeft = desired;
-		this.scrolledToToday = true;
+		info.lastLeftPx = newLeftPx;
+		const barEl = (e.target as HTMLElement).closest(
+			".gantt-bar",
+		) as HTMLElement | null;
+		if (barEl) {
+			barEl.style.transform = `translateX(${newLeftPx - info.origStartPx}px)`;
+			barEl.style.willChange = "transform";
+		}
 	}
 
-	resetTimeline() {
-		this.totalDays.set(0);
-		this.timeline.set([]);
-		this.todayPosition.set(null);
+	dragPointerUp(e: PointerEvent, work: GanttItem) {
+		if (this.resizeInfo && this.resizeInfo.workId === work.workId) {
+			this.handleResizeUp(e, work);
+			return;
+		}
+		if (!this.barDragInfo || this.barDragInfo.workId !== work.workId) return;
+		const info = this.barDragInfo;
+		const container = this.container;
+		const finalBar = (e.target as HTMLElement).closest(
+			".gantt-bar",
+		) as HTMLElement | null;
+		const newLeftPx = info.lastLeftPx;
+		let snappedIndex = Math.round(newLeftPx / info.dayWidthPx);
+		snappedIndex = this.clamp(snappedIndex, 0, this.totalDays() - 1);
+		const snappedPct = (snappedIndex / this.totalDays()) * 100;
+		if (finalBar) {
+			finalBar.style.transform = "";
+			finalBar.style.willChange = "";
+			finalBar.style.marginLeft = `${snappedPct}%`;
+		}
+		const movedDays = snappedIndex - info.origStartDayIndex;
+		console.log("Bar drag finished:", { workId: work.workId, movedDays });
+
+		this.alterDateOnWork(work.workId, movedDays);
+		this.barDragInfo = null;
+		if (container) container.classList.remove("bar-drag-active");
+		(e.target as HTMLElement).releasePointerCapture(e.pointerId);
 	}
 
-	// Calculates the overall project start and end dates to establish the timeline range.
+	resizePointerDown(e: PointerEvent, work: GanttItem, side: "left" | "right") {
+		if (e.button !== 0) return;
+		const container = this.container;
+		if (!container) return;
+		(e.target as HTMLElement).setPointerCapture(e.pointerId);
+		const bodyEl = container.querySelector(".gantt-body") as HTMLElement | null;
+		if (!bodyEl) return;
+		const totalWidthPx = bodyEl.clientWidth || container.clientWidth;
+		const dayWidthPx = totalWidthPx / this.totalDays();
+		const barEl = (e.target as HTMLElement).closest(
+			".gantt-bar",
+		) as HTMLElement | null;
+		if (!barEl) return;
+		const barRect = barEl.getBoundingClientRect();
+		const bodyRect = bodyEl.getBoundingClientRect();
+		const origStartPx = barRect.left - bodyRect.left;
+		const origWidthPx = barRect.width;
+		this.resizeInfo = {
+			workId: work.workId,
+			side,
+			origStartPx,
+			origWidthPx,
+			dayWidthPx,
+			bodyLeft: bodyRect.left,
+			pointerStartX: e.clientX,
+			minWidthPx: dayWidthPx,
+			lastLeftPx: origStartPx,
+			lastWidthPx: origWidthPx,
+		};
+		barEl.classList.add("resizing");
+		e.preventDefault();
+	}
+
+	// --- TIMELINE & TODAY MARKER ---
 
 	buildTimeline() {
 		const data = this.ganttData() as {
@@ -198,42 +287,158 @@ export class GanttPageComponent {
 	}
 
 	updateTodayMarker() {
-		const today = new Date();
-		this.todayPosition.set(
-			today >= this.timelineStartDate() && today <= this.timelineEndDate()
-				? this.daysBetween(this.timelineStartDate(), today)
-				: null,
+		// kept for future extension (currently just recomputes todaysIndex in build)
+	}
+
+	tryScrollTodayIntoView() {
+		if (this.scrolledToToday || !this.container) return;
+		const idx = this.todaysIndex();
+		if (idx == null) return;
+		const allDays = this.timeline().flatMap((m) => m.days);
+		const cellWrapper = this.dayCells.find(
+			(_, i) => allDays[i]?.globalIndex === idx,
 		);
+		if (!cellWrapper) return;
+		const el = cellWrapper.nativeElement;
+		if (!el.offsetWidth) {
+			setTimeout(() => this.tryScrollTodayIntoView(), 50);
+			return;
+		}
+		const leftPanel = this.container.querySelector(
+			".work-data-section",
+		) as HTMLElement | null;
+		const targetCenter = el.offsetLeft + el.offsetWidth / 2;
+		const leftWidth = leftPanel?.offsetWidth || 0;
+		const fudge = -200;
+		let desired =
+			targetCenter - this.container.clientWidth / 2 - leftWidth / 2 - fudge;
+		desired = this.clamp(
+			desired,
+			0,
+			this.container.scrollWidth - this.container.clientWidth,
+		);
+		this.container.scrollLeft = desired;
+		this.scrolledToToday = true;
 	}
 
-	// Helper function to calculate the number of days between two dates.
-	// @param date1 The first date.
-	// @param date2 The second date.
-	// @returns The total number of full days between the two dates.
-	daysBetween(date1: Date, date2: Date): number {
-		// 24 h * 60 min * 60 s * 1000 ms
-		const oneDay = 24 * 60 * 60 * 1000;
-		const d1 = new Date(date1);
-		const d2 = new Date(date2);
-		// Zero out to compare date portions only
-		d1.setHours(0, 0, 0, 0);
-		d2.setHours(0, 0, 0, 0);
-		const diffTime = d2.getTime() - d1.getTime();
-		return Math.round(diffTime / oneDay);
+	resetTimeline() {
+		this.totalDays.set(0);
+		this.timeline.set([]);
 	}
 
-	// Calculates the width percentage of a work item in the Gantt chart.
-	// @param w The work item to calculate the width for.
-	// @returns The width percentage as a string (e.g., "50%").
-	calculateGanttBarWidth(startDate: Date, targetDate: Date): string {
-		return `${(this.daysBetween(startDate, targetDate) / this.totalDays()) * 100}%`;
+	// --- GANTT BAR RESIZE ---
+
+	handleResizeMove(e: PointerEvent, work: GanttItem) {
+		if (!this.resizeInfo || this.resizeInfo.workId !== work.workId) return;
+		const info = this.resizeInfo;
+		const delta = e.clientX - info.pointerStartX;
+		let newLeft = info.origStartPx;
+		let newWidth = info.origWidthPx;
+		if (info.side === "right") {
+			newWidth = this.clamp(
+				info.origWidthPx + delta,
+				info.minWidthPx,
+				this.totalDays() * info.dayWidthPx - info.origStartPx,
+			);
+		} else {
+			newLeft = this.clamp(
+				info.origStartPx + delta,
+				0,
+				info.origStartPx + info.origWidthPx - info.minWidthPx,
+			);
+			newWidth = info.origWidthPx - (newLeft - info.origStartPx);
+		}
+		info.lastLeftPx = newLeft;
+		info.lastWidthPx = newWidth;
+		const barEl = (e.target as HTMLElement).closest(
+			".gantt-bar",
+		) as HTMLElement | null;
+		if (barEl) {
+			barEl.style.willChange = "transform,width";
+			barEl.style.transform = `translateX(${newLeft - info.origStartPx}px)`;
+			barEl.style.width = `${newWidth}px`;
+		}
 	}
+
+	handleResizeUp(e: PointerEvent, work: GanttItem) {
+		if (!this.resizeInfo || this.resizeInfo.workId !== work.workId) return;
+		const info = this.resizeInfo;
+		const barEl = (e.target as HTMLElement).closest(
+			".gantt-bar",
+		) as HTMLElement | null;
+		if (barEl) {
+			const startIndex = Math.round(info.lastLeftPx / info.dayWidthPx);
+			const endIndexExclusive = Math.round(
+				(info.lastLeftPx + info.lastWidthPx) / info.dayWidthPx,
+			);
+			const clampedStart = this.clamp(startIndex, 0, this.totalDays() - 1);
+			const clampedEndEx = this.clamp(
+				endIndexExclusive,
+				clampedStart + 1,
+				this.totalDays(),
+			);
+			const snappedLeftPx = clampedStart * info.dayWidthPx;
+			const snappedWidthPx = clampedEndEx * info.dayWidthPx - snappedLeftPx;
+			barEl.style.transform = "";
+			barEl.style.willChange = "";
+			const pctLeft = (clampedStart / this.totalDays()) * 100;
+			const pctWidth =
+				(snappedWidthPx / (this.totalDays() * info.dayWidthPx)) * 100;
+			barEl.style.marginLeft = `${pctLeft}%`;
+			barEl.style.width = `${pctWidth}%`;
+			barEl.classList.remove("resizing");
+
+			this.applyResize(work, clampedStart, clampedEndEx);
+		}
+		this.resizeInfo = null;
+		(e.target as HTMLElement).releasePointerCapture(e.pointerId);
+	}
+
+	applyResize(work: GanttItem, startIndex: number, endIndexExclusive: number) {
+		const newStartDate = this.addDays(this.timelineStartDate(), startIndex);
+
+		const lengthDays = endIndexExclusive - startIndex;
+		const currentLength = this.daysBetween(work.startDate, work.targetDate);
+		console.log("length", lengthDays, currentLength);
+		if (lengthDays === currentLength) return;
+		const newTargetDate = this.addDays(newStartDate, lengthDays);
+		work.startDate = newStartDate;
+		work.targetDate = newTargetDate;
+		const alterData: AlterWork = {
+			workId: work.workId,
+			startDate: newStartDate,
+			targetDate: newTargetDate,
+		};
+		this.ganttPageService.alterDataOnWork(work.workId, alterData);
+	}
+
+	alterDateOnWork(workId: number, movedDays: number) {
+		if (movedDays === 0) return;
+		const ganttItem = this.ganttPageService.getGanttItemById(workId);
+		if (!ganttItem) return;
+
+		const day = 24 * 60 * 60 * 1000;
+		const startDate = new Date(ganttItem.startDate);
+		const targetDate = new Date(ganttItem.targetDate);
+		ganttItem.startDate = new Date(startDate.getTime() + movedDays * day);
+		ganttItem.targetDate = new Date(targetDate.getTime() + movedDays * day);
+		const alterData: AlterWork = {
+			workId,
+			startDate: ganttItem.startDate,
+			targetDate: ganttItem.targetDate,
+		};
+		console.log("Altering work:", alterData);
+		this.ganttPageService.alterDataOnWork(workId, alterData);
+	}
+
+	// --- CALCULATION & DISPLAY HELPERS (keep at bottom) ---
+
 	calculateGanttBarStart(startDate: Date): string {
 		return `${(this.daysBetween(this.timelineStartDate(), startDate) / this.totalDays()) * 100}%`;
 	}
 
 	calculateTodayLineLocation(): string {
-		const offset = 8; // px
+		const offset = 8;
 		const percent = ((this.todaysIndex() || 0) / this.totalDays()) * 100;
 		return `calc(${percent}% + ${offset}px)`;
 	}
@@ -242,98 +447,24 @@ export class GanttPageComponent {
 		return users.map((u) => u.name).join(", ");
 	}
 
-	// --- GANTT BAR DRAG (HORIZONTAL SNAP) ---
-	barDragInfo: {
-		workId: number;
-		origStartPx: number;
-		origStartDayIndex: number;
-		barWidthPx: number;
-		dayWidthPx: number;
-		pointerOffsetInBar: number;
-		bodyLeft: number;
-		lastLeftPx: number;
-	} | null = null;
+	// --- GENERIC HELPERS ---
 
-	onBarPointerDown(e: PointerEvent, work: GanttItem) {
-		// Only primary button
-		if (e.button !== 0) return;
-		const container = this.container;
-		if (!container) return;
-		// Prevent container drag scroll while resizing
-		container.classList.add("bar-drag-active");
-		(e.target as HTMLElement).setPointerCapture(e.pointerId);
-		const bodyEl = container.querySelector(".gantt-body") as HTMLElement | null;
-		const totalWidthPx = bodyEl?.clientWidth || container.clientWidth;
-		const dayWidthPx = totalWidthPx / this.totalDays();
-		// Use actual rendered bar position instead of computed index*dayWidth to avoid rounding jumps
-		const barEl = (e.target as HTMLElement).closest(
-			".gantt-bar",
-		) as HTMLElement | null;
-		if (!barEl || !bodyEl) return;
-		const barRect = barEl.getBoundingClientRect();
-		const bodyRect = bodyEl.getBoundingClientRect();
-		const origStartPx = barRect.left - bodyRect.left;
-		const origStartDayIndex = this.daysBetween(
-			this.timelineStartDate(),
-			work.startDate,
-		);
-		const barWidthPx =
-			this.daysBetween(work.startDate, work.targetDate) * dayWidthPx;
-		const pointerOffsetInBar = e.clientX - barRect.left;
-		this.barDragInfo = {
-			workId: work.workId,
-			origStartPx,
-			origStartDayIndex,
-			barWidthPx,
-			dayWidthPx,
-			pointerOffsetInBar,
-			bodyLeft: bodyRect.left,
-			lastLeftPx: origStartPx,
-		};
-		e.preventDefault();
+	get container() {
+		return this.ganttScrollRef?.nativeElement || null;
 	}
-
-	onBarPointerMove(e: PointerEvent, work: GanttItem) {
-		if (!this.barDragInfo || this.barDragInfo.workId !== work.workId) return;
-		const info = this.barDragInfo;
-		// Desired left edge = pointer - bodyLeft - pointerOffsetInBar
-		let newLeftPx = e.clientX - info.bodyLeft - info.pointerOffsetInBar;
-		newLeftPx = this.clamp(
-			newLeftPx,
-			0,
-			this.totalDays() * info.dayWidthPx - info.barWidthPx,
-		);
-		info.lastLeftPx = newLeftPx;
-		const barEl = (e.target as HTMLElement).closest(
-			".gantt-bar",
-		) as HTMLElement | null;
-		if (barEl) {
-			barEl.style.transform = `translateX(${newLeftPx - info.origStartPx}px)`;
-			barEl.style.willChange = "transform";
-		}
+	clamp(v: number, min: number, max: number) {
+		return Math.max(min, Math.min(max, v));
 	}
-
-	onBarPointerUp(e: PointerEvent, work: GanttItem) {
-		if (!this.barDragInfo || this.barDragInfo.workId !== work.workId) return;
-		const info = this.barDragInfo;
-		const container = this.container;
-		const finalBar = (e.target as HTMLElement).closest(
-			".gantt-bar",
-		) as HTMLElement | null;
-		const newLeftPx = info.lastLeftPx; // already clamped
-		let snappedIndex = Math.round(newLeftPx / info.dayWidthPx);
-		snappedIndex = this.clamp(snappedIndex, 0, this.totalDays() - 1);
-		const snappedPct = (snappedIndex / this.totalDays()) * 100;
-		if (finalBar) {
-			finalBar.style.transform = "";
-			finalBar.style.willChange = "";
-			finalBar.style.marginLeft = `${snappedPct}%`;
-		}
-		const movedDays = snappedIndex - info.origStartDayIndex;
-		console.log("Bar drag finished:", { workId: work.workId, movedDays });
-		// Cleanup
-		this.barDragInfo = null;
-		if (container) container.classList.remove("bar-drag-active");
-		(e.target as HTMLElement).releasePointerCapture(e.pointerId);
+	daysBetween(date1: Date, date2: Date): number {
+		const oneDay = 24 * 60 * 60 * 1000;
+		const d1 = new Date(date1);
+		const d2 = new Date(date2);
+		d1.setHours(0, 0, 0, 0);
+		d2.setHours(0, 0, 0, 0);
+		const diffTime = d2.getTime() - d1.getTime();
+		return Math.round(diffTime / oneDay);
+	}
+	addDays(base: Date, days: number) {
+		return new Date(base.getTime() + days * 24 * 60 * 60 * 1000);
 	}
 }

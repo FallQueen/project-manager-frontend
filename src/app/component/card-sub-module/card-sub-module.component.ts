@@ -26,8 +26,6 @@ import { ExpandableWorkContainerComponent } from "../expandable-work-container/e
 		CommonModule,
 		MatTooltipModule,
 		MatIconModule,
-
-		PopUpChangeComponent,
 		ExpandableWorkContainerComponent,
 	],
 	templateUrl: "./card-sub-module.component.html",
@@ -64,12 +62,18 @@ export class CardSubModuleComponent {
 
 	countTotalWorkState() {
 		let total = 0;
+		if (!this.subModuleData.workStateCountList) {
+			return;
+		}
 		for (const state of this.subModuleData.workStateCountList) {
 			total += state.count;
 		}
 		this.totalWork.set(total);
 	}
 	countPercentage() {
+		if (!this.subModuleData.workStateCountList) {
+			return;
+		}
 		for (const state of this.subModuleData.workStateCountList) {
 			state.percentage = (100 * state.count) / this.totalWork();
 		}
@@ -106,15 +110,19 @@ export class CardSubModuleComponent {
 
 	doWhenNewWork(workState: NameListItem) {
 		this.refreshWorkList();
-		const index = this.subModuleData.workStateCountList.findIndex(
+		const workStateCountList = this.subModuleData.workStateCountList;
+		if (!workStateCountList) {
+			return;
+		}
+		const index = workStateCountList.findIndex(
 			(item) => item.id === workState.id,
 		);
 
 		if (index !== -1) {
-			this.subModuleData.workStateCountList[index].count += 1;
+			workStateCountList[index].count += 1;
 		}
 		if (index === -1) {
-			this.subModuleData.workStateCountList.push({
+			workStateCountList.push({
 				id: workState.id,
 				name: workState.name,
 				count: 1,
