@@ -26,7 +26,8 @@ export class DialogUtilTitleComponent {
 		| "NEW PROJECT"
 		| "NEW MODULE"
 		| "NEW SUB-MODULE"
-		| "NEW WORK" = "NEW PROJECT";
+		| "NEW WORK"
+		| "NEW BUG" = "NEW PROJECT";
 	@Output() edit = new EventEmitter<void>();
 	@Output() delete = new EventEmitter<void>();
 
@@ -40,6 +41,8 @@ export class DialogUtilTitleComponent {
 			message = "Are you sure you want to delete this sub-module?";
 		} else if (this.title.toLowerCase().includes("work")) {
 			message = "Are you sure you want to delete this work item?";
+		} else if (this.title.toLowerCase().includes("bug")) {
+			message = "Are you sure you want to delete this bug?";
 		}
 		const dialogRef = this.dialogService.openUtilityDialog(
 			message,

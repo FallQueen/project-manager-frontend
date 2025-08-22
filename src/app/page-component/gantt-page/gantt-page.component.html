@@ -5,7 +5,7 @@
         <app-gantt-filter></app-gantt-filter>
     </div>
 
-
+    @if(ganttPageService.filteredGanttData()){
     <div class="gantt-container" #ganttScroll (pointerdown)="onDragStart($event)" (pointermove)="onDragMove($event)"
         (pointerup)="onDragEnd()" (pointerleave)="onDragEnd()">
         <div class="work-data-section no-scroll">
@@ -71,4 +71,5 @@
         </div>
     </div>
 </div>
+}
 </div>

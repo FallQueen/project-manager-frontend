@@ -19,6 +19,8 @@
         <app-card-project-new (refresh)="projectPageService.getProjectData()"></app-card-project-new>
         }
     </div>
+
+    @if (projectPageService.Projects().done && projectPageService.Projects().done.length > 0) {
     <div class="page-title done">
         <!-- Displays the dynamic page title ("My Projects" or "All Projects") -->
         <h1>Done Projects</h1>
@@ -36,4 +38,5 @@
         <!-- If the user is a webmaster, show the 'new project' card for new project creation -->
 
     </div>
+    }
 </div>
