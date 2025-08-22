@@ -150,7 +150,7 @@ input::placeholder {
   position: absolute;
   bottom: 50px; /* jarak ke atas dari tombol Alice */
   left: 0;
-  width: 170px;
+  width: 150px;
   background: #eaeaea;
   color: black;
   padding: 12px;

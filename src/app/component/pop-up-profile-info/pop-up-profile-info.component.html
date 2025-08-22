@@ -1,10 +1,12 @@
 <div class="profile-info">
-  <mat-icon>account_circle</mat-icon>
-  <h2>{{ name }}</h2>
-  <p>Email: {{ email }}</p>
-  <p>Role: {{ role }}</p>
-  <p>{{ bio }}</p>
+  <div class="profile-header">
+    <mat-icon>account_circle</mat-icon>
+    <span class="profile-name">{{ name }}</span>
+  </div>
 
-  <!-- kalau ada tombol close -->
-  <!-- <button mat-button (click)="close.emit()">Close</button> -->
+  <p>Email: {{ email }}</p>
+
+  <button mat-button class="logout-btn" (click)="onLogout()">
+    Logout
+  </button>
 </div>

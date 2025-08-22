@@ -364,6 +364,11 @@ export class DataProcessingService {
 	// Creates a new subModule item.
 	// @param newSubModule The new subModule data.
 	// @returns An Observable of the server response.
+
+	getProjectSubModulesByModule(moduleId: number) {
+		const url = `${this.host}/getProjectSubModulesByModule?moduleId=${moduleId}`;
+		return this.http.get<SubModuleData[]>(url);
+	}
 	postNewSubModule(newSubModule: NewSubModule) {
 		const url = `${this.host}/postNewSubModule`;
 		return this.http.post(url, newSubModule);

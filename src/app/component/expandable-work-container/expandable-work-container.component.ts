@@ -37,6 +37,7 @@ export class ExpandableWorkContainerComponent {
 		{ label: "TRACKER", column: "trackerId" },
 		{ label: "ACTIVITY", column: "activityId" },
 		{ label: "STATE", column: "stateId" },
+		// { label: "PRIORITY", column: "priorityId" },
 		{ label: "PERIOD" },
 	]);
 
@@ -46,6 +47,7 @@ export class ExpandableWorkContainerComponent {
 				{ label: "DEFECT CAUSE", column: "defectCause" },
 				{ label: "AFFECTED WORK", column: "workAffected" },
 				{ label: "STATE", column: "stateId" },
+				{ label: "PRIORITY", column: "priorityId" },
 				{ label: "PERIOD" },
 			]);
 		}
@@ -56,6 +58,7 @@ export class ExpandableWorkContainerComponent {
 				{ label: "TRACKER", column: "trackerId" },
 				{ label: "ACTIVITY", column: "activityId" },
 				{ label: "STATE", column: "stateId" },
+				// { label: "PRIORITY", column: "priorityId" },
 				{ label: "PERIOD" },
 			]);
 		}
