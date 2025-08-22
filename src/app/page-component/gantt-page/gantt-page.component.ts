@@ -42,6 +42,7 @@ export class GanttPageComponent {
 	totalDays = signal(0);
 	todaysIndex = signal<number | null>(null);
 	timeline = signal<TimelineMonth[]>([]);
+	today = signal<Date>(new Date());
 
 	// view refs
 	@ViewChildren("dayCell") dayCells!: QueryList<ElementRef<HTMLDivElement>>;
@@ -466,5 +467,11 @@ export class GanttPageComponent {
 	}
 	addDays(base: Date, days: number) {
 		return new Date(base.getTime() + days * 24 * 60 * 60 * 1000);
+	}
+
+	isWorkOverdue(w: GanttItem): boolean {
+		console.log("Checking if work is overdue:", w.stateName);
+		return w.stateName !== 'DONE' &&
+			(new Date(w.targetDate)).setHours(0,0,0,0) < this.today().setHours(0,0,0,0);
 	}
 }

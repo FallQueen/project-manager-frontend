@@ -27,7 +27,7 @@ export class DialogUtilTitleComponent {
 		| "NEW MODULE"
 		| "NEW SUB-MODULE"
 		| "NEW WORK"
-		| "NEW BUG" = "NEW PROJECT";
+		| "NEW BUG REPORT" = "NEW PROJECT";
 	@Output() edit = new EventEmitter<void>();
 	@Output() delete = new EventEmitter<void>();
 

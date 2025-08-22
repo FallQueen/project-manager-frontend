@@ -5,6 +5,7 @@ import type { SubModuleData } from "../../model/format.type";
 import { CardSubModuleComponent } from "../../component/card-sub-module/card-sub-module.component";
 import { CardSubModuleNewComponent } from "../../component/card-sub-module-new/card-sub-module-new.component";
 import { CardModuleComponent } from "../../component/card-module/card-module.component";
+import { CardModuleNewComponent } from "../../component/card-module-new/card-module-new.component";
 
 @Component({
 	selector: "app-backlog-page",
@@ -12,6 +13,7 @@ import { CardModuleComponent } from "../../component/card-module/card-module.com
 		CardSubModuleComponent,
 		CardSubModuleNewComponent,
 		CardModuleComponent,
+		CardModuleNewComponent
 	],
 	templateUrl: "./backlog-page.component.html",
 	styleUrl: "./backlog-page.component.css",

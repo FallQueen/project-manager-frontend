@@ -48,16 +48,21 @@
     </div>
     <!-- Expandable container for work items related to this module -->
 
-  </div>
-      <div
-      class="container-submodules"
-      [style.maxHeight.px]="expanded() ? subModules().length * 200 : 0"
-      [class.expanded]="expanded()"
-    >
-      @if (loadingSubModules()) {
-      <div class="loading">Loading submodules...</div>
-      } @for (sub of subModules(); track $index) {
-      <app-card-sub-module [subModuleData]="sub"></app-card-sub-module>
-      }
-    </div>
-</div>
+
+        </div>
+        <!-- Expandable container for work items related to this module -->
+
+        <!-- Expandable container untuk SubModules -->
+        <div class="container-submodules" [style.maxHeight.px]="expanded() ? subModules().length * 200 : 0"
+            [class.expanded]="expanded()">
+            @if (loadingSubModules()) {
+            <div class="loading">Loading submodules...</div>
+            }
+
+
+            @for (sub of subModules(); track $index) {
+            <app-card-sub-module [subModuleData]="sub"></app-card-sub-module>
+            }
+
+        </div>
+

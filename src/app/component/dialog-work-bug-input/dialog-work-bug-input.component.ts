@@ -74,7 +74,7 @@ export class DialogWorkBugInputComponent {
 	@Input() currentPic = signal<NameListItem>({ name: "", id: 0 });
 	@Input() subModuleId!: number;
 	@Input() data!: WorkData | BugData;
-	@Input() isBug = false;
+	@Input() isBug = this.dataService.isBugData(this.data) || this.dataService.isPage("bug");
 	@Output() selectActivity = new EventEmitter<NameListItem>();
 	@Output() edited = new EventEmitter<void>();
 
@@ -87,7 +87,7 @@ export class DialogWorkBugInputComponent {
 	nameTitle = signal(this.isBug ? "Bug Name" : "Work Name");
 	defectCauseList = signal<NameListItem[]>([]);
 	currentProjectWorkList = signal<NameListItem[]>([]);
-
+	
 	workForm = new FormGroup({
 		workName: new FormControl("", [Validators.required]),
 		description: new FormControl("", [Validators.required]),
@@ -107,7 +107,7 @@ export class DialogWorkBugInputComponent {
 			!this.isBug ? Validators.required : Validators.nullValidator,
 		]),
 		activity: new FormControl<NameListItem | null>(null, [
-			!this.isBug ? Validators.required : Validators.nullValidator,
+			Validators.required
 		]),
 		defectCause: new FormControl<NameListItem | null>(null, [
 			this.isBug ? Validators.required : Validators.nullValidator,

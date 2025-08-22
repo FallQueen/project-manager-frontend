@@ -50,9 +50,10 @@
                         <div class="gantt-bar" (pointerdown)="dragPointerDown($event, w)"
                             (pointermove)="dragPointerMove($event, w)" (pointerup)="dragPointerUp($event, w)"
                             (pointercancel)="dragPointerUp($event, w)"
-                            [matTooltip]="(w.startDate | date:'shortDate') + ' - ' + (w.targetDate | date:'shortDate') + ' (' + (daysBetween(w.startDate, w.targetDate)) + ' days)'"
-                            [style.width]="(daysBetween(w.startDate, w.targetDate)/totalDays() * 100) + '%'"
-                            [style.margin-left]="calculateGanttBarStart(w.startDate)">
+                            [matTooltip]="(w.startDate | date:'shortDate') + ' - ' + (w.targetDate | date:'shortDate') + ' (' + (daysBetween(w.startDate, w.targetDate)+1) + ' days)'"
+                            [style.width]="((daysBetween(w.startDate, w.targetDate)+1)/totalDays() * 100) + '%'"
+                            [style.margin-left]="calculateGanttBarStart(w.startDate)"
+                            [class.warning-work-overdue]="isWorkOverdue(w)">
                             <div class="resize-handle left" (pointerdown)="resizePointerDown($event, w, 'left')">
                             </div>
                             <span>{{w.workName}}</span>
